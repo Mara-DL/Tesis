@@ -1,0 +1,44 @@
+{
+  "index.qmd": {
+    "index.html": "3883632a"
+  },
+  "intro.qmd": {
+    "intro.html": "021fe4d9"
+  },
+  "summary.qmd": {
+    "summary.html": "412e7cd2"
+  },
+  "references.qmd": {
+    "references.html": "1f7a86a4"
+  },
+  "Introduccion_.qmd": {
+    "Introduccion_.html": "c284e670"
+  },
+  "Objetivos.qmd": {
+    "Objetivos.html": "f2b1db4f"
+  },
+  "Preliminar.qmd": {
+    "Preliminar.html": "c8a58b3c"
+  },
+  "Modelo_de_Cramer_Lundberg.qmd": {
+    "Modelo_de_Cramer_Lundberg.html": "9e768a2f"
+  },
+  "Estudio_de_caso.qmd": {
+    "Estudio_de_caso.html": "7778ba0f"
+  },
+  "introduccion.qmd": {
+    "introduccion.html": "2e9b566b"
+  },
+  "Estudio_caso.qmd": {
+    "Estudio_caso.html": "f36da2db"
+  },
+  "probabilidad.qmd": {
+    "probabilidad.html": "d5ccc700"
+  },
+  "estadistica.qmd": {
+    "estadistica.html": "52367298"
+  },
+  "ciencia_de_datos.qmd": {
+    "ciencia_de_datos.html": "aac6562c"
+  }
+}

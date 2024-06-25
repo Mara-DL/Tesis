@@ -1,0 +1,3273 @@
+---
+lang: es
+---
+
+# Estudio de caso: Análisis de ventas de una empresa de comida rápida
+
+## Descripción del problema
+
+::: {style="text-align:justify"}
+Se presentan datos que son parte de las ventas de una empresa de comida rápida. Para brindar una mejor idea del estudio caso se presentará una extensión de lo que es una empresa de comida rápida y una franquicia .
+
+Una empresa de comida rápida es un tipo de negocio dentro del sector alimenticio que se especializa en la preparación y venta de alimentos y bebidas que pueden ser servidos y consumidos rápidamente. Estas empresas suelen ofrecer menús estandarizados y utilizan métodos de producción en masa para asegurar la rapidez y la eficiencia en el servicio. Algunas características típicas de una empresa de comida rápida incluyen:
+
+1-Rapidez en el Servicio: La principal característica es la rapidez con la que los clientes pueden recibir sus pedidos, generalmente en pocos minutos.
+
+2-Menú Limitado y Estandarizado: Los menús suelen ser simples y consistentes en todas las ubicaciones de la cadena, permitiendo una preparación rápida y eficiente.
+
+3-Precios Asequibles: Los precios suelen ser más bajos en comparación con los restaurantes tradicionales, lo que los hace accesibles a una amplia gama de clientes.
+
+4-Métodos de Preparación Eficientes: Utilizan técnicas de cocción rápida, como freidoras y parrillas de alta eficiencia, así como la pre-preparación de ingredientes.
+
+5-Autoservicio y Comida para Llevar: Muchas de estas empresas ofrecen opciones de autoservicio y comida para llevar, facilitando el consumo rápido y conveniente.
+
+6-Ambiente Informal: El ambiente es generalmente informal y está diseñado para facilitar el flujo rápido de clientes, con áreas de autoservicio y estaciones de recolección de pedidos.
+
+Ejemplos de empresas de comida rápida incluyen grandes cadenas internacionales como McDonald's, Burger King, KFC, Subway, Carl's Jr y Taco Bell. Estas empresas han expandido su presencia globalmente, adaptándose a diferentes mercados y culturas mientras mantienen su enfoque en la rapidez y eficiencia del servicio.
+
+Muchas de estas empresas otorga parte del derecho a operar en diferentes franquicias.
+
+Una franquicia es un modelo de negocio en el cual una empresa (el franquiciador) otorga a otra parte (el franquiciado) el derecho a operar un negocio utilizando su marca, productos, servicios y modelo operativo a cambio de una tarifa o regalías. Este modelo permite a los franquiciadores expandir su marca y presencia en el mercado sin tener que invertir en nuevas ubicaciones directamente. Al mismo tiempo, ofrece a los franquiciados la oportunidad de operar un negocio con una marca establecida y un sistema probado. Algunas características clave de una franquicia incluyen:
+
+1-Marca y Sistema Operativo: El franquiciado utiliza la marca comercial, logotipos, productos y servicios del franquiciador, así como su sistema operativo, que puede incluir recetas, métodos de producción, estrategias de marketing, entre otros.
+
+2-Pago de Tarifas: El franquiciado paga al franquiciador una tarifa inicial y, en muchos casos, regalías continuas basadas en un porcentaje de las ventas. Estas tarifas cubren el uso de la marca y el soporte continuo del franquiciador.
+
+3-Capacitación y Soporte: El franquiciador proporciona capacitación inicial y soporte continuo al franquiciado, lo cual puede incluir formación en gestión empresarial, operaciones, marketing y servicio al cliente.
+
+4-Estándares y Control de Calidad: Para mantener la consistencia y calidad de la marca, el franquiciador establece estándares y procedimientos que los franquiciados deben seguir. Esto puede incluir auditorias y evaluaciones periódicas.
+
+5-Contrato de Franquicia: La relación entre el franquiciador y el franquiciado está regulada por un contrato de franquicia que detalla los derechos y obligaciones de ambas partes, incluyendo la duración del acuerdo y las condiciones de renovación.
+
+6-Territorio Exclusivo: A menudo, el contrato otorga al franquiciado un territorio exclusivo en el cual puede operar, evitando la competencia directa con otras franquicias de la misma marca en esa área.
+
+Ejemplos de negocios que utilizan el modelo de franquicia incluyen cadenas de comida rápida (como McDonald's, Subway y KFC), Carl's Jr, hoteles (como Marriott y Hilton), servicios de limpieza, tiendas de conveniencia y muchos otros sectores. Este modelo permite una expansión rápida y eficiente del negocio mientras ofrece a los emprendedores la oportunidad de operar con el respaldo de una marca establecida.
+
+Esta empresa ofrece en sus productos dos tipos de hamburguesas, bebidas como sodas, cervezas y cafés. En la información de las ventas incluye registros obtenidos por una Terminal Punto de Venta (TPV), el sistema de pago usado en establecimientos comerciales para procesar transacciones de venta. Permite a los comerciantes aceptar el uso de tarjetas de crédito y débito. Se tiene registro de las ventas por cada día desde el año 2018 al noviembre del 2020, haciendo un cierre pandémico, se registran en dos etapas, antes de pandemia los datos a partir del 25 de julio del 2018 al 10 de abril del 2020. Los datos después de pandemia se registraron a partir del 3 de agosto del 2020 y cerrando finalmente el 10 de noviembre del 2020, los cuales se les aplicó una homogenización para un buen manejo de los datos y así poder presentar un mejor análisis.
+:::
+
+## Elementos de Ciencia de Datos
+
+### Importación de los datos originales a R
+
+::: {style="text-align:justify"}
+Se cargan los datos del archivo excel para ser leído y almacenarlo en un dataframe (@sec-dataframe) para poder manipular cada uno de los elementos de la base de datos.
+
+```{r,  echo = FALSE, message=FALSE,  warning = FALSE}
+library(readxl)
+library(readr)
+library(tseries)
+library(dplyr)
+library(tidyverse)
+library(psych)
+library(plotly)
+library(ruin)
+library(MASS)
+library(fitdistrplus)
+library(logspline)
+library(vegan)
+library(ggplot2)
+library(dtplyr)
+# instalar DT con: remotes::install_github('rstudio/DT')
+library(DT)#Para poner el dataframe en ventana
+```
+
+```{r, message=FALSE, warning = FALSE}
+Datos <- read_excel("~/TM/Datos.xlsx", col_types = 
+                  c("numeric","numeric","numeric","numeric","numeric",
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric",
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric", 
+                    "numeric","numeric","numeric","numeric","numeric"
+                        ))
+
+Datos
+```
+
+Como se puede apreciar, es necesario eliminar columnas, reducido a las columnas de las ventas de los diferentes productos que oferta la empresa para así obtener las ventas totales.
+:::
+
+### Homogenización del total de ventas por día
+
+::: {style="text-align:justify"}
+Mediante este proceso se eliminan y se corrigen valores atípicos, valores faltantes o alguna inconsistencia que se presentan en los datos. Esto implica la eliminación de datos incompletos, conocidos como datos faltantes o NA. También se renombran cabeceras de cada columna del dataframe para facilitar la lectura del archivo.
+
+```{r, warning = FALSE}
+#Eliminamos las columnas con datos faltantes
+datos <- Datos[, -c(6,8,10,12,14,16,18,20,22,24, 26,28, 30,32, 34, 36,
+                    38,39, 40,  42, 44, 46, 48, 50,51,52, 53, 54,55, 56, 
+57,58,59,60,61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 73,74,72, 75)]
+#Cambiar las cabeceras del dataframe  
+datos <- data.frame(datos%>% rename(Año = ...1 ))
+datos <- data.frame(datos%>% rename(Mes = ...2, Semana = ...3, Dia= ...4, 
+                  Fecha = ...5, Ventas= X240519, 
+                  TotalVentas = X247172.9,Customers = X973,
+                  Totalcustomers = X1136, 
+                  CH_Promedio = X371.753114754098, 
+                  TotalCH_Promedio = ...17, Burgers = X2099,
+                  TotalBurgers = X2162, 
+                  Thickurgers = X1384...23, 
+                  TotalThickburgers = X1384...25,
+                  Total_Burgers = X2402, 
+                  T_Total_Burgers= X2525,Bebidas = X1556...31,
+                  Totalbebidas = X1556...33, Cervezas = X61,
+                  Totalcervezas = X83, Cafes = X83,
+                  Totalcafes = X54, Ventas_TPV = X158904,
+                  Total_Ventas_TPV = X173412.5,
+                  HR_Laborales = ...47,
+                  Total_HR_Laborales = ...49 ))
+```
+
+Por último, se realizó la separación de la base de datos antes de la pandemia y después de la pandemia, presentando así los dataframes resultantes en el siguiente código y como se ilustra posteriormente:
+
+```{r, eval= FALSE, message=FALSE}
+#Analisis de los datos:
+#Filtros por días:
+#___________________________Antes de la pandemia___________________________
+
+fil_before1<- data.frame(subset(datos, Año <= 2019))
+fil_before2<- data.frame(subset(datos, Año == 2020 & Mes <= 4))
+fil_before <- rbind(fil_before1, fil_before2)
+
+#________________________Después de la pandemia____________________________
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+```
+:::
+
+### DataFrame Resultante: Antes de la pandemia
+
+::: {.content-visible when-format="html"}
+```{r, echo = FALSE, attr.output='style="max-height: 100px;"'}
+
+#
+#Poner un apartado donde explique que es la visualización de los datos 
+#Elimina las filas con datos faltantes
+#datos <- data.frame( datos %>% filter(!is.na(Año)))
+#DATAFRAME RESULTANTE:
+#_________________________________Antes de la pandemia____________________________
+fil_before1<- data.frame(subset(datos, Año <= 2019))
+fil_before2<- data.frame(subset(datos, Año == 2020 & Mes <= 4))
+fil_before <- rbind(fil_before1, fil_before2)
+DT::datatable(fil_before)
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, echo = FALSE, attr.output='style="max-height: 200px;"'}
+
+#
+#Poner un apartado donde explique que es la visualización de los datos 
+#Elimina las filas con datos faltantes
+#datos <- data.frame( datos %>% filter(!is.na(Año)))
+#DATAFRAME RESULTANTE:
+#_________________________________Antes de la pandemia____________________________
+fil_before1_new<- data.frame(subset(datos, Año < 2019 & Mes <= 8))
+#fil_before_new <- fil_before %>%select(Año, Mes, Dia, Ventas)
+fil_before_new <- subset(fil_before1_new, select=c(Año, Mes, Dia, Ventas, TotalVentas))
+
+fil_before_new
+```
+:::
+
+### DataFrame Resultante: Después de la pandemia
+
+::: {.content-visible when-format="html"}
+```{r, echo = FALSE}
+#________________________Después de la pandemia__________________________________
+
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+DT::datatable(fil_dat_after)
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, echo = FALSE}
+#________________________Después de la pandemia__________________________________
+
+
+fil_dat_after_new <- data.frame(subset(datos, Año == 2020 & Mes>=8 & Mes<9))
+fil_after_new <- subset(fil_dat_after_new, select=c(Año, Mes, Dia, Ventas, TotalVentas))
+fil_after_new
+
+```
+:::
+
+::: {style="text-align:justify"}
+Para realizar la identificación de las diferentes distribuciones e implementar los gráficos como los histogramas y los boxplot, se elaboran filtros correspondientes para las ventas por cada día antes y después de pandemia
+
+Los comandos para realizar los filtros es el siguiente:
+:::
+
+```{r, echo = TRUE, message=FALSE}
+#filtra los datos del día Domingo antes de la pandemia
+fil_dat_1_before<- data.frame(subset(fil_before, Dia == 1))
+#___________________________________________________________
+#filtra los datos del día Lunes antes de la pandemia
+fil_dat_2_before<- data.frame(subset(fil_before, Dia == 2))
+#___________________________________________________________
+#filtra los datos del día martes antes de la pandemia
+fil_dat_3_before<- data.frame(subset(fil_before, Dia == 3))
+#___________________________________________________________
+#filtra los datos del día miércoles antes de la pandemia
+fil_dat_4_before<- data.frame(subset(fil_before, Dia == 4))
+#___________________________________________________________
+#filtra los datos del día Jueves antes de la pandemia
+fil_dat_5_before<- data.frame(subset(fil_before, Dia == 5))
+#___________________________________________________________
+#filtra los datos del día Viernes antes de la pandemia
+fil_dat_6_before<- data.frame(subset(fil_before, Dia == 6))
+#___________________________________________________________
+#filtra los datos del día Sábado antes de la pandemia
+fil_dat_7_before<- data.frame(subset(fil_before, Dia == 7))
+```
+
+```{r, echo = TRUE, message=FALSE}
+#____________________________________________________________________
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+#filtra los datos del día domingo despues de la pandemia
+fil_dat_1_after<- data.frame(subset(datos, 
+                                    Año == 2020 & Mes >= 8 & Dia==1))
+#____________________________________________________________________
+#filtra los datos del día lunes despues de la pandemia
+fil_dat_2_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==2))
+#____________________________________________________________________
+#filtra los datos del día martes despues de la pandemia
+fil_dat_3_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==3))
+#____________________________________________________________________
+#filtra los datos del día miércoles despues de la pandemia
+fil_dat_4_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==4))
+#____________________________________________________________________
+#filtra los datos del día jueves despues de la pandemia
+fil_dat_5_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==5))
+#____________________________________________________________________
+#filtra los datos del día viernes despues de la pandemia
+fil_dat_6_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==6))
+#____________________________________________________________________
+#filtra los datos del día sábado despues de la pandemia
+fil_dat_7_after<- data.frame(subset(datos,
+                                    Año == 2020 & Mes >= 8 & Dia ==7))
+
+```
+
+::: {style="text-align:justify"}
+Para visualizar gráficamente el comportamiento de las ventas por día, a continuación se construyen los histogramas por día, en los periodos antes y después de la pandemia.
+:::
+
+### Análisis gráfico de las ventas por día:
+
+::: {style="text-align:justify"}
+Para la generación de los gráficos se empleó los filtros anteriores, con el fin de obtener un análisis descriptivo de cada uno de ellos.
+:::
+
+#### Histogramas de los datos de ventas por día antes de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera estos histogramas en R es el siguiente:
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval=FALSE}
+# muestra el gráfico de todos los histogramas de ventas por día 
+# antes de la pandemia
+par(mar=c(2,2,2,2))
+par(mfrow =c(3,3))
+hist(fil_dat_1_before$Ventas, 
+     main = "Ventas día Domingo", xlab = "Ventas")
+hist(fil_dat_2_before$Ventas, 
+     main = "Ventas día Lunes", xlab = "Ventas")
+hist(fil_dat_3_before$Ventas,
+     main = "Ventas día Martes", xlab = "Ventas")
+hist(fil_dat_4_before$Ventas, 
+     main = "Ventas día Miércoles", xlab = "Ventas")
+hist(fil_dat_5_before$Ventas, 
+     main = "Ventas día Jueves", xlab = "Ventas")
+hist(fil_dat_6_before$Ventas, 
+     main = "Ventas día Viernes", xlab = "Ventas")
+hist(fil_dat_7_before$Ventas, 
+     main = "Ventas día Sábado", xlab = "Ventas")
+```
+
+![Histogramas de las ventas por día antes de la pandemia.](his_1.png){fig-align="center" width="80%"}
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-his1}
+```{r}
+# muestra el gráfico de todos los histogramas de ventas por día antes de la pandemia
+par(mar=c(2,2,2,2))
+par(mfrow =c(3,3))
+hist(fil_dat_1_before$Ventas, main = "Ventas día Domingo", xlab = "Ventas")
+hist(fil_dat_2_before$Ventas, main = "Ventas día Lunes", xlab = "Ventas")
+hist(fil_dat_3_before$Ventas, main = "Ventas día Martes", xlab = "Ventas")
+hist(fil_dat_4_before$Ventas, main = "Ventas día Miércoles", xlab = "Ventas")
+hist(fil_dat_5_before$Ventas, main = "Ventas día Jueves", xlab = "Ventas")
+hist(fil_dat_6_before$Ventas, main = "Ventas día Viernes", xlab = "Ventas")
+hist(fil_dat_7_before$Ventas, main = "Ventas día Sábado", xlab = "Ventas")
+```
+
+Histogramas de las ventas por día antes de la pandemia.
+:::
+:::
+
+::: {style="text-align:justify"}
+Para profundizar en el análisis descriptivo de las ventas periódicas se presenta ahora los boxplot de las ventas por cada día de la semana.
+:::
+
+#### Boxplot de datos de ventas por días antes de la pandemia
+
+```{r, echo= FALSE}
+summary(fil_dat_1_before$Ventas)
+summary(fil_dat_2_before$Ventas)
+summary(fil_dat_3_before$Ventas)
+summary(fil_dat_4_before$Ventas)
+summary(fil_dat_5_before$Ventas)
+summary(fil_dat_6_before$Ventas)
+summary(fil_dat_7_before$Ventas)
+
+```
+
+::: {style="text-align:justify"}
+El código que genera en R los boxplot es el siguiente:
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-box1}
+```{r, echo=TRUE}
+# muestra el gráfico de todos los boxplot de ventas por día antes de la pandemia 
+fig <- plot_ly(y =fil_dat_1_before$Ventas, name = "Ventas día Domingo", 
+               boxpoints = "all",type = "box", )
+fig <- fig %>% add_trace(y = fil_dat_2_before$Ventas,  
+                         name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_before$Ventas,  
+                         name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_before$Ventas,  
+                         name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_before$Ventas,  
+                         name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_before$Ventas,  
+                         name = "Ventas día Viernes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_7_before$Ventas,  
+                         name = "Ventas día Sábado", boxpoints = "all")
+
+fig
+
+```
+
+Boxplot de las ventas por día antes de la pandemia.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval=FALSE, out.width="40%"}
+# muestra el gráfico de todos los boxplot de ventas por día 
+# antes de la pandemia 
+fig <- plot_ly(y =fil_dat_1_before$Ventas, name = "Ventas día Domingo", 
+               boxpoints = "all",type = "box", )
+fig <- fig %>% add_trace(y = fil_dat_2_before$Ventas,  
+                         name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_before$Ventas,  
+                         name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_before$Ventas,  
+                         name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_before$Ventas,  
+                         name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_before$Ventas,  
+                         name = "Ventas día Viernes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_7_before$Ventas,  
+                         name = "Ventas día Sábado", boxpoints = "all")
+
+fig
+```
+
+![Boxplot de las ventas por día antes de la pandemia.](fig-box1pdf.png)
+:::
+
+#### Histogramas de los datos de ventas por día después de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera estos histogramas en R es el siguiente:
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-his2}
+```{r, echo=TRUE}
+
+# muestra el gráfico de todos los histogramas de ventas por día despues de la pandemia
+par(mar=c(2,2,2,2))
+par(mfrow =c(3,3))
+hist(fil_dat_1_after$Ventas, main = "Ventas día Domingo", xlab = "Ventas")
+hist(fil_dat_2_after$Ventas, main = "Ventas día Lunes", xlab = "Ventas")
+hist(fil_dat_3_after$Ventas, main = "Ventas día Martes", xlab = "Ventas")
+hist(fil_dat_4_after$Ventas, main = "Ventas día Miércoles", xlab = "Ventas")
+hist(fil_dat_5_after$Ventas, main = "Ventas día Jueves", xlab = "Ventas")
+hist(fil_dat_6_after$Ventas, main = "Ventas día Viernes", xlab = "Ventas")
+hist(fil_dat_7_after$Ventas, main = "Ventas día Sábado", xlab = "Ventas")
+```
+
+Histogramas de las ventas por día después de la pandemia.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval= FALSE}
+# muestra el gráfico de todos los histogramas de ventas por día 
+#despues de la pandemia
+par(mar=c(2,2,2,2))
+par(mfrow =c(3,3))
+hist(fil_dat_1_after$Ventas, 
+     main = "Ventas día Domingo", xlab = "Ventas")
+hist(fil_dat_2_after$Ventas, 
+     main = "Ventas día Lunes", xlab = "Ventas")
+hist(fil_dat_3_after$Ventas, 
+     main = "Ventas día Martes", xlab = "Ventas")
+hist(fil_dat_4_after$Ventas,
+     main = "Ventas día Miércoles", xlab = "Ventas")
+hist(fil_dat_5_after$Ventas, 
+     main = "Ventas día Jueves", xlab = "Ventas")
+hist(fil_dat_6_after$Ventas, 
+     main = "Ventas día Viernes", xlab = "Ventas")
+hist(fil_dat_7_after$Ventas, 
+     main = "Ventas día Sábado", xlab = "Ventas")
+```
+
+![Histogramas de las ventas por día después de la pandemia.](his_2.png){fig-align="center" width="80%"}
+:::
+
+::: {style="text-align:justify"}
+El comportamiento periódico de las ventas, se observa en los boxplot de las ventas por cada día de la semana.
+:::
+
+#### Boxplot de datos de ventas por días limpios después de la pandemia
+
+```{r}
+summary(fil_dat_1_after$Ventas)
+summary(fil_dat_2_after$Ventas)
+summary(fil_dat_3_after$Ventas)
+summary(fil_dat_4_after$Ventas)
+summary(fil_dat_5_after$Ventas)
+summary(fil_dat_6_after$Ventas)
+summary(fil_dat_7_after$Ventas)
+
+```
+
+::: {style="text-align:justify"}
+El código que genera estos los boxplot en R es el siguiente:
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-box2}
+```{r, echo =TRUE}
+library(plotly)
+
+#día 1 = domingo
+#día 2 = lunes
+#día 3 = martes
+#día 4 = miércoles
+#día 5 = jueves
+#día 6 = viernes 
+#día 7 = sábado
+fig <- plot_ly(y =fil_dat_1_after$Ventas, name = "Ventas día Domingo", boxpoints = "all",type = "box")
+fig <- fig %>% add_trace(y = fil_dat_2_after$Ventas,  
+                         name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_after$Ventas,  
+                         name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_after$Ventas,  
+                         name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_after$Ventas,  
+                         name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_after$Ventas,  
+                         name = "Ventas día Viernes", boxpoints="all")
+fig <- fig %>% add_trace(y = fil_dat_7_after$Ventas,  
+                         name = "Ventas día Sábado", boxpoints = "all")
+
+fig
+```
+
+Boxplot de las ventas por día después de la pandemia.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval=FALSE}
+# muestra el gráfico de todos los boxplot de ventas por día antes de la pandemia 
+fig <- plot_ly(y =fil_dat_1_after$Ventas, name = "Ventas día Domingo",
+               boxpoints = "all",type = "box")
+
+fig <- fig %>% add_trace(y = fil_dat_2_after$Ventas,  
+                         name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_after$Ventas,  
+                         name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_after$Ventas,  
+                         name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_after$Ventas,  
+                         name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_after$Ventas,  
+                         name = "Ventas día Viernes", boxpoints="all")
+fig <- fig %>% add_trace(y = fil_dat_7_after$Ventas,  
+                         name = "Ventas día Sábado", boxpoints = "all")
+fig
+```
+
+![Boxplot de las ventas por día después de la pandemia.](fig-box2pdf.png){fig-align="center"}
+:::
+
+## Identificación de distribuciones de probabilidad de las ventas por día
+
+::: {style="text-align:justify"}
+Con el fin de adaptar el modelo de Cramér Lundberg es necesario ajustar distribuciones de probabilidad de las ventas para cada día de la semana. Haciendo uso del test de Jarque Bera que ayuda a identificar cuales días siguen una distribución normal y el test de Kolmogorov de Smirnov.
+
+El siguiente código aplica los diferentes test de normalidad para las ventas por día antes de la pandemia:(Citar Jarque Bera)
+:::
+
+```{r, echo = FALSE, message=FALSE}
+#Analisis de los datos:
+#Filtros por días:
+#_________________________________Antes de la pandemia____________________________________________
+fil_before1<- data.frame(subset(datos, Año <= 2019))
+fil_before2<- data.frame(subset(datos, Año == 2020 & Mes <= 4))
+fil_before <- rbind(fil_before1, fil_before2)
+
+#filtra los datos del día domingo antes de la pandemia
+fil_dat_1_before<- data.frame(subset(fil_before, Dia == 1))
+#Calcula la media, mediana, etc.
+#median(fil_dat_1_before$Ventas)
+#summary(fil_dat_1_before$Ventas)
+#p1b <-hist(fil_dat_1_before$Ventas)
+#______________________________________________________________________________________________
+#quitamos los outliers de la base de datos del día 1(domingo):
+
+#dim(fil_dat_1_before)
+
+Q <- quantile(fil_dat_1_before$Ventas, probs=c(.10, .80), na.rm = FALSE)
+IQR <- IQR(fil_dat_1_before$Ventas)
+
+Lower <- Q[1] - 1.5*IQR
+Upper <- Q[2] + 1.5*IQR
+
+fil_dat_1_before <- subset(fil_dat_1_before, fil_dat_1_before$Ventas > Lower & fil_dat_1_before$Ventas < Upper)
+
+#dim(fil_dat_1_before)
+
+aux_box <- data.frame(fil_dat_1_before$Ventas)
+#box1_b <-boxplot(fil_dat_1_before$Ventas, outline=FALSE) #Dato atípico
+#_______________________________________________________________________
+#filtra los datos del día Lunes antes de la pandemia
+fil_dat_2_before<- data.frame(subset(fil_before, Dia == 2))
+#Sacamos la media, mediana
+#median(fil_dat_2_before$Ventas)
+#summary(fil_dat_2_before$Ventas)
+#Histogramas
+#p2b <- hist(fil_dat_2_before$Ventas)
+#Boxplot
+#Se ajustara una distribuciión con el comando siguiente:
+
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_2_before)
+
+Q2 <- quantile(fil_dat_2_before$Ventas, probs=c(.10, .70), na.rm = FALSE)
+IQR2 <- IQR(fil_dat_2_before$Ventas)
+
+Lower <- Q2[1] - 1.5*IQR2
+Upper <- Q2[2] + 1.5*IQR2
+
+fil_dat_2_before <- subset(fil_dat_2_before, fil_dat_2_before$Ventas > Lower & fil_dat_2_before$Ventas < Upper)
+
+#dim(fil_dat_2_before)
+
+aux_box1 <- data.frame(fil_dat_2_before$Ventas)
+#___________________________
+#filtra los datos del día martes antes de la pandemia
+fil_dat_3_before<- data.frame(subset(fil_before, Dia == 3))
+
+#median(fil_dat_3_before$Ventas)
+#summary(fil_dat_3_before$Ventas)
+#p3b <- hist(fil_dat_3_before$Ventas)
+#boxplot(fil_dat_3_before$Ventas, outline=FALSE) #Dato atípico
+#describe(fil_dat_3_before$Ventas)
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_3_before)
+
+Q3 <- quantile(fil_dat_3_before$Ventas, probs=c(.10, .75), na.rm = FALSE)
+IQR3 <- IQR(fil_dat_3_before$Ventas)
+
+Lower <- Q3[1] - 1.5*IQR3
+Upper <- Q3[2] + 1.5*IQR3
+
+fil_dat_3_before <- subset(fil_dat_3_before, fil_dat_3_before$Ventas > Lower & fil_dat_3_before$Ventas < Upper)
+
+#dim(fil_dat_3_before)
+
+aux_box3 <- data.frame(fil_dat_3_before$Ventas)
+#__________________________________
+#filtra los datos del día miércoles antes de la pandemia
+fil_dat_4_before<- data.frame(subset(fil_before, Dia == 4))
+
+#median(fil_dat_4_before$Ventas)
+#summary(fil_dat_4_before$Ventas)
+#p4b <- hist(fil_dat_4_before$Ventas)
+#boxplot(fil_dat_4_before$Ventas, outline=FALSE) #Dato atípico
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_4_before)
+
+Q4 <- quantile(fil_dat_4_before$Ventas, probs=c(.05, .60), na.rm = FALSE)
+IQR4 <- IQR(fil_dat_4_before$Ventas)
+
+Lower <- Q4[1] - 1.5*IQR4
+Upper <- Q4[2] + 1.5*IQR4 
+
+fil_dat_4_before <- subset(fil_dat_4_before, fil_dat_4_before$Ventas > Lower & fil_dat_4_before$Ventas < Upper)
+
+#dim(fil_dat_4_before)
+
+aux_box4 <- data.frame(fil_dat_4_before$Ventas)
+#_______________________________________________________________________________
+#filtra los datos del día Jueves antes de la pandemia
+fil_dat_5_before<- data.frame(subset(fil_before, Dia == 5))
+
+#median(fil_dat_5_before$Ventas)
+#summary(fil_dat_5_before$Ventas)
+#p5b <- hist(fil_dat_5_before$Ventas)
+#boxplot(fil_dat_5_before$Ventas, outline=FALSE) #Dato atípico
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_5_before)
+
+Q5 <- quantile(fil_dat_5_before$Ventas, probs=c(.10, .65), na.rm = FALSE)
+IQR5 <- IQR(fil_dat_5_before$Ventas)
+
+Lower <- Q5[1] - 1.5*IQR5
+Upper <- Q5[2] + 1.5*IQR5 
+
+fil_dat_5_before <- subset(fil_dat_5_before, fil_dat_5_before$Ventas > Lower & fil_dat_5_before$Ventas < Upper)
+
+#dim(fil_dat_5_before)
+
+aux_box5 <- data.frame(fil_dat_5_before$Ventas)
+##########################################################
+#filtra los datos del día Viernes antes de la pandemia
+fil_dat_6_before<- data.frame(subset(fil_before, Dia == 6))
+
+#median(fil_dat_6_before$Ventas)
+#summary(fil_dat_6_before$Ventas)
+#p6b <- hist(fil_dat_6_before$Ventas)
+#boxplot(fil_dat_6_before$Ventas, outline=FALSE) #Dato atípico
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_6_before)
+
+Q6 <- quantile(fil_dat_6_before$Ventas, probs=c(.15, .75), na.rm = FALSE)
+IQR6 <- IQR(fil_dat_6_before$Ventas)
+
+Lower <- Q6[1] - 1.5*IQR6
+Upper <- Q6[2] + 1.5*IQR6
+
+fil_dat_6_before <- subset(fil_dat_6_before, fil_dat_6_before$Ventas > Lower & fil_dat_6_before$Ventas < Upper)
+
+#dim(fil_dat_6_before)
+
+aux_box6 <- data.frame(fil_dat_6_before$Ventas)
+
+```
+
+```{r, echo=TRUE}
+#Calcularemos los test correspondientes a los filtros
+#de ventas por día:
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_1_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+
+fitdistr(fil_dat_1_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_2_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_2_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_3_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_3_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_4_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_4_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_5_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_5_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_6_before$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#por lo tanto los datos se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_6_before$Ventas, "normal")
+
+```
+
+::: {style="text-align:justify"}
+Para el caso del día sábado, denotado como séptimo día, no se obtuvo una distribución normal por lo que se utilizo la paqueteria de R fitdistrplus para probar el ajuste de otras distribuciones clásicas de probabilidad. Las distribuciones probadas se presentan en el código siguiente:
+
+```{r, echo = TRUE, message=FALSE}
+fitdistr(fil_dat_7_before$Ventas, "weibull")
+fitdistr(fil_dat_7_before$Ventas, "exponential")
+fitdistr(fil_dat_7_before$Ventas, "lognormal")
+
+```
+
+::: {style="text-align:justify"}
+De lo anterior podemos decir que el mejor ajuste se obtuvo al usar la distribución Weibull.
+:::
+:::
+
+### Prueba de la distribución Weibull:
+
+::: {style="text-align:justify"}
+Una vez ajustada la distribución Weibull, se prueban sus parametros con la aplicación del test de Kolmogorov de Smirnov. El siguiente código implementa ambos procedimientos:
+
+```{r, echo = FALSE, message=FALSE}
+#############################################
+#filtra los datos del día Sábado antes de la pandemia
+fil_dat_7_before<- data.frame(subset(fil_before, Dia == 7))
+#___________________________________________________________
+
+Q7 <- quantile(fil_dat_7_before$Ventas, probs=c(.25, .75), na.rm = FALSE)
+IQR7 <- IQR(fil_dat_7_before$Ventas)
+
+Lower <- Q7[1] - 1.5*IQR7
+Upper <- Q7[2] + 1.5*IQR7 
+
+fil_dat_7_before <- subset(fil_dat_7_before, fil_dat_7_before$Ventas > Lower & fil_dat_7_before$Ventas < Upper)
+
+aux_box7 <- data.frame(fil_dat_7_before$Ventas)
+```
+:::
+
+```{r, echo = TRUE, message=FALSE}
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#JARQUE BERA
+jarque.bera.test(fil_dat_7_before$Ventas)
+#Fitting de de una distri bución weibull
+#fil_dat_7_before$Ventas
+fit.weibull <- fitdist(fil_dat_7_before$Ventas, "weibull")
+fit.weibull
+vector_ventas7_ordenados <- fil_dat_7_before$Ventas[order(fil_dat_7_before$Ventas)]
+n = 83
+F_x = numeric(n)
+for(i in 1:n){
+  F_x[i] <- (i/ n)
+}
+#F_x
+f_gorro_x <-  pweibull(vector_ventas7_ordenados,
+                       shape = 4.784508e+00, scale =1.295070e+05, 
+                       lower.tail = TRUE, log.p = FALSE)
+ks <- abs(F_x - f_gorro_x)
+```
+
+#### Representación gráfica al aplicar el test de Kolmogorov de Smirnov
+
+```{r, echo = FALSE, message=FALSE}
+max(ks)
+valor_critico = (1.36/(sqrt(n)))
+valor_critico
+```
+
+```{r, message=FALSE}
+
+x <- 1:83 
+g1 <- plot(1:83, F_x) 
+g2 <- plot(1:83, f_gorro_x) 
+plot(x, F_x, col='red', xlab='x', ylab='y')
+
+#add second line to plot 
+points(x, f_gorro_x, col='blue')
+```
+
+::: {style="text-align:justify"}
+Para el periodo despues de pandemia se repite la misma metodología. Aplicamos el test de Jarque Bera a los datos para cada día de la semana después de pandemia.
+:::
+
+```{r, echo = FALSE, message=FALSE}
+#________________________Después de la pandemia__________________________________
+
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+#filtra los datos del día domingo despues de la pandemia
+fil_dat_1_after<- data.frame(subset(datos, Año == 2020 & Mes >= 8 & Dia==1))
+
+#median(fil_dat_1_after$Ventas)
+#summary(fil_dat_1_after$Ventas)
+#p1 <- hist(fil_dat_1_after$Ventas)
+#boxplot(fil_dat_1_after$Ventas)
+#______________________________________________________________________
+
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_1_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra  proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_1_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_1_after$Ventas)
+fitdistr(fil_dat_1_after$Ventas, "normal")
+
+#filtra los datos del día lunes despues de la pandemia
+fil_dat_2_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==2))
+fil_dat_2_after <- fil_dat_2_after[fil_dat_2_after$Ventas != max(fil_dat_2_after$Ventas), ]
+#median(fil_dat_2_after$Ventas)
+#summary(fil_dat_2_after$Ventas)
+#p2 <- hist(fil_dat_2_after$Ventas)
+#boxplot(fil_dat_2_after$Ventas, outline=FALSE) #Dato atípico
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_2_after)
+#Q2a <- quantile(fil_dat_2_after$Ventas, probs=c(.05, .95), na.rm = FALSE)
+#IQR2a <- IQR(fil_dat_2_after$Ventas)
+
+#Lower <- Q2a[1] - 1.5*IQR2a
+#Upper <- Q2a[2] + 1.5*IQR2a 
+
+#fil_dat_2_after <- subset(fil_dat_2_after, fil_dat_2_after > Lower & fil_dat_2_after < Upper)
+
+#_________________________________________
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_2_after$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_2_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_2_after$Ventas)
+fitdistr(fil_dat_2_after$Ventas, "normal")
+
+#filtra los datos del día martes despues de la pandemia
+fil_dat_3_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==3))
+
+#median(fil_dat_3_after$Ventas)
+#summary(fil_dat_3_after$Ventas)
+#Histograma de las ventas día martes
+#p3 <- hist(fil_dat_3_after$Ventas)
+#boxplot(fil_dat_3_after$Ventas)
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_3_after)
+
+
+#dim(fil_dat_3_after$Ventas)
+
+#aux_box3a <- data.frame(fil_dat_3_after)
+#___________________________
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_3_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_3_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_3_after$Ventas)
+fitdistr(fil_dat_3_after$Ventas, "normal")
+
+#filtra los datos del día miércoles despues de la pandemia
+fil_dat_4_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==4))
+
+#median(fil_dat_4_after$Ventas)
+#summary(fil_dat_4_after$Ventas)
+#p4 <- hist(fil_dat_4_after$Ventas)
+#boxplot(fil_dat_4_after$Ventas, outline=FALSE) #Dato atípico
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_4_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_4_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_4_after$Ventas)
+fitdistr(fil_dat_4_after$Ventas, "normal")
+
+#filtra los datos del día jueves despues de la pandemia
+fil_dat_5_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==5))
+
+#median(fil_dat_5_after$Ventas)
+#summary(fil_dat_5_after$Ventas)
+#p5 <- hist(fil_dat_5_after$Ventas)
+#boxplot(fil_dat_5_after$Ventas, outline=FALSE)#Dato atípico
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_5_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_5_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_5_after$Ventas)
+fitdistr(fil_dat_5_after$Ventas, "normal")
+
+#filtra los datos del día viernes despues de la pandemia
+fil_dat_6_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==6))
+
+#median(fil_dat_6_after$Ventas)
+#summary(fil_dat_6_after$Ventas)
+#p6 <- hist(fil_dat_6_after$Ventas)
+#boxplot(fil_dat_6_after$Ventas)
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_6_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_6_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_6_after$Ventas)
+fitdistr(fil_dat_6_after$Ventas, "normal")
+
+#filtra los datos del día sábado despues de la pandemia
+fil_dat_7_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==7))
+
+#median(fil_dat_7_after$Ventas)
+#summary(fil_dat_7_after$Ventas)
+#p7 <- hist(fil_dat_7_after$Ventas)
+#boxplot(fil_dat_7_after$Ventas)
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_7_after$Ventas)
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_7_after$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_7_after$Ventas)
+#Se ajustara una distribución con el comando siguiente:
+fitdistr(fil_dat_7_after$Ventas, "normal")
+```
+
+```{r}
+#_______Después de la pandemia____________________________________
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra  proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_1_after$Ventas)
+fitdistr(fil_dat_1_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+#a los filtros de de ventas por día:
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_2_after$Ventas)
+fitdistr(fil_dat_2_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+# a los filtros de de ventas por día:
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_3_after$Ventas)
+fitdistr(fil_dat_3_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+# a los filtros de de ventas por día:
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_4_after$Ventas)
+fitdistr(fil_dat_4_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+# a los filtros de de ventas por día:
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_5_after$Ventas)
+fitdistr(fil_dat_5_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+# a los filtros de de ventas por día:
+# El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+#JARQUE BERA
+jarque.bera.test(fil_dat_6_after$Ventas)
+fitdistr(fil_dat_6_after$Ventas, "normal")
+#________________________________________________________________
+#Calcularemos los test correspondientes 
+# a los filtros de de ventas por día:
+#El valor p no es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra proviene de una población con distribución normal.
+jarque.bera.test(fil_dat_7_after$Ventas)
+#Se ajustara una distribución con el comando siguiente:
+fitdistr(fil_dat_7_after$Ventas, "normal")
+```
+
+::: {style="text-align:justify"}
+Con las distribuciones identificadas de las ventas por día en los dos periodos, ahora es posible simular las variables aleatorias de las ventas de cada día de la semana y por lo tanto simular las ganancias de toda la semana.
+:::
+
+## Modelo Modificado de Cramér-Lundberg para identificar la probabilidad de las ganancias insuficientes en una empresa de comida rápida
+
+::: {.content-visible when-format="html"}
+::: {style="text-align:justify"}
+Como ya se vio en la sección (@sec-modelo_C_L) el Modelo de Cramér-Lundberg (MCL)es una herramienta utilizada en el campo de la gestión de riesgos y las finanzas para evaluar la probabilidad de incumplimiento o pérdidas insuficientes en una empresa. Aunque no es específicamente diseñado para analizar la variación de las ganancias de una empresa, en particular una empresa de comida rápida, se propone en este trabajo una adaptación del modelo, para evaluar la probabilidad de ganancias en este tipo de negocio, que puede facilitar el análisis de la evolución financiera de la empresa.
+
+Para ello la ecuación general del modelo modificado que representa la evolución de las ganancias en el tiempo hasta la semana $t$, denotada por $G$ queda definida como: $$G(t) = u -ct + V(t), \ \ t = 1, 2, 3, ...$$ {#eq-4.1}
+
+::: {style="text-align:justify"}
+la cual se estudiara en los periodos de tiempo (pre-pandemia, pos-pandemia).
+:::
+
+-   $V(t)$: son los ingresos de las ganancias por día para cada semana.
+
+-   $c$ : Son los costos de las obligaciones financieras del inversionista, como prestamos, pagos por adquisición de la franquicia, compras de equipos inmobiliarios, pagos de empleados, etc.
+
+-   $u \geq 0$ : Es el capital inicial con el cual inicia la empresa a trabajar.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+::: {style="text-align:justify"}
+Como ya se vio en la sección (@sec-modelo_C_L) El Modelo de Cramér-Lundberg (MCL) es una herramienta utilizada en el campo de la gestión de riesgos y las finanzas para evaluar la probabilidad de incumplimiento o pérdidas insuficientes en una empresa. Aunque no es específicamente diseñado para analizar la variación de las ganancias de una empresa, en particular una empresa de comida rápida, puede adaptarse para evaluar la probabilidad de ganancias insuficientes en este tipo de negocio, que puede llevar a la decisión de cierre de las actividades de la empresa.
+
+Para ello la ecuación general del modelo modificado que representa la evolución de las ganancias en el tiempo hasta la semana $t$, denotada por $G$ queda definida como: $$G(t) = u -ct + V(t), \ \ t = 1, 2, 3, ...$$ {#eq-4.1pdf}
+
+::: {style="text-align:justify"}
+la cual se estudiara en los dos periodo de tiempo (pre-pandemia, pos-pandemia).
+:::
+
+-   $V(t)$: son los ingresos de las ganancias por día para cada semana
+
+-   $c$ : Son los costos de las obligaciones financieras del inversionista, como prestamos, pagos por adquisición de la franquicia, compras de equipos inmobiliarios, pagos de empleados, etc.
+
+-   $u \geq 0$ : Es el capital inicial con el cual inicia la empresa a trabajar.
+:::
+:::
+
+### Caso pre-pandemia
+
+::: {style="text-align:justify"}
+Para la implementación del modelo modificado Cramér-Lundberg con los datos antes de la pandemia se hizo la simulación de las variables aleatorias mediante las distribuciones de las ventas por día tomado como las ganancias acumuladas, y se estimó los parámetros de $u$ y $c$, por lo que el modelo es determinista y se incrementa por semana.
+:::
+
+#### Modelo de Cramér-Lundberg simulado en R con datos reales de las ventas por día de la empresa.
+
+::: {.content-visible when-format="html"}
+::: {style="text-align:justify"}
+En la (@fig-trayectoria) se muestra la trayectoria del modelo bajo los supuestos del modelo modificado, el proceso comienza con $t = 90$, que son las $90$ semanas de de las ventas registradas por día antes del cierre pandemico, con un capital inicial de $u= 1759629$, una tasa de $c= 0.29$, los montos de las ganancias tienen distribución normal ($N$) y weibull ($W$).
+
+El código que genera la trayectoria es el siguiente:
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+::: {style="text-align:justify"}
+En la (@fig-fig-trayectoriapdf) se muestra la trayectoria del modelo bajo los supuestos del modelo modificado, el proceso comienza con $t = 90$, que son las $90$ semanas de de las ventas registradas por día antes del cierre pandemico, con un capital inicial de $u= 1759629$, una tasa de $c= 0.29$, los montos de las ganancias tienen distribución normal y weibull.
+
+El código que genera la trayectoria es el siguiente:
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r , eval=FALSE, message=FALSE}
+#Simulación Modelo Clásico de Cramér-Lundberg 
+#para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr)#librería para poder renombrar las cabeceras 
+# de los dataframes
+#Parámetros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c =0.29*u #prima de pago cada timepo t. c=0.5*u
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)
+  Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 )  + 
+            rnorm(1, mean = 48125.734 , sd=17150.338 )   +  
+            rnorm(1, mean =  44509.755, sd = 14312.338)  + 
+            rnorm(1, mean =   46904.516, sd = 16238.151) + 
+            rnorm(1, mean = 52786.734  , sd = 18403.17)  + 
+            rnorm(1, mean = 118645.9  , sd = 36530.24)   + 
+    rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] +
+                  tiempo_llegada,tiempo[length(tiempo)] +
+                  tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+           Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                              c*tiempo_llegada,
+          Cramer_trayectoria[length(Cramer_trayectoria)]-
+                              c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename
+                               (Tiempo = tiempo, 
+                                 Ct = Cramer_trayectoria))
+  return(df_trayectoria)
+  
+}
+trayectoria <- trayectoria_CLt(u,c, t_final )
+
+#Intalación de plotly usando github
+#devtools::install_github("ropensci/plotly")
+
+fig_tr<- plot_ly(trayectoria, x = ~Tiempo, y = ~Ct, 
+name = "Ganancias: G(t)", type = "scatter", mode = "lines")
+fig_tr <- fig_tr %>% add_trace(x = ~Tiempo, y = u,  
+name = "Capital inicial: u", type = "scatter", mode = "lines")
+fig_tr
+```
+
+![Trayectoria del proceso de evolución del modelo modificado de Cramér Lundberg antes de la pandemia.](fig-trayectoriapdf.png){#fig-fig-trayectoriapdf fig-align="center" width="80%"}
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-trayectoria}
+```{r , echo = TRUE, message=FALSE}
+#Simulación Modelo Clásico de Cramér-Lundberg 
+#para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # librería para poder renombrar las cabeceras 
+# de los dataframes
+
+#Parámetros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c =0.29*u #prima de pago cada timepo t. c=0.5*u
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)
+  Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + 
+    rnorm(1, mean = 48125.734 , sd=17150.338 ) +  
+   rnorm(1, mean =  44509.755, sd = 14312.338 ) + 
+    rnorm(1, mean =   46904.516, sd = 16238.151 ) + 
+    rnorm(1, mean = 52786.734  , sd = 18403.17 ) + 
+    rnorm(1, mean = 118645.9  , sd = 36530.24) + 
+    rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + 
+                tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+    Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada,
+    Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria)
+  
+}
+trayectoria <- trayectoria_CLt(u,c, t_final )
+
+#Intalación de plotly usando github
+#devtools::install_github("ropensci/plotly")
+
+fig_tr<- plot_ly(trayectoria, x = ~Tiempo, y = ~Ct, 
+name = "Ganancias: G(t)", type = "scatter", mode = "lines")
+fig_tr <- fig_tr %>% add_trace(x = ~Tiempo, y = u,  
+name = "Capital inicial: u", type = "scatter", mode = "lines")
+fig_tr
+
+```
+
+Trayectoria del proceso de evolución del modelo modificado de Cramér Lundberg antes de la pandemia.
+:::
+:::
+
+#### Probabilidad de ruina
+
+::: {style="text-align:justify"}
+Con la simulación de la variable aleatoria $G(t)$, es posible ahora calcular la probabilidad de ruina, utilizando el método de Monte Carlo(citar).
+
+Para ello, se quiere analizar el momento en el que $G(t)\leq u$, es decir cuando la ganancia al final de la semana $t$ es menor al capital inicial. Cuando $G(t)\leq0$, se alcanza como la ruina de la empresa, para ambos casos se utiliza la comparación con la tasa de interés para préstamos bancarios de $0.8$ anual.
+
+El código para simular la probabilidad de las ganancias finales bajas es el siguiente:
+:::
+
+```{r, echo= TRUE, message=FALSE}
+#Simulación de la probabilidad de ruina: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr) # librería para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parámetros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada tiempo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 48
+mu = 1 #tiempos entrellegadas constantes
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1) 
+    #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + 
+             rnorm(1, mean = 48125.734 , sd=17150.338 ) +  
+             rnorm(1, mean =  44509.755, sd = 14312.338 ) + 
+             rnorm(1, mean =   46904.516, sd = 16238.151 ) + 
+             rnorm(1, mean = 52786.734  , sd = 18403.17 ) + 
+             rnorm(1, mean = 118645.9  , sd = 36530.24) +
+             rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] +
+                  tiempo_llegada,tiempo[length(tiempo)] + 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <-c(Cramer_trayectoria,
+                Cramer_trayectoria[length(Cramer_trayectoria)]-
+                  c*tiempo_llegada,
+                Cramer_trayectoria[length(Cramer_trayectoria)]-
+                  c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de un tasa de 
+  #un título financiero 
+#para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.08*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>%rename
+                               (Tiempo = tiempo, 
+                                Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar 
+#la probabilidad de las ganancias bajas
+n_replicaciones = 100
+r_baja_ganancia <- replicate(n_replicaciones,
+trayectoria_CLt(u, c, lambda_Nt, t_final)
+[2])
+#r_baja_ganancia 
+prob_baja_ganancia <- sum(r_baja_ganancia >0)/n_replicaciones
+```
+
+::: {style="text-align:justify"}
+Es claro que la evolución de $G(t)$ antes de la pandemia genera una probabilidad de ganancias bajas cero.
+:::
+
+```{r, echo=FALSE}
+prob_baja_ganancia
+```
+
+::: {style="text-align:justify"}
+El código para calcular la probabilidad de ruina es el siguiente:
+:::
+
+```{r, echo= TRUE, message=FALSE}
+#Simulación de la probabilidad de ruina: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada tiempo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 48
+mu = 1 #tiempos entrellegadas constantes
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1) 
+#Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) +
+             rnorm(1, mean = 48125.734 , sd=17150.338 )   +  
+             rnorm(1, mean =  44509.755, sd = 14312.338 ) + 
+             rnorm(1, mean =   46904.516, sd = 16238.151) + 
+             rnorm(1, mean = 52786.734  , sd = 18403.17 ) +
+             rnorm(1, mean = 118645.9  , sd = 36530.24)   + 
+             rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] +
+                  tiempo_llegada,tiempo[length(tiempo)] + 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <-c(Cramer_trayectoria,
+                Cramer_trayectoria[length(Cramer_trayectoria)]-
+                             c*tiempo_llegada,
+                Cramer_trayectoria[length(Cramer_trayectoria)]-
+                             c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de un tasa de
+# un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.08*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename
+                               (Tiempo = tiempo, 
+                                 Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina <- replicate(n_replicaciones, 
+            trayectoria_CLt(u, c, lambda_Nt, t_final)[1])
+#r_ruina
+prob_ruin <- sum(r_ruina>0)/n_replicaciones
+```
+
+::: {style="text-align:justify"}
+En efecto la evolución de $G(t)$ antes de la pandemia genera una probabilidad ruina cero.
+:::
+
+```{r, echo=FALSE}
+prob_ruin
+```
+
+#### Análisis de sensibilidad
+
+::: {style="text-align:justify"}
+Se desea ahora analizar los cambios del resultado del modelo cuando se modifican sus entradas o parámetros, por lo cual se realiza un análisis de sensibilidad de algunos parámetros.
+
+Para ello del modelo modificado de Cramér Lundberg se toma los parámetros $u$ y $c$ del modelo modificado y se establece los rangos o valores posibles para cada uno de los ciertos parámetros, también se toma las medianas de las ganancia en la semana final de 100 simulaciones de las trayectorias del modelo, los rangos se determinan hasta que el modelo presente un comportamiento diferente.
+:::
+
+::: {.content-visible when-format="html"}
+```{r, echo =TRUE}
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: 
+#Antes de la pandemia Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) +
+rnorm(1, mean = 48125.734 , sd=17150.338 ) +  
+rnorm(1, mean =  44509.755, sd = 14312.338 ) + 
+rnorm(1, mean =   46904.516, sd = 16238.151 ) + 
+rnorm(1, mean = 52786.734  , sd = 18403.17 ) 
++ rnorm(1, mean = 81601.876  , sd = 23756.037) 
++ rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,
+    tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+    Cramer_trayectoria[length(Cramer_trayectoria)]- 
+      c*tiempo_llegada,
+    Cramer_trayectoria[length(Cramer_trayectoria)]-
+      c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+      {
+      ruina = 1
+      }
+    else
+      {
+      ruina = 0
+      }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename
+                               (Tiempo = tiempo, 
+                                Ct = Cramer_trayectoria))
+  return(df_trayectoria$Ct[length(df_trayectoria$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula 
+#la mediana de las ganancias finales 
+#de 100 trayectorias, fijando el u= surplus y el c
+generador_mediana<- function(ui,cj)
+  {
+  ganancia_final_replicas <- replicate(100, 
+                                       trayectoria_CLt(u, c,
+                                        lambda_Nt, t_final))
+  return( median(ganancia_final_replicas))
+  }
+#Se crea la rejilla donde se hace el analisis de sensibilidad
+#para diferentes valores de u y c
+grid_u <- seq(from = (u-100000*4), to = (u+100000*4), by = 100000)
+grid_c <- seq(from = (decimal_c-0.01*4), to = (decimal_c+0.01*4), 
+              by = 0.01)
+u_t <- grid_u
+matriz_mediana <- matrix(rep(0, length(u_t)*length(grid_c)),
+nrow= length(u_t), ncol= length(grid_c))
+G_t <- matriz_mediana
+
+for (i in 1:length(u_t)) 
+  {
+    for (j in 1:length(grid_c)) 
+      {
+      G_t[i,j] <- generador_mediana(u_t[i],grid_c[j]*u_t[i])
+      }
+  }  
+#matriz_mediana
+
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- u_t*grid_c
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], 
+             end = u_t[length(u_t)], 
+             size =100000 , color = 'red'),
+    z = list(show = TRUE, start = G_t[1], 
+             end = G_t[length(G_t)], 
+             size = 0.01*100000)),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+fig <- fig %>% layout(
+  scene = list(autosize = F, width = 500, height = 500,
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 8),
+    camera = list(eye = list(x = 0, 
+                             y = -1, z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval = FALSE}
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: 
+#Antes de la pandemia Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) +
+            rnorm(1, mean = 48125.734 , sd=17150.338 )    +  
+            rnorm(1, mean =  44509.755, sd = 14312.338 )  + 
+            rnorm(1, mean =   46904.516, sd = 16238.151 ) + 
+            rnorm(1, mean = 52786.734  , sd = 18403.17 )  + 
+            rnorm(1, mean = 81601.876  , sd = 23756.037)  + 
+            rweibull(1,  shape = 4.784508e+00, scale = 1.295070e+05 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] +
+                  tiempo_llegada,
+                tiempo[length(tiempo)] + 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+            Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                          c*tiempo_llegada,
+            Cramer_trayectoria[length(Cramer_trayectoria)]-
+                          c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+      {
+      ruina = 1
+      }
+    else
+      {
+      ruina = 0
+      }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename
+                               (Tiempo = tiempo, 
+                                Ct = Cramer_trayectoria))
+  return(df_trayectoria$Ct[length(df_trayectoria$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula 
+#la mediana de las ganancias finales 
+#de 100 trayectorias, fijando el u= surplus y el c
+generador_mediana<- function(ui,cj)
+  {
+  ganancia_final_replicas <- replicate(100, 
+                                       trayectoria_CLt(u, c,
+                                        lambda_Nt, t_final))
+  return( median(ganancia_final_replicas))
+  }
+#Se crea la rejilla donde se hace el analisis de sensibilidad
+#para diferentes valores de u y c
+grid_u <- seq(from = (u-100000*4), to = (u+100000*4), by = 100000)
+grid_c <- seq(from = (decimal_c-0.01*4), to = (decimal_c+0.01*4), 
+              by = 0.01)
+u_t <- grid_u
+
+matriz_mediana <- matrix(rep(0, length(grid_u)*length(grid_c)),
+nrow= length(grid_u), ncol= length(grid_c))
+G_t <- matriz_mediana
+for (i in 1:length(grid_u)) 
+  {
+    for (j in 1:length(grid_c)) 
+      {
+        G_t[i,j] <- generador_mediana(u_t[i],
+                              grid_c[j]*u_t[i])
+      }
+  }  
+#matriz_mediana
+
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- grid_u*grid_c
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], 
+             end = u_t[length(u_t)], 
+             size =100000 , color = 'red'),
+    z = list(show = TRUE, start = G_t[1], 
+             end = G_t[length(G_t)], 
+             size = 0.01*100000)),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+fig <- fig %>% layout(
+  scene = list(autosize = F, width = 500, height = 500,
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 8),
+    camera = list(eye = list(x = 0, 
+                             y = -1, z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig
+
+
+```
+
+![Análisis de sensibilidad pre-pandemia para 90 semanas](fig-analisispdf.png){fig-align="center" width="500"}
+:::
+
+### Caso pos-pandemia
+
+::: {style="text-align:justify"}
+De manera análoga a la metodología empleada con los datos pre-pandemicos, para la simulación del modelo Crámer-Lundberg con los datos después de la pandemia se hizo uso de las medias de las distribuciones de las ventas por día tomado como las ganancias acumuladas, y se estimó los parámetros de $u$ y $c$.
+:::
+
+#### Modelo de Cramér-Lundberg simulado en R con datos reales de las ventas por día de la empresa
+
+::: {.content-visible when-format="html"}
+::: {style="text-align:justify"}
+En la (@fig-trayectoria2) se muestra la trayectoria del modelo bajo los supuestos del modelo modificado, el proceso comienza con $t = 14$, que son las $14$ semanas de las ventas registradas por día después del cierre pandémico, con un capital inicial de $u= 1759629$, una tasa de $c= 0.29$, los montos de las ganancias tienen todas distribución normal ($N$).
+
+El código que genera la trayectoria es el siguiente:
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+::: {style="text-align:justify"}
+En la (@fig-fig-trayectoria2pdf) se muestra la trayectoria del modelo bajo los supuestos del modelo modificado, el proceso comienza con $t = 14$, que son las $14$ semanas de de las ventas registradas por día después del cierre pandemico, con un capital inicial de $u= 1759629$, una tasa de $c= 0.29$, los montos de las ganancias tienen todas distribución normal ($N$).
+
+El código que genera la trayectoria es el siguiente:
+:::
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-trayectoria2}
+```{r , echo = TRUE, message=FALSE}
+
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = (0.29*u) #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+Cramer_trayectoria <- c(Cramer_trayectoria,
+Cramer_trayectoria[length(Cramer_trayectoria)]
+-c*tiempo_llegada,
+
+Cramer_trayectoria[length(Cramer_trayectoria)]-
+c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+fig_tr2 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, y = ~Ct, name = "Ganancias: G(t)",type = "scatter", mode = "lines")
+
+fig_tr2 <- fig_tr2 %>% add_trace(x = ~Tiempo, y = u,  name = "Capital inicial: u", type = "scatter", mode = "lines")
+fig_tr2
+
+
+```
+
+Trayectoria de pérdidas del proceso de evolución modificado de Cramér Lundberg después de la pandemia.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r , eval=FALSE}
+
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = (0.29*u) #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075)+
+             rnorm(1, mean =  39841.721 , sd= 7873.446)  + 
+             rnorm(1, mean =   41751.747, sd = 5687.030) + 
+             rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+             rnorm(1, mean = 43010.307  , sd = 7741.889 )+ 
+             rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+             rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+tiempo <- c(tiempo, tiempo[length(tiempo)] +
+              tiempo_llegada,tiempo[length(tiempo)] +
+              tiempo_llegada ) 
+Cramer_trayectoria <- c(Cramer_trayectoria,
+Cramer_trayectoria[length(Cramer_trayectoria)] -
+  c*tiempo_llegada, 
+Cramer_trayectoria[length(Cramer_trayectoria)] -
+  c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                        rename(Tiempo = tiempo,
+                                        Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                              lambda_Nt,t_final)
+
+
+library(plotly)
+fig_tr2 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, 
+                                              y = ~Ct, 
+          name = "Ganancias: G(t)",
+          type = "scatter", mode = "lines")
+
+fig_tr2 <- fig_tr2 %>% add_trace(x = ~Tiempo, y = u,
+        name = "Capital inicial: u", 
+        type = "scatter", mode = "lines")
+fig_tr2
+
+
+```
+
+![Trayectoria de pérdidas del proceso de evolución modificado de Cramér Lundberg después de la pandemia](trayectoria2pdf.png){#fig-fig-trayectoria2pdf fig-align="left" width="600"}
+:::
+
+::: {style="text-align:justify"}
+Se emplean los mismos parámetros obtenidos en el periodo de tiempo pre pandemia del modelo modificado donde se observa una completa ruina al alcanzar $17$ semanas.
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r , eval =FALSE}
+library(dplyr) # libreria para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 17
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) 
++ rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  
+rnorm(1, mean =   41751.747, sd = 5687.030  ) + 
+rnorm(1, mean =   43243.143, sd = 10517.841 ) + 
+rnorm(1, mean = 43010.307  , sd = 7741.889 ) + 
+rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+    + tiempo_llegada,tiempo[length(tiempo)]
+    + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+    Cramer_trayectoria[length(Cramer_trayectoria)]
+    - c*tiempo_llegada,
+    Cramer_trayectoria[length(Cramer_trayectoria)]-
+    c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                        rename(Tiempo = tiempo,
+    Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+fig_tr3 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, 
+                                              y = ~Ct,
+            name = "Ganancias:G(t)",
+            type = "scatter", mode = "lines")
+
+fig_tr3 <- fig_tr3 %>% add_trace(x = ~Tiempo, y = u,
+           name = "Capital inicial:u", 
+           type = "scatter", mode = "lines")
+fig_tr3
+```
+
+![](trayectoria3pdf.png){#fig-fig-trayectoria3pdf}
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-trayectoria3}
+```{r , eval =FALSE}
+library(dplyr) # libreria para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 17
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) 
++ rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  
+rnorm(1, mean =   41751.747, sd = 5687.030  ) + 
+rnorm(1, mean =   43243.143, sd = 10517.841 ) + 
+rnorm(1, mean = 43010.307  , sd = 7741.889 ) + 
+rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+    + tiempo_llegada,tiempo[length(tiempo)]
+    + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+    Cramer_trayectoria[length(Cramer_trayectoria)]
+    - c*tiempo_llegada,
+    Cramer_trayectoria[length(Cramer_trayectoria)]-
+    c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                        rename(Tiempo = tiempo,
+    Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+fig_tr3 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, 
+                   y = ~Ct, 
+                   name = "Ganancias:G(t)",
+                   type = "scatter", mode = "lines")
+
+fig_tr3 <- fig_tr3 %>% add_trace(x = ~Tiempo, y = u,
+           name = "Capital inicial:u", 
+           type = "scatter", mode = "lines")
+fig_tr3
+
+
+```
+:::
+:::
+
+::: {style="text-align:justify"}
+La evolución del proceso de pérdidas en el modelo modificado de Cramér-Lundberg proporciona una herramienta más precisa y adaptable para predecir y contrarrestar los impactos financieros negativos de la empresa.
+
+Se incorpora un factor adicional y ajuste que mejoran la simulación del modelo, mediante la modificación del parámetro $c$, reduciendo un $17\%$ presentándose así los resultados siguientes mediante el siguiente código.
+:::
+
+::: {.content-visible when-format="html"}
+::: {#fig-trayectoria4}
+```{r , echo = TRUE, message=FALSE}
+
+library(dplyr) # libreria para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = (0.29*u)*(0.83) #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+            rnorm(1, mean =  39841.721 , sd= 7873.446) +  
+            rnorm(1, mean =   41751.747, sd = 5687.030) + 
+            rnorm(1, mean =   43243.143, sd = 10517.841) + 
+            rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+            rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+            rnorm(1, mean =  85684.058 , sd = 8371.359 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + 
+                tiempo_llegada,tiempo[length(tiempo)] + 
+                tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]-
+                            c*tiempo_llegada, 
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                            c*tiempo_llegada + Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename
+                                             (Tiempo = tiempo, 
+                                               Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+fig_tr4 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, 
+                   y = ~Ct, 
+         name = "Ganancias: G(t)",type = "scatter", mode = "lines")
+
+fig_tr4 <- fig_tr4 %>% add_trace(x = ~Tiempo, y = u,
+           name = "Capital inicial:u", type = "scatter", mode = "lines")
+fig_tr4
+
+```
+
+Trayectoria del proceso de pérdidas generadas por el modelo modificado de Cramér Lundberg después de la pandemia con una reducción de los costos al $17 \%$.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r , eval=FALSE}
+
+library(dplyr) # libreria para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = (0.29*u)*(0.83) #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+            rnorm(1, mean =  39841.721 , sd= 7873.446) +  
+            rnorm(1, mean =   41751.747, sd = 5687.030) + 
+            rnorm(1, mean =   43243.143, sd = 10517.841) + 
+            rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+            rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+            rnorm(1, mean =  85684.058 , sd = 8371.359 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + 
+                tiempo_llegada,tiempo[length(tiempo)] + 
+                tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                    Cramer_trayectoria[length(Cramer_trayectoria)]-
+                          c*tiempo_llegada, 
+                    Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                            c*tiempo_llegada + Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                          rename(Tiempo = tiempo, 
+                                          Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+fig_tr4 <- plot_ly(trayectoria_post_pandemia, x = ~Tiempo, 
+                   y = ~Ct, 
+         name = "Ganancias: G(t)",
+         type = "scatter", mode = "lines")
+
+fig_tr4 <- fig_tr4 %>% add_trace(x = ~Tiempo, y = u,
+        name = "Capital inicial: u", 
+        type = "scatter", mode = "lines")
+fig_tr4
+
+
+```
+
+![Trayectoria del proceso de pérdidas generadas por el modelo de Cramér Lundberg después de la pandemia con una reducción de los costos al 17%.](trayectoria4pdf.png){fig-align="center"}
+:::
+
+#### Probabilidad de ruina
+
+::: {style="text-align:justify"}
+Al igual que para el caso con los datos antes de la pandemia se analizó la semana en el que $G(t)\leq u$ y cuando $G(t)\leq0$, haciendo la comparación con la tasa de interés de $0.8$ anual en una cuenta de ahorro para una inversión del capital inicial $u$, para este periodo tomamos $t = 14$, es decir los datos registrados hasta las $14$ semanas después de pandemia donde la tasa es de $0.0233$
+
+El código para calcular la probabilidad de las ganancias finales bajas es el siguiente:
+:::
+
+```{r, eval= FALSE, message=FALSE}
+library(dplyr) # librería para poder renombrar las 
+# cabeceras de los dataframes
+
+#Parámetros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+mu = 1 #tiempos entrellegadas constantes
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) 
+#Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075   ) 
+              + rnorm(1, mean =  39841.721 , sd= 7873.446  ) 
+              + rnorm(1, mean =   41751.747, sd = 5687.030 ) 
+              + rnorm(1, mean =   43243.143, sd = 10517.841) 
+              + rnorm(1, mean = 43010.307  , sd = 7741.889 ) 
+              + rnorm(1, mean = 61191.300  , sd = 7202.989 ) 
+              + rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + 
+                  tiempo_llegada,tiempo[length(tiempo)]+ 
+                  tiempo_llegada) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+    Cramer_trayectoria[length(Cramer_trayectoria)] - 
+      c*tiempo_llegada, 
+    Cramer_trayectoria[length(Cramer_trayectoria)]- 
+      c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de un tasa de 
+# un título financiero  para el año 2018
+  
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < (1 + (14*0.08)/48)*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                  rename(Tiempo = tiempo,
+                                         Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_baja_ganancia_post_pandemia <- replicate(n_replicaciones,
+                          trayectoria_CLt_post_pandemia(u, c, 
+                                         lambda_Nt, t_final)[2])
+r_baja_ganancia_post_pandemia 
+prob_baja_ganancia_post_pandemia <- sum(r_baja_ganancia_post_pandemia >0)/
+n_replicaciones
+prob_baja_ganancia_post_pandemia
+```
+
+```{r, echo = FALSE, message=FALSE}
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02333*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_baja_ganancia_post_pandemia <- replicate(n_replicaciones, trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[2])
+#r_baja_ganancia_post_pandemia 
+prob_baja_ganancia_post_pandemia <- sum(r_baja_ganancia_post_pandemia >0)/n_replicaciones
+```
+
+::: {.content-visible when-format="html"}
+::: {style="text-align:justify"}
+Claramente la probabilidad de las ganancias bajas de la evolución de $G(t)$ después de la pandemia sea $1$, pues como se muestra en la gráfica (@fig-trayectoria) #fig-trayectoriatodas las ventas registradas están por debajo del capital inicial
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+::: {style="text-align:justify"}
+Claramente la probabilidad de las ganancias bajas de la evolución de $G(t)$ después de la pandemia sea $1$, pues como se muestra en la @fig-fig-trayectoria2pdf todas las ventas registradas están por debajo del capital inicial
+:::
+:::
+
+```{r, echo=FALSE}
+prob_baja_ganancia_post_pandemia
+```
+
+El código para calcular la probabilidad de las ganancias finales bajas durante las $17$ semanas es el siguiente:
+
+```{r, echo = TRUE, message=FALSE}
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 17
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo ,
+#media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) 
+#Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075)+ 
+              rnorm(1, mean =  39841.721 , sd= 7873.446) + 
+              rnorm(1, mean =   41751.747, sd = 5687.030)+ 
+              rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+              rnorm(1, mean = 43010.307  , sd = 7741.889)+ 
+              rnorm(1, mean = 61191.300  , sd = 7202.989)+ 
+              rnorm(1, mean =  85684.058 , sd = 8371.359 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)]+ 
+                  tiempo_llegada,tiempo[length(tiempo)]+ 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]-
+                      c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                      c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de un tasa de 
+# un título financieropara el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02833*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                            rename(Tiempo = tiempo, 
+                                            Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_baja_ganancia_post_pandemia <- replicate(n_replicaciones, 
+          trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[2])
+#r_baja_ganancia_post_pandemia 
+prob_baja_ganancia_post_pandemia <- sum(r_baja_ganancia_post_pandemia >0)/
+n_replicaciones
+prob_baja_ganancia_post_pandemia
+```
+
+::: {style="text-align:justify"}
+El código para calcular la probabilidad de ruina es el siguiente:
+:::
+
+```{r, eval = FALSE, message=FALSE}
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , 
+#media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) 
+#Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075)  +
+               rnorm(1, mean =  39841.721 , sd= 7873.446 ) + 
+               rnorm(1, mean =   41751.747, sd = 5687.030) + 
+               rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+               rnorm(1, mean = 43010.307  , sd = 7741.889 )+
+               rnorm(1, mean = 61191.300  , sd = 7202.989) +
+               rnorm(1, mean =  85684.058 , sd = 8371.359 )) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] +
+                  tiempo_llegada,tiempo[length(tiempo)] + 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                       Cramer_trayectoria[length(Cramer_trayectoria)]-
+                          c*tiempo_llegada, 
+                       Cramer_trayectoria[length(Cramer_trayectoria)]-
+                         c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de un tasa de 
+# un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02333*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                  rename(Tiempo = tiempo, 
+                                  Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina_post_pandemia <- replicate(n_replicaciones,
+          trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[1])
+#r_ruina_post_pandemia
+prob_ruin_post_pandemia <- sum(r_ruina_post_pandemia>0)/
+n_replicaciones
+prob_ruin_post_pandemia
+
+```
+
+::: {style="text-align:justify"}
+Lo que significa que a pesar de que las ganancias sean todas menores al capital inicial, en todas la simulaciones, nunca se presenta una que sea menor que cero.
+:::
+
+```{r, echo = FALSE, message=FALSE}
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02333*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina_post_pandemia <- replicate(n_replicaciones,
+        trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[1])
+#r_ruina_post_pandemia
+prob_ruin_post_pandemia <- sum(r_ruina_post_pandemia>0)/n_replicaciones
+prob_ruin_post_pandemia
+
+```
+
+::: {style="text-align:justify"}
+El código para calcular la probabilidad de ruina durante las $17$ semanas es el siguiente:
+:::
+
+```{r, echo = TRUE, message=FALSE}
+library(dplyr) # libreria para poder renombrar 
+#las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 17
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , 
+#media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) 
+# Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075)  + 
+               rnorm(1, mean =  39841.721 , sd= 7873.446)  +  
+               rnorm(1, mean =   41751.747, sd = 5687.030) + 
+               rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+               rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+               rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + 
+                  tiempo_llegada,tiempo[length(tiempo)] + 
+                  tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]-
+                      c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                      c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+# 1.08*u es la ganancia inferior a la de 
+# un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02833*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% 
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,
+                                            lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina_post_pandemia <- replicate(n_replicaciones,
+                          trayectoria_CLt_post_pandemia(u, c, 
+                                          lambda_Nt, t_final)[1])
+#r_ruina_post_pandemia
+prob_ruin_post_pandemia <- sum(r_ruina_post_pandemia>0)/
+n_replicaciones
+prob_ruin_post_pandemia
+
+```
+
+#### Análisis de sensibilidad
+
+::: {style="text-align:justify"}
+Modificando los parámetros $u$ y $c$ para erl periodo pso-pandemia del modelo modificado y estableciendo los rangos o valores posibles para cada uno de los ciertos parámetros, se presenta el análisis de sensibilidad durante las semanas registradas después de la pandemia que fueron $14$,. Se toman la mediana de las $100$ simulaciones de la ganancia final de la semana obtenida por el modelo, es decir la venta registrada en la última semana de los datos registrados.
+:::
+
+::: {.content-visible when-format="html"}
+```{r, echo = TRUE, message=FALSE}
+
+library(dplyr) # librería para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c = 0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+              rnorm(1, mean =  39841.721 , sd= 7873.446)  +  
+              rnorm(1, mean =   41751.747, sd = 5687.030) + 
+              rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+              rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+              rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+              rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+                + tiempo_llegada,tiempo[length(tiempo)] 
+                + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                        c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                       c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length
+                                (df_trayectoria_post_pandemia$Ct)])
+}
+
+# La función generador_mediana nos calcula la mediana de 
+# las ganancias finales de 100 trayectorias, 
+# fijando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+  ganancia_final_replicas_post_pandemia <- replicate(100,
+           trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+# Se crea la rejilla donde se hace el analisis de sensibilidad
+# para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*4), 
+                            to = (u+100000*4), 
+                            by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*4), 
+                            to = (decimal_c+0.01*4), 
+                            by = 0.01)
+u_t <- grid_u_post_pandemia
+matriz_mediana_post_pandemia <- matrix(rep(0, 
+      length(grid_u_post_pandemia)*length(grid_c_post_pandemia)),
+      nrow= length(grid_u_post_pandemia), 
+      ncol= length(grid_c_post_pandemia))
+
+G_t <- matriz_mediana_post_pandemia
+
+for (i in 1:length(u_t)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    G_t[i,j] <- generador_mediana_post_pandemia(u_t[i], 
+                                  grid_c_post_pandemia[j]*u_t[i])
+  }
+} 
+# matriz_mediana_post_pandemia  
+# Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- u_t*grid_c_post_pandemia
+fig2 <- plot_ly(
+  type = 'surface',
+  contours = list(x = list(show = TRUE, start = u_t[1], 
+                  end = grid_u_post_pandemia[length(u_t)], 
+                  size =100000 , color = 'black'),
+                  z = list(show = TRUE, start = G_t[1], 
+                  end = G_t[length(G_t)], 
+                  size = 0.01*100000)),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+fig2 <- fig2 %>% layout(
+    scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = 0, 
+                             y = -1, 
+                             z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig2
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval = FALSE, message=FALSE}
+
+library(dplyr) # libreria para poder renombrar 
+# las cabeceras de los dataframes
+
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+              rnorm(1, mean =  39841.721 , sd= 7873.446)  +  
+              rnorm(1, mean =   41751.747, sd = 5687.030) + 
+              rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+              rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+              rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+              rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+                + tiempo_llegada,tiempo[length(tiempo)] 
+                + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                        c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                       c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length
+                                (df_trayectoria_post_pandemia$Ct)])
+}
+
+# La función generador_mediana nos calcula la mediana de 
+# las ganancias finales de 100 trayectorias, 
+# fijando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+  ganancia_final_replicas_post_pandemia <- replicate(100,
+           trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+# Se crea la rejilla donde se hace el analisis de sensibilidad
+# para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*4), 
+                            to = (u+100000*4), 
+                            by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*4), 
+                            to = (decimal_c+0.01*4), 
+                            by = 0.01)
+u_t <- grid_u_post_pandemia
+matriz_mediana_post_pandemia <- matrix(rep(0, 
+      length(grid_u_post_pandemia)*length(grid_c_post_pandemia)),
+      nrow= length(grid_u_post_pandemia), 
+      ncol= length(grid_c_post_pandemia))
+
+G_t <- matriz_mediana_post_pandemia
+
+for (i in 1:length(u_t)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    G_t[i,j] <- generador_mediana_post_pandemia(u_t[i], 
+                                  grid_c_post_pandemia[j]*u_t[i])
+  }
+}  
+# matriz_mediana_post_pandemia  
+# Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- u_t*grid_c_post_pandemia
+fig2 <- plot_ly(
+  type = 'surface',
+  contours = list(x = list(show = TRUE, start = u_t[1], 
+                  end = grid_u_post_pandemia[length(u_t)], 
+                  size =100000 , color = 'black'),
+                  z = list(show = TRUE, start = G_t[1], 
+                  end = G_t[length(G_t)], 
+                  size = 0.01*100000)),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+fig2 <- fig2 %>% layout(
+    scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = 0, 
+                             y = -1, 
+                             z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig2
+
+
+```
+:::
+
+![](fig-analisis2pdf.png){fig-align="center" width="600"}
+
+::: {style="text-align:justify"}
+Se presenta también el análisis de sensibilidad para $t = 19$, debido a que en $19$ semanas se presenta el caso donde se pueden registrar ventas por debajo del cero, es decir, casos donde $G(t)\leq0$.
+:::
+
+::: {.content-visible when-format="html"}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+
+
+library(dplyr) # libreria para poder 
+# renombrar las cabeceras de los dataframes
+
+# Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+# Es un estimado a partir de la media de las ganancias por semana, 
+# multiplicado por 10/3, 
+# siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 19
+# S(t) = \sum_{i=1}^{N(t)}X_i
+# donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+# CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+# Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+              rnorm(1, mean =  39841.721 , sd= 7873.446)  +  
+              rnorm(1, mean =   41751.747, sd = 5687.030) + 
+              rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+              rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+              rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+              rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+                + tiempo_llegada,tiempo[length(tiempo)] 
+                + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                        c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                       c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length
+                                (df_trayectoria_post_pandemia$Ct)])
+}
+
+# La función generador_mediana nos calcula la mediana de 
+# las ganancias finales de 100 trayectorias, 
+# fijando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+  ganancia_final_replicas_post_pandemia <- replicate(100,
+           trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+# Se crea la rejilla donde se hace el analisis de sensibilidad
+# para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*4), 
+                            to = (u+100000*4), 
+                            by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*4), 
+                            to = (decimal_c+0.01*4), 
+                            by = 0.01)
+u_t <- grid_u_post_pandemia
+matriz_mediana_post_pandemia <- matrix(rep(0, 
+      length(grid_u_post_pandemia)*length(grid_c_post_pandemia)),
+      nrow= length(grid_u_post_pandemia), 
+      ncol= length(grid_c_post_pandemia))
+
+G_t <- matriz_mediana_post_pandemia
+
+for (i in 1:length(u_t)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    G_t[i,j] <- generador_mediana_post_pandemia(u_t[i], 
+                                  grid_c_post_pandemia[j]*u_t[i])
+  }
+} 
+
+#Grafica del ánalisis de sensibilidad
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- grid_u_post_pandemia*grid_c_post_pandemia
+
+z1<- matrix(rep(0,
+length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow=
+length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+z2<- matrix(rep(u,
+length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow=
+length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+fig3 <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], end =
+u_t[length(u_t)], size =100000 ,
+color = 'black'),
+    z = list(show = TRUE, start = G_t[1], 
+             end = G_t[length(G_t)], size =0.01*100000 , 
+             color = 'white')),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+
+fig3 <- fig3%>% add_surface(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], 
+             end = u_t[length(u_t)], size =100000 ,
+             color = 'black'),
+    y = list(show = TRUE, start = c_t[1], 
+             end = c_t[length(c_t)], 
+             size = 0.01*100000 , color = 'red')),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~z1)
+
+fig3 <- fig3 %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = 0, y = -1, z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+
+fig3
+
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+
+
+library(dplyr) # libreria para poder 
+# renombrar las cabeceras de los dataframes
+
+# Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+# Es un estimado a partir de la media de las ganancias por semana, 
+# multiplicado por 10/3, 
+# siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 19
+# S(t) = \sum_{i=1}^{N(t)}X_i
+# donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+# CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+# Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075) + 
+              rnorm(1, mean =  39841.721 , sd= 7873.446)  +  
+              rnorm(1, mean =   41751.747, sd = 5687.030) + 
+              rnorm(1, mean =   43243.143, sd = 10517.841)+ 
+              rnorm(1, mean = 43010.307  , sd = 7741.889) + 
+              rnorm(1, mean = 61191.300  , sd = 7202.989) + 
+              rnorm(1, mean =  85684.058 , sd = 8371.359)) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] 
+                + tiempo_llegada,tiempo[length(tiempo)] 
+                + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                        c*tiempo_llegada, 
+                      Cramer_trayectoria[length(Cramer_trayectoria)]- 
+                       c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>%
+                                  rename(Tiempo = tiempo, 
+                                         Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length
+                                (df_trayectoria_post_pandemia$Ct)])
+}
+
+# La función generador_mediana nos calcula la mediana de 
+# las ganancias finales de 100 trayectorias, 
+# fijando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+  ganancia_final_replicas_post_pandemia <- replicate(100,
+           trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+# Se crea la rejilla donde se hace el analisis de sensibilidad
+# para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*4), 
+                            to = (u+100000*4), 
+                            by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*4), 
+                            to = (decimal_c+0.01*4), 
+                            by = 0.01)
+u_t <- grid_u_post_pandemia
+matriz_mediana_post_pandemia <- matrix(rep(0, 
+      length(grid_u_post_pandemia)*length(grid_c_post_pandemia)),
+      nrow= length(grid_u_post_pandemia), 
+      ncol= length(grid_c_post_pandemia))
+
+G_t <- matriz_mediana_post_pandemia
+
+for (i in 1:length(u_t)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    G_t[i,j] <- generador_mediana_post_pandemia(u_t[i], 
+                                  grid_c_post_pandemia[j]*u_t[i])
+  }
+} 
+
+#Grafica del ánalisis de sensibilidad
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+c_t <- grid_u_post_pandemia*grid_c_post_pandemia
+
+z1<- matrix(rep(0,
+length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow=
+length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+z2<- matrix(rep(u,
+length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow=
+length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+fig3 <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], end =
+u_t[length(u_t)], size =100000 ,
+color = 'black'),
+    z = list(show = TRUE, start = G_t[1], 
+             end = G_t[length(G_t)], size =0.01*100000 , 
+             color = 'white')),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~G_t)
+
+fig3 <- fig3%>% add_surface(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = u_t[1], 
+             end = u_t[length(u_t)], size =100000 ,
+             color = 'black'),
+    y = list(show = TRUE, start = c_t[1], 
+             end = c_t[length(c_t)], 
+             size = 0.01*100000 , color = 'red')),
+  x = ~u_t,
+  y = ~c_t,
+  z = ~z1)
+
+fig3 <- fig3 %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = 0, y = -1, z = 1)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+
+fig3
+
+```
+
+![](fig-analisis3pdf.png){fig-align="center" width="600"}
+:::
+
+## Análisis de resultados y recomendaciones.
+
+::: {.content-visible when-format="html"}
+::: {style="text-align:justify"}
+Con los datos registrados de $90$ semanas antes de pandemia en el modelo modificado (@eq-4.1) se obtiene un crecimiento positivo de las ganancias simuladas, en particular mayor que el capital inicial, es decir la probabilidad del evento donde $G(t)\geq u$ es positiva, con $t=90$, como se puede observar en la imagen (@fig-trayectoria), por lo que en el intervalo de tiempo en el que se estudia la empresa generaría siempre ganancias positivas y se lograría suplir la deuda e incluso pensar en implementar más equipos inmobiliarios.
+
+Mientras que después de la pandemia, se puede argumentar con base en las observaciones de las $14$ semanas de las ventas registradas, usando los mismos parámetros obtenidos para los datos antes de la pandemia implementados, las ganancias son bajas como se muestra en la imagen (@fig-trayectoria2). Aquí se observa que la simulación de las ganancias son menores que el capital inicial y al dar seguimiento en el intervalo de tiempo con los datos registrados después de pandemiahasta la semana $17$ se observa que las ganancias son menores que cero, por lo que se puede concluir que se llega a una ruina total, como se muestra el caso en la imagen (@fig-trayectoria3).
+
+Analizando el caso en el que se modificara los parámetros de los costos del modelo (@eq-4.1), se concluye que al calibrar el parámetro $c$, este se puede reducir a un $17 \%$ para cuando $t=14$, es decir, al final de la semana $14$ puede evitarse la perdida total de las ganancias que son mayores que el capital inicial, como se observa en la figura (@fig-trayectoria4).
+
+Como $c$, es el parámetro de los pagos que incluye el pago por la adquisición de la franquicia, compras de equipos inmobiliarios, pagos de empleados y prestamos, el anterior análisis quiere decir que se necesita un recorte de personal del $17 \%$ como mínimo y una reestructuración financiera del capital pendiente por pagar, haciendo los pagos más pequeños a un tiempo extendido, con el fin de la funcionalidad del negocio durante este proceso pandemico y evitar el cierre de quiebra.
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+::: {style="text-align:justify"}
+Con los datos registrados de $90$ semanas antes de pandemia en el modelo modificado (@eq-4.1pdf) se obtiene un crecimiento positivo de las ganancias simuladas, en particular mayor que el capital inicial, es decir la probabilidad del evento donde $G(t)\geq u$ es positiva, con $t=90$, como se puede observar en la imagen (@fig-fig-trayectoriapdf), por lo que en el intervalo de tiempo en el que se estudia la empresa generaría siempre ganancias positivas y se lograría suplir la deuda e incluso pensar en implementar más equipos inmobiliarios.
+
+Mientras que después de la pandemia, se puede argumentar con base en las observaciones de las $14$ semanas de las ventas registradas, usando los mismos parámetros obtenidos para los datos antes de la pandemia implementados, las ganancias son bajas como se muestra en la imagen (@fig-fig-trayectoria2pdf). Aquí se observa que la simulación de las ganancias son menores que el capital inicial y al dar seguimiento en el intervalo de tiempo con los datos registrados después de pandemia hasta la semana $17$ se observa que las ganancias son menores que cero, por lo que se puede concluir que se llega a una ruina total, como se muestra el caso en la imagen (@fig-fig-trayectoria3pdf).
+
+Analizando el caso en el que se modifica los parámetros de los costos del modelo (@eq-4.1pdf) , se concluye que al calibrar el parámetro $c$, este se puede reducir a un $17 \%$ para cuando $t=14$, es decir, al final de la semana $14$ puede evitarse la perdida total de las ganancias que son mayores que el capital inicial, como se observa en la figura (@fig-fig-trayectoria4pdf).
+
+Como $c$, es el parámetro de los pagos que incluye el pago de la adquisición de la franquicia, compras de equipos inmobiliarios, pagos de empleados y prestamos, el anterior análisis quiere decir que se necesita un recorte de personal del $17 \%$ como mínimo y una reestructuración financiera del capital pendiente por pagar, haciendo los pagos más pequeños a un tiempo extendido, con el fin de la funcionalidad del negocio durante este proceso pandemico y evitar el cierre de quiebra.
+:::
+:::

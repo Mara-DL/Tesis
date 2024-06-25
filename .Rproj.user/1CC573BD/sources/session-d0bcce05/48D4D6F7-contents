@@ -1,0 +1,46 @@
+#_______________________________________________________________________________
+#Simulación Modelo Clásico de Cramer-Lundberg: Despues de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+plot_ly(trayectoria_post_pandemia, x = ~Tiempo, y = ~Ct, type = "scatter", mode = "lines")
+
+

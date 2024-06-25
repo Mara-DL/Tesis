@@ -1,0 +1,90 @@
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: despues de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length(df_trayectoria_post_pandemia$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula la mediana de las ganancias finales 
+#de 100 trayectorias, fihando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+    ganancia_final_replicas_post_pandemia <- replicate(100, trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+#Se crea la rejilla donde se hace el analisis de sensibilidad para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*5), to = (u+100000*5), by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*5), to = (decimal_c+0.01*5), by = 0.01)
+
+matriz_mediana_post_pandemia <- matrix(rep(0, length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow= length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+for (i in 1:length(grid_u_post_pandemia)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    matriz_mediana_post_pandemia[i,j] <- generador_mediana_post_pandemia(grid_u_post_pandemia[i], grid_c_post_pandemia[j]*grid_u_post_pandemia[i])
+  }
+}  
+matriz_mediana_post_pandemia  
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+w <- grid_u_post_pandemia*grid_c_post_pandemia
+fig2 <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = grid_u_post_pandemia[1], end = grid_u_post_pandemia[length(grid_u_post_pandemia)], size =100000 , color = 'white'),
+    y = list(show = TRUE, start = w[1], end = w[length(w)], size = 0.01*100000 , color = 'white')),
+  x = ~grid_u_post_pandemia,
+  y = ~w,
+  z = ~matriz_mediana_post_pandemia)
+fig2 <- fig2 %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = grid_u_post_pandemia[1]-1000, y = w[1]-1000, z = 300000)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig2

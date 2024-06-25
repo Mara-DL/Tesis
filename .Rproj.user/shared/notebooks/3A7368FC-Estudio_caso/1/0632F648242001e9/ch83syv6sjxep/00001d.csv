@@ -1,0 +1,4 @@
+"0","# muestra el gráfico de todos los histogramas de ventas por día antes de la pandemia"
+"0","par(mar=c(2,2,2,2))"
+"0","par(mfrow =c(3,3))"
+"0","hist(fil_dat_1_before$Ventas, main = ""Ventas día Domingo"", xlab = ""Ventas"")"

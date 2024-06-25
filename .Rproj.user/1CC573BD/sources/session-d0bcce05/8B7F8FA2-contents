@@ -1,0 +1,922 @@
+---
+lang: es
+---
+
+# Estudio de caso: Análisis de ventas de una empresa de comida rápida
+
+## Descripción del problema
+
+::: {style="text-align:justify"}
+Se presentan datos que son parte de las ventas de una empresa de comida rápida, esta empresa ofrece en sus productos dos tipos de hamburguesas, bebidas como sodas, cervezas y cafés, en la información de las ventas incluye registros obtenidos por una Terminal Punto de Venta (TPV), un dispositivo usado en establecimientos comerciales para procesar transacciones de venta. Permiten a los comerciantes aceptar pagos de tarjeta de crédito y débito. Se tiene registro de las ventas por cada día desde el año 2018 al noviembre del 2020, haciendo una pausa pandemica, por lo que se registran en dos etapas, antes de pandemia se registraron datos a partir del 25 de julio del 2018, haciendo un cierre pandemico el 10 de abril del 2020, después de pandemia se registraron los datos a partir del 3 de agosto del 2020 y cerrando finalmente el 10 de noviembre del 2020, los cuales se les aplicó una homogenización para un buen manejo de los datos y así poder presentar un mejor análisis.
+:::
+
+## Elementos de Ciencia de Datos
+
+### Importación de los datos originales a R
+
+::: {style="text-align:justify"}
+Se cargan los datos del archivo excel para ser leído y almacenarlo en un dataframe para poder manipular cada uno de los elementos de la base de datos.
+
+```{r,  echo = FALSE, message=FALSE,  warning = FALSE}
+library(readxl)
+library(readr)
+library(tswge)
+library(tseries)
+library(dplyr)
+library(tidyverse)
+library(psych)
+library(plotly)
+library(ruin)
+library(MASS)
+library(fitdistrplus)
+#library(logspline)
+#library(vegan)
+library(ggplot2)
+library(dtplyr)
+# instalar DT con: remotes::install_github('rstudio/DT')
+library(DT)#Para poner el dataframe en ventana
+```
+
+```{r, message=FALSE, warning = FALSE}
+Datos <- read_excel("~/Unach_FCFM/Tesis/Datos.xlsx", col_types = c("numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",   "numeric", "numeric"))
+
+Datos
+```
+
+Se eliminaron las columnas de las cuales no haremos utilidad y nos quedamos con las columnas de las ventas de los diferentes productos que oferta la empresa para así obtener las ventas totales.
+:::
+
+### Homogenización del total de ventas por día
+
+::: {style="text-align:justify"}
+Mediante este proceso se eliminan y se corrigen valores atípicos, valores faltantes o alguna inconsistencia que se presentan en los datos. Esto implica la eliminación de datos incompletos, conocidos como datos faltantes o NA. También se renombran las cabeceras de cada columna del dataframe para facilitar la lectura del archivo.
+
+-Explicar que es la base de datos total ya homogenizados
+
+-Explicar la separación de los datos antes de pandemia y después
+
+```{r, warning = FALSE}
+datos <- Datos[, -c(6,8,10,12,14,16,18,20,22,24, 26,28, 30,32, 34, 36,
+                    38, 40,  42, 44, 46, 48, 50,51,52, 53, 54,55, 56, 57,58,59,60,61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 73,74,72, 75)]
+#Cambiar las cabeceras del dataframe  
+datos <- data.frame(datos%>% rename(Año = ...1 ))
+datos <- data.frame(datos%>% rename(Mes = ...2, Semana = ...3, Dia= ...4 , Fecha = ...5, Ventas= VENTAS, TotalVentas =...9, Customers = CUSTOMERS, Totalcustomers =...13, CH_Promedio = CH..PROMEDIO, TotalCH_Promedio = ...17, Burgers = BURGERS, TotalBurgers = ...21, Thickurgers = THICKBURGERS, TotalThickburgers = ...25, Total_Burgers = TOTAL.BURGERS, T_Total_Burgers= ...29, Bebidas = BEBIDAS, Totalbebidas = ...33, Cervezas = CERVEZAS, Totalcervezas = ...37, Cafes = CAFES, Totalcafes = ...41, Ventas_TPV = VENTAS.TPV, Total_Ventas_TPV = ...45, HR_Laborales = HRS.LABORADAS, Total_HR_Laborales = ...49 ))
+```
+Por último se realizó la separación de la base de datos antes de la pandemia y después de la pandemia, presentando así los dataframes resultantes en el siguiente código:
+```{r, eval= FALSE, message=FALSE}
+#Analisis de los datos:
+#Filtros por días:
+#_________________________________Antes de la pandemia_____________________________________
+fil_before1<- data.frame(subset(datos, Año <= 2019))
+fil_before2<- data.frame(subset(datos, Año == 2020 & Mes <= 4))
+fil_before <- rbind(fil_before1, fil_before2)
+
+#________________________Después de la pandemia__________________________________
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+```
+:::
+
+### DataFrame Resultante: Antes de la pandemia
+
+```{r, echo = FALSE, attr.output='style="max-height: 300px;"'}
+
+#
+#Poner un apartado donde explique eque es la visualización de los datos 
+#Elimina las filas con datos faltantes
+#datos <- data.frame( datos %>% filter(!is.na(Año)))
+#DATAFRAME RESULTANTE:
+#_________________________________Antes de la pandemia____________________________________________
+fil_before1<- data.frame(subset(datos, Año <= 2019))
+fil_before2<- data.frame(subset(datos, Año == 2020 & Mes <= 4))
+fil_before <- rbind(fil_before1, fil_before2)
+DT::datatable(fil_before)
+```
+
+### DataFrame Resultante: Después de la pandemia
+
+```{r, echo = FALSE, attr.output='style="max-height: 300px;"'}
+#________________________Después de la pandemia__________________________________
+
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+DT::datatable(fil_dat_after)
+```
+
+::: {style="text-align:justify"}
+Para realizar la identificación de las diferentes distribuciones e implementar los gráficos como los histogramas y los boxplot, se elaboran filtros correspondientes para las ventas por cada día antes y después de pandemia
+
+Los comandos para realizar los filtros es el siguiente:
+:::
+
+```{r, echo = TRUE, message=FALSE}
+#filtra los datos del día Domingo antes de la pandemia
+fil_dat_1_before<- data.frame(subset(fil_before, Dia == 1))
+#_______________________________________________________________________
+#filtra los datos del día Lunes antes de la pandemia
+fil_dat_2_before<- data.frame(subset(fil_before, Dia == 2))
+#_________________________________________________________________________
+#filtra los datos del día martes antes de la pandemia
+fil_dat_3_before<- data.frame(subset(fil_before, Dia == 3))
+#______________________________________________________________________
+#filtra los datos del día miércoles antes de la pandemia
+fil_dat_4_before<- data.frame(subset(fil_before, Dia == 4))
+#___________________________________________________________
+#filtra los datos del día Jueves antes de la pandemia
+fil_dat_5_before<- data.frame(subset(fil_before, Dia == 5))
+#___________________________________________________________
+#filtra los datos del día Viernes antes de la pandemia
+fil_dat_6_before<- data.frame(subset(fil_before, Dia == 6))
+#___________________________________________________________
+#filtra los datos del día Sábado antes de la pandemia
+fil_dat_7_before<- data.frame(subset(fil_before, Dia == 7))
+```
+::: {style="text-align:justify"}
+Para visualizar gráficamente el comportamiento de las ventas por día, a continuación se construyen los histogramas por día, en el periodo antes y después de la pandemia
+:::
+
+### Análisis gráfico de las ventas por día:
+
+::: {style="text-align:justify"}
+Para la generación de los gráficos se empleó los filtros anteriores, con el fin de obtener un análisis descriptivo de cada uno de ellos.
+:::
+
+#### Histogramas de los datos de ventas por día antes de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera estos histogramas en R es el siguiente:
+
+```{r, echo=FALSE}
+# muestra el gráfico de todos los histogramas de ventas por día antes de la pandemia 
+
+par(mfrow =c(3,3))
+hist(fil_dat_1_before$Ventas, main = "Ventas día Domingo", xlab = "Ventas")
+hist(fil_dat_2_before$Ventas, main = "Ventas día Lunes", xlab = "Ventas")
+hist(fil_dat_3_before$Ventas, main = "Ventas día Martes", xlab = "Ventas")
+hist(fil_dat_4_before$Ventas, main = "Ventas día Miércoles", xlab = "Ventas")
+hist(fil_dat_5_before$Ventas, main = "Ventas día Jueves", xlab = "Ventas")
+hist(fil_dat_6_before$Ventas, main = "Ventas día Viernes", xlab = "Ventas")
+hist(fil_dat_7_before$Ventas, main = "Ventas día Sábado", xlab = "Ventas")
+```
+
+Para indagar el comportamiento periódico de las ventas, se presenta ahora los boxplot de las ventas por día.
+:::
+
+#### Boxplot de datos de ventas por días antes de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera en R los boxplot es el siguiente:
+
+```{r, echo=FALSE}
+# muestra el gráfico de todos los boxplot de ventas por día antes de la pandemia 
+fig <- plot_ly(y =fil_dat_1_before$Ventas, name = "Ventas día Domingo", boxpoints = "all",type = "box", )
+fig <- fig %>% add_trace(y = fil_dat_2_before$Ventas,  name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_before$Ventas,  name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_before$Ventas,  name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_before$Ventas,  name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_before$Ventas,  name = "Ventas día Viernes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_7_before$Ventas,  name = "Ventas día Sábado", boxpoints = "all")
+
+fig
+
+```
+
+Explicar que para generar el análisis pos pandemia se hace uso de los filtros de las ventas por cada día.
+
+El código es el siguiente:
+:::
+
+```{r, echo = FALSE, message=FALSE}
+#________________________Después de la pandemia__________________________________
+
+
+fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))
+#filtra los datos del día domingo despues de la pandemia
+fil_dat_1_after<- data.frame(subset(datos, Año == 2020 & Mes >= 8 & Dia==1))
+
+
+#filtra los datos del día lunes despues de la pandemia
+fil_dat_2_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==2))
+fil_dat_2_after <- fil_dat_2_after[fil_dat_2_after$Ventas != max(fil_dat_2_after$Ventas), ]
+#__________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+
+#dim(fil_dat_2_after)
+#Q2a <- quantile(fil_dat_2_after$Ventas, probs=c(.05, .95), na.rm = FALSE)
+#IQR2a <- IQR(fil_dat_2_after$Ventas)
+
+#Lower <- Q2a[1] - 1.5*IQR2a
+#Upper <- Q2a[2] + 1.5*IQR2a 
+
+#fil_dat_2_after <- subset(fil_dat_2_after, fil_dat_2_after > Lower & fil_dat_2_after < Upper)
+
+#_________________________________________
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#filtra los datos del día martes despues de la pandemia
+fil_dat_3_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==3))
+#p3 <- hist(fil_dat_3_after$Ventas)
+#boxplot(fil_dat_3_after$Ventas)
+
+#___________________________________________________________
+#quitamos los outliers de la base de datos del día 2(lunes):
+#aux_box3a <- data.frame(fil_dat_3_after)
+#filtra los datos del día miércoles despues de la pandemia
+fil_dat_4_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==4))
+
+#filtra los datos del día jueves despues de la pandemia
+fil_dat_5_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==5))
+
+#filtra los datos del día viernes despues de la pandemia
+fil_dat_6_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==6))
+#filtra los datos del día sábado despues de la pandemia
+fil_dat_7_after<- data.frame(subset(datos,Año == 2020 & Mes >= 8 & Dia ==7))
+
+```
+
+#### Histogramas de los datos de ventas por día después de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera estos histogramas en R es el siguiente:
+:::
+
+```{r, echo=FALSE}
+
+# muestra el gráfico de todos los histogramas de ventas por día despues de la pandemia
+
+par(mfrow =c(3,3))
+hist(fil_dat_1_after$Ventas, main = "Ventas día Domingo")
+hist(fil_dat_2_after$Ventas, main = "Ventas día Lunes")
+hist(fil_dat_3_after$Ventas, main = "Ventas día Martes")
+hist(fil_dat_4_after$Ventas, main = "Ventas día Miércoles")
+hist(fil_dat_5_after$Ventas, main = "Ventas día Jueves")
+hist(fil_dat_6_after$Ventas, main = "Ventas día Viernes")
+hist(fil_dat_7_after$Ventas, main = "Ventas día Sábado")
+```
+
+#### Boxplot de datos de ventas por días limpios después de la pandemia
+
+::: {style="text-align:justify"}
+El código que genera estos los boxplot en R es el siguiente:
+:::
+
+```{r, echo=FALSE}
+library(plotly)
+#día 1 = domingo
+#día 2 = lunes
+#día 3 = martes
+#día 4 = miércoles
+#día 5 = jueves
+#día 6 = viernes 
+#día 7 = sábado
+fig <- plot_ly(y =fil_dat_1_after$Ventas, name = "Ventas día Domingo", boxpoints = "all",type = "box")
+fig <- fig %>% add_trace(y = fil_dat_2_after$Ventas,  name = "Ventas día Lunes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_3_after$Ventas,  name = "Ventas día Martes", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_4_after$Ventas,  name = "Ventas día Miércoles", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_5_after$Ventas,  name = "Ventas día Jueves", boxpoints = "all")
+fig <- fig %>% add_trace(y = fil_dat_6_after$Ventas,  name = "Ventas día Viernes", boxpoints="all")
+fig <- fig %>% add_trace(y = fil_dat_7_after$Ventas,  name = "Ventas día Sábado", boxpoints = "all")
+
+fig
+```
+
+## Identificación de distribuciones de probabilidad de las ventas por día
+
+::: {style="text-align:justify"}
+Para identificar las distribuciones de cada día se hizo uso del test de Jarque Bera que ayuda a identificar cuales días siguen una distribución normal y el test de Kolmogorov de Smirnov
+
+El siguiente código aplica los diferentes test para las ventas por día antes de la pandemia
+:::
+
+```{r, echo=FALSE}
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_1_before$Ventas)
+#Como el p-value(2.2e^-16)<0.05 rechazamos la hipótesis nulajau
+#JARQUE BERA
+jarque.bera.test(fil_dat_1_before$Ventas) 
+#por lo tanto los datos no se distribuyen normalmente
+#Se ajustara una distribuciión con el comando siguiente:
+
+fitdistr(fil_dat_1_before$Ventas, "normal")
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_2_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_2_before$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_2_before$Ventas)
+
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_2_before$Ventas, "normal")
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_3_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_3_before$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_3_before$Ventas)
+
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_3_before$Ventas, "normal")
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_4_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_4_before$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_4_before$Ventas)
+
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_4_before$Ventas, "normal")
+
+#JARQUE BERA
+jarque.bera.test(fil_dat_5_before$Ventas)
+
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_5_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_5_before$Ventas)
+
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_5_before$Ventas, "normal")
+
+#Calcularemos los test correspondientes a los test de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_6_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_6_before$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_6_before$Ventas)
+
+#ajustamos una distribución (normal)
+fitdistr(fil_dat_6_before$Ventas, "normal")
+
+```
+
+::: {style="text-align:justify"}
+Para el caso del día sábado, denotado como séptimo día, no se obtuvo una distribución normal por lo que se utilizo la paqueteria de R fitdistrplus para porbar el ajuste de las distribuciones de probabilidad. Las distribuciones probadas fueron:
+El mejor ajuste se obtuvo al usar la distribución Weibull, como se presentará más adelante
+:::
+
+### Prueba de la distribución Weibull:
+
+::: {style="text-align:justify"}
+Una vez ajustada la distribución Weibull, se aplicó adicionalmente el test de Kolmogorov de Smirnov. El siguiente código implementa ambos procedimientos:
+:::
+
+```{r, echo = FALSE, message=FALSE}
+#############################################
+#filtra los datos del día Sábado antes de la pandemia
+fil_dat_7_before<- data.frame(subset(fil_before, Dia == 7))
+
+#median(fil_dat_7_before$Ventas)
+#summary(fil_dat_7_before$Ventas)
+#p7b <- hist(fil_dat_7_before$Ventas)
+#boxplot(fil_dat_7_before$Ventas, outline=FALSE) #Dato atípico
+
+#___________________________________________________________
+
+Q7 <- quantile(fil_dat_7_before$Ventas, probs=c(.25, .75), na.rm = FALSE)
+IQR7 <- IQR(fil_dat_7_before$Ventas)
+
+Lower <- Q7[1] - 1.5*IQR7
+Upper <- Q7[2] + 1.5*IQR7 
+
+fil_dat_7_before <- subset(fil_dat_7_before, fil_dat_7_before$Ventas > Lower & fil_dat_7_before$Ventas < Upper)
+
+#dim(fil_dat_7_before)
+
+aux_box7 <- data.frame(fil_dat_7_before$Ventas)
+#______________________________________________________________________
+
+
+#Calcularemos los test correspondientes a los filtros de de ventas por día:
+#SHAPIRO-WILK
+#shapiro.test(fil_dat_7_before$Ventas)
+#El valor p es menor que α = .05, 
+#entonces hay evidencia suficiente para decir 
+#que la muestra no proviene de una población con distribución normal.
+#CHI-SQUARE
+#chisq.test(fil_dat_7_before$Ventas)
+#JARQUE BERA
+jarque.bera.test(fil_dat_7_before$Ventas)
+#Fitting de de una distri bución weibull
+
+#fil_dat_7_before$Ventas
+fit.weibull <- fitdist(fil_dat_7_before$Ventas, "weibull")
+fit.weibull
+vector_ventas7_ordenados <- fil_dat_7_before$Ventas[order(fil_dat_7_before$Ventas)]
+n = 83
+F_x = numeric(n)
+for(i in 1:n){
+  F_x[i] <- (i/ n)
+}
+#F_x
+f_gorro_x <-  pweibull(vector_ventas7_ordenados, shape = 4.784508e+00, scale =  1.295070e+05 , lower.tail = TRUE, log.p = FALSE)
+ks <- abs(F_x - f_gorro_x)
+```
+
+#### Representación gráfica al aplicar el test de Kolmogorov de Smirnov
+
+```{r, echo = FALSE, message=FALSE}
+max(ks)
+valor_critico = (1.36/(sqrt(n)))
+valor_critico
+```
+
+```{r, echo = FALSE, message=FALSE}
+
+x <- 1:83 
+g1 <- plot(1:83, F_x) 
+g2 <- plot(1:83, f_gorro_x) 
+plot(x, F_x, col='red', xlab='x', ylab='y')
+
+#add second line to plot points(x, f_gorro_x, col='blue')
+```
+
+## Modelo Modificado de Crámer-Lundberg para identificar la probabilidad de las ganancias insuficientes en una empresa de comida rápida
+
+::: {style="text-align:justify"}
+El Modelo de Crámer-Lundberg (MCL) es una herramienta utilizada en el campo de la gestión de riesgos y las finanzas para evaluar la probabilidad de incumplimiento o pérdidas insuficientes en una empresa. Aunque no es específicamente diseñado para analizar la variación de las ganancias de una empresa, en particular una empresa de comida rápida, puede adaptarse para evaluar la probabilidad de ganancias insuficientes en este tipo de negocio, que puede llevar a la decisión de cierre de las actividades de la empresa.
+
+Para ello nuestra ecuación general del modelo queda definida como: $$U(t) = u -ct + S(t), \ \ t \geq0,$$
+
+la cual se especificará para cada periodo de tiempo ( pre-pandemia, pos-pandemia) .
+:::
+
+### Caso pre-pandemia
+
+::: {style="text-align:justify"}
+Para la simulación del modelo Crámer-Lundberg modificado con los datos antes de la pandemia se hizo uso de las medias de las distribuciones de las ventas por día tomado como las ganancias acumuladas, y se estimó los parámetros de $u$ y $c$
+:::
+
+#### Modelo de Crámer-Lundberg simulado en R con datos reales de las ventas por día de la empresa
+
+```{r , echo = FALSE, message=FALSE}
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c =0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+
+library(ggplot2)
+library(plotly)
+
+#Intalación de plotly usando github
+#devtools::install_github("ropensci/plotly")
+
+plot_ly(trayectoria, x = ~Tiempo, y = ~Ct, type = "scatter", mode = "lines")
+
+```
+
+#### Probabilidad de ruina
+
+```{r, echo = FALSE, message=FALSE}
+#Simulación Modelo Clásico de Cramer-Lundberg: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 48
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.08*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[1])
+r_ruina
+prob_ruin <- sum(r_ruina>0)/n_replicaciones
+prob_ruin
+
+n_replicaciones = 100
+r_baja_ganancia <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[2])
+r_baja_ganancia 
+prob_baja_ganancia <- sum(r_baja_ganancia >0)/n_replicaciones
+prob_baja_ganancia
+
+```
+
+#### Análisis de sensibilidad
+
+```{r, echo = FALSE, message=FALSE}
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+      {
+      ruina = 1
+      }
+    else
+      {
+      ruina = 0
+      }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria$Ct[length(df_trayectoria$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula la mediana de las ganancias finales 
+#de 100 trayectorias, fihando el u= surplus y el c
+generador_mediana<- function(ui,cj)
+  {
+  ganancia_final_replicas <- replicate(100, trayectoria_CLt(u, c,lambda_Nt, t_final))
+  return( median(ganancia_final_replicas))
+  }
+#Se crea la rejilla donde se hace el analisis de sensibilidad para diferentes valores de u y c
+grid_u <- seq(from = (u-100000*5), to = (u+100000*5), by = 100000)
+grid_c <- seq(from = (decimal_c-0.01*5), to = (decimal_c+0.01*5), by = 0.01)
+
+matriz_mediana <- matrix(rep(0, length(grid_u)*length(grid_c)), nrow= length(grid_u), ncol= length(grid_c))
+
+for (i in 1:length(grid_u)) 
+  {
+    for (j in 1:length(grid_c)) 
+      {
+        matriz_mediana[i,j] <- generador_mediana(grid_u[i], grid_c[j]*grid_u[i])
+      }
+  }  
+matriz_mediana
+
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+w <- grid_u*grid_c
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = grid_u[1], end = grid_u[length(grid_u)], size =100000 , color = 'white'),
+    y = list(show = TRUE, start = w[1], end = w[length(w)], size = 0.01*100000 , color = 'white')),
+  x = ~grid_u,
+  y = ~w,
+  z = ~matriz_mediana)
+fig <- fig %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = grid_u[1]-1000, y = w[1]-1000, z = 3000000)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig
+
+```
+
+### Caso pos-pandemia
+
+::: {style="text-align:justify"}
+De manera análoga a los datos pre-pandemicos, para la simulación del modelo Crámer-Lundberg con los datos después de la pandemia se hizo uso de las medias de las distribuciones de las ventas por día tomado como las ganancias acumuladas, y se estimo los parámetros de $u$ y $c$
+:::
+
+#### Modelo de Crámer-Lundberg simulado en R con datos reales de las ventas por día de la empresa
+
+```{r , echo = FALSE, message=FALSE}
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    tiempo_llegada <- (1)#rexp(1, rate = lambda_Nt)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia)
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+
+
+library(plotly)
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+plot_ly(trayectoria_post_pandemia, x = ~Tiempo, y = ~Ct, type = "scatter", mode = "lines")
+
+
+```
+
+#### Probabilidad de ruina
+
+```{r, echo = FALSE, message=FALSE}
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.034*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df_post_pandemia <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria_post_pandemia <- trayectoria_CLt_post_pandemia(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina_post_pandemia <- replicate(n_replicaciones, trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[1])
+r_ruina_post_pandemia
+prob_ruin_post_pandemia <- sum(r_ruina_post_pandemia>0)/n_replicaciones
+prob_ruin_post_pandemia
+
+n_replicaciones = 100
+r_baja_ganancia_post_pandemia <- replicate(n_replicaciones, trayectoria_CLt_post_pandemia(u, c, lambda_Nt, t_final)[2])
+r_baja_ganancia_post_pandemia 
+prob_baja_ganancia_post_pandemia <- sum(r_baja_ganancia_post_pandemia >0)/n_replicaciones
+prob_baja_ganancia_post_pandemia
+
+
+```
+
+#### Análisis de sensibilidad
+
+```{r, echo = FALSE, message=FALSE}
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 14
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt_post_pandemia <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 101919.050 , sd = 10877.075  ) + rnorm(1, mean =  39841.721 , sd= 7873.446 
+    ) +  rnorm(1, mean =   41751.747, sd = 5687.030  ) + rnorm(1, mean =   43243.143, sd = 10517.841 ) + rnorm(1, mean = 43010.307  , sd = 7741.889 ) + rnorm(1, mean = 61191.300  , sd = 7202.989) + rnorm(1, mean =  85684.058 , sd = 8371.359 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df_post_pandemia<- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria_post_pandemia <- data.frame(df_post_pandemia%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria_post_pandemia$Ct[length(df_trayectoria_post_pandemia$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula la mediana de las ganancias finales 
+#de 100 trayectorias, fihando el u= surplus y el c
+generador_mediana_post_pandemia<- function(ui,cj)
+  {
+    ganancia_final_replicas_post_pandemia <- replicate(100, trayectoria_CLt_post_pandemia(u, c,lambda_Nt, t_final))
+    return( median(ganancia_final_replicas_post_pandemia))
+  }
+#Se crea la rejilla donde se hace el analisis de sensibilidad para diferentes valores de u y c
+grid_u_post_pandemia <- seq(from = (u-100000*5), to = (u+100000*5), by = 100000)
+grid_c_post_pandemia <- seq(from = (decimal_c-0.01*5), to = (decimal_c+0.01*5), by = 0.01)
+
+matriz_mediana_post_pandemia <- matrix(rep(0, length(grid_u_post_pandemia)*length(grid_c_post_pandemia)), nrow= length(grid_u_post_pandemia), ncol= length(grid_c_post_pandemia))
+
+for (i in 1:length(grid_u_post_pandemia)) 
+{
+  for (j in 1:length(grid_c_post_pandemia)) 
+  {
+    matriz_mediana_post_pandemia[i,j] <- generador_mediana_post_pandemia(grid_u_post_pandemia[i], grid_c_post_pandemia[j]*grid_u_post_pandemia[i])
+  }
+}  
+matriz_mediana_post_pandemia  
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+w <- grid_u_post_pandemia*grid_c_post_pandemia
+fig2 <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = grid_u_post_pandemia[1], end = grid_u_post_pandemia[length(grid_u_post_pandemia)], size =100000 , color = 'white'),
+    y = list(show = TRUE, start = w[1], end = w[length(w)], size = 0.01*100000 , color = 'white')),
+  x = ~grid_u_post_pandemia,
+  y = ~w,
+  z = ~matriz_mediana_post_pandemia)
+fig2 <- fig2 %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = grid_u_post_pandemia[1]-1000, y = w[1]-1000, z = 300000)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig2
+
+```
+
+## Análisis de resultados y recomendaciones

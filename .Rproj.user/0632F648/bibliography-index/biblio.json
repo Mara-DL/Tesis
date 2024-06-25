@@ -1,0 +1,117 @@
+{
+    "sources": [
+        {
+            "DOI": "10.1093/comjnl/27.2.97",
+            "ISSN": "0010-4620",
+            "URL": "https://doi.org/10.1093/comjnl/27.2.97",
+            "author": [
+                {
+                    "family": "Knuth",
+                    "given": "Donald E."
+                }
+            ],
+            "container-title": "Comput. J.",
+            "id": "knuth84",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        1984,
+                        5
+                    ]
+                ]
+            },
+            "page": "97-111",
+            "publisher": "Oxford University Press, Inc.",
+            "publisher-place": "USA",
+            "title": "Literate programming",
+            "type": "article-journal",
+            "volume": "27"
+        },
+        {
+            "author": [
+                {
+                    "family": "Castañeda",
+                    "given": "Liliana Blanco"
+                },
+                {
+                    "family": "Arunachalam",
+                    "given": "Viswanathan"
+                },
+                {
+                    "family": "Dharmaraja",
+                    "given": "Selvamuthu"
+                }
+            ],
+            "id": "castaneda2012introduction",
+            "issued": {
+                "date-parts": [
+                    [
+                        2012
+                    ]
+                ]
+            },
+            "publisher": "John Wiley & Sons",
+            "title": "Introduction to probability and stochastic processes with applications",
+            "type": "book"
+        },
+        {
+            "URL": "https://books.google.com.mx/books?id=bKHBjgEACAAJ",
+            "author": [
+                {
+                    "family": "Mood",
+                    "given": "A. M. F."
+                },
+                {
+                    "family": "Graybill",
+                    "given": "F. A."
+                },
+                {
+                    "family": "Boes",
+                    "given": "D. C."
+                }
+            ],
+            "collection-title": "McGraw-hill series in probability and statistics",
+            "id": "mood1986introduction",
+            "issued": {
+                "date-parts": [
+                    [
+                        1986
+                    ]
+                ]
+            },
+            "title": "Introduction to the theory of statistics",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Çetinkaya-Rundel",
+                    "given": "Mine"
+                },
+                {
+                    "family": "Grolemund",
+                    "given": "Garrett"
+                }
+            ],
+            "id": "wickham2023r",
+            "issued": {
+                "date-parts": [
+                    [
+                        2023
+                    ]
+                ]
+            },
+            "publisher": "\" O’Reilly Media, Inc.\"",
+            "title": "R for data science",
+            "type": "book"
+        }
+    ],
+    "project_biblios": [
+        "references.bib"
+    ]
+}

@@ -1,0 +1,5 @@
+"0","#________________________Después de la pandemia__________________________________"
+"0",""
+"0",""
+"0","fil_dat_after <- data.frame(subset(datos, Año == 2020 & Mes>=8))"
+"0","DT::datatable(fil_dat_after)"

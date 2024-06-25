@@ -1,0 +1,77 @@
+project:
+  type: book
+  output-dir: _book
+  
+website:
+  favicon: FCFMLOGO.png
+  reader-mode: true
+  search:
+    location: sidebar
+    type: overlay
+  comments:
+    hypothesis: true
+
+book:
+  title: "Estudio del impacto de la pandemia en un establecimiento de comida rápida: Análisis y estimación de parámetros para el modelo modificado de Cramer-Lundberg"
+  reader-mode: true
+  language: es
+  author: "Mara Dominguez Limas"
+  date: "24/4/2024"
+  output-file: "Tesis_MDL"
+  image: FCFMLOGO.png
+  downloads: [pdf, epub]
+  favicon: logofcfm.png
+  sidebar:
+    logo: FCFM-UNACH.png
+    style: floating
+    collapse-level: 2
+    border: true
+    search: true
+  open-graph: true
+  twitter-card: true
+  repo-url: https://github.com/Mara-DL/Tesis.git
+  repo-actions: [edit, issue, source]
+  page-navigation: true
+  chapters:
+    - index.qmd
+    
+    - part: 'Preliminares'
+      chapters:
+        - probabilidad.qmd
+        - estadistica.qmd
+        - ciencia_de_datos.qmd
+        
+    - Modelo_de_Cramer_Lundberg.qmd
+    - Estudio_caso.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+ html:
+    theme:
+      dark: darkly
+    grid: 
+      sidebar-width: 300px
+      body-width: 900px
+      margin-width: 300px
+      gutter-width: 1.5rem
+    code-copy: true
+    code-fold: true
+ pdf:
+    lang: es
+    include-in-header:
+      - packa.tex
+    template-partials:
+      - before-body.tex
+    documentclass: scrreprt
+    papersize: us-letter
+    institution: Universidad Autónoma de Chiapas
+    email: x1800999@unach.mx
+    keep-tex: true
+ epub:
+    cover-image: FCFM-UNACH.png
+
+    
+editor: visual
+

@@ -1,0 +1,205 @@
+  #______________________________________________________________________________________
+#Simulación Modelo Clásico de Cramer-Lundberg: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 48
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.08*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[1])
+r_ruina
+prob_ruin <- sum(r_ruina>0)/n_replicaciones
+prob_ruin
+
+n_replicaciones = 100
+r_baja_ganancia <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[2])
+r_baja_ganancia 
+prob_baja_ganancia <- sum(r_baja_ganancia >0)/n_replicaciones
+prob_baja_ganancia
+
+
+
+n_replicaciones = 60
+r <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final))
+r
+prob_ruin <- sum(r>0)/n_replicaciones
+prob_ruin
+n_replicaciones = 90
+r <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final))
+r
+prob_ruin <- sum(r>0)/n_replicaciones
+prob_ruin
+
+#Gráfico usando ggPlot2:
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+
+#Gráfico usando Plotly:
+
+# Pinto mi gráfico de líneas
+library(ggplot2)
+library(plotly)
+
+#Intalación de plotly usando github
+#devtools::install_github("ropensci/plotly")
+
+plot_ly(trayectoria, x = ~Tiempo, y = ~Ct, type = "scatter", mode = "lines")
+
+plot_ly(trayectoria, type = "scatter", mode = "lines") %>%
+  add_lines(x = ~Tiempo, name = "Ruina" , y = ~Ct)
+
+#______________________________________________________________________________________
+#Simulación Modelo Clásico de Cramer-Lundberg durante tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+c = 0.29*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 12
+mu = 1 #tiempos entrellegadas constantes
+#df_media <- data.frame(df_media%>% rename(tiempos = Tiempo , media_trayectoria = cramer_media)
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1) #Suponiendo los tiempos entrellegadas constantes \mu = 1
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0){
+      ruina = 1
+    }
+    else{
+      ruina = 0
+    }
+  }
+  # 1.08*u es la ganancia inferior a la de un tasa de un título financiero para el año 2018
+  if(Cramer_trayectoria[length(Cramer_trayectoria)] < 1.02*u) {
+    ganancia_no_deseada = 1
+    
+  } 
+  else{
+    ganancia_no_deseada = 0
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  salida <- c(ruina, ganancia_no_deseada)
+  return(salida)
+  
+}
+trayectoria <- trayectoria_CLt(u,c,lambda_Nt, t_final )
+#Método de monte carlo para estimar la probabilidad de ruina
+n_replicaciones = 100
+r_ruina <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[1])
+r_ruina
+prob_ruin <- sum(r_ruina>0)/n_replicaciones
+prob_ruin
+
+n_replicaciones = 100
+r_baja_ganancia <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final)[2])
+r_baja_ganancia 
+prob_baja_ganancia <- sum(r_baja_ganancia >0)/n_replicaciones
+prob_baja_ganancia
+
+
+
+n_replicaciones = 60
+r <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final))
+r
+prob_ruin <- sum(r>0)/n_replicaciones
+prob_ruin
+n_replicaciones = 90
+r <- replicate(n_replicaciones, trayectoria_CLt(u, c, lambda_Nt, t_final))
+r
+prob_ruin <- sum(r>0)/n_replicaciones
+prob_ruin
+
+#Gráfico usando ggPlot2:
+#plot(trayectoria$Tiempo, trayectoria$Ct, type= "l")
+
+#Gráfico usando Plotly:
+
+# Pinto mi gráfico de líneas
+library(ggplot2)
+library(plotly)
+
+#Intalación de plotly usando github
+#devtools::install_github("ropensci/plotly")
+
+plot_ly(trayectoria, x = ~Tiempo, y = ~Ct, type = "scatter", mode = "lines")
+
+plot_ly(trayectoria, type = "scatter", mode = "lines") %>%
+  add_lines(x = ~Tiempo, name = "Ruina" , y = ~Ct)
+
+
+
+
+
+
+
+

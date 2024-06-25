@@ -1,0 +1,74 @@
+{
+    "entries": [
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "espacio_probabilidad",
+            "suffix": "",
+            "title": "Espacio de probabilidad"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "var_alea_cont",
+            "suffix": "",
+            "title": "Variable aleatoria continua"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "espacio_medible",
+            "suffix": "",
+            "title": "Espacio medible"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "eq",
+            "id": "var_ale_con",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "mutuamente_excluyentes",
+            "suffix": "",
+            "title": "Eventos mutuamente excluyentes"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "variable_alea_dis",
+            "suffix": "",
+            "title": "Variable aleatoria discreta"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "sigma_algebra",
+            "suffix": "",
+            "title": "\\sigma-álgebra"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "pclas",
+            "suffix": "",
+            "title": "Probabilidad clásica"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "variable_aleatoria",
+            "suffix": "",
+            "title": "Variable aleatoria"
+        },
+        {
+            "file": "probabilidad.qmd",
+            "type": "def",
+            "id": "pfrec",
+            "suffix": "",
+            "title": "Probabilidad frecuentista"
+        }
+    ]
+}

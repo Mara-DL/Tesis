@@ -1,0 +1,13 @@
+# Ciencia de Datos
+
+## Data Frame {#sec-dataframe}
+
+::: {style="text-align:justify"}
+Los dataframes son un objeto que se muestran en un formato tabla, los cuales pueden tener diferentes tipos de datos en su interior.
+
+Una cuestión habitual es preguntarse en qué casos debes usar un data frame o una matriz en R. Los data frames son estructuras de datos muy similares a las matrices, pero en el caso de los data frames puedes tener diferentes tipos de datos dentro de las columnas. En consecuencia, la diferencia es que las matrices almacenan tipos de datos homogéneos mientras que los data frames almacenan tipos de datos heterogéneos.
+
+Los Dataframes se representan como un tipo especial de lista en la que cada elemento de la lista debe tener el atributo misma longitud. Cada elemento de la lista se puede considerar como una columna y la longitud de cada elemento de la lista es el número de filas. A diferencia de las matrices, los dataframes pueden almacenar diferentes clases de objetos en cada columna. Las matrices deben Hacer que cada elemento sea de la misma clase (por ejemplo, todos los enteros o todos los números).
+
+[@wickham2023r]
+:::

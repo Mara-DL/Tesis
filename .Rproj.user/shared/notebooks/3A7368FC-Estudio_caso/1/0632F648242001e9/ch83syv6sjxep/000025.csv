@@ -1,0 +1,1 @@
+"0","hist(fil_dat_5_before$Ventas, main = ""Ventas día Jueves"", xlab = ""Ventas"")"

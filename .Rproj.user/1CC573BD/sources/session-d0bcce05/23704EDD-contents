@@ -1,0 +1,214 @@
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+      {
+      ruina = 1
+      }
+    else
+      {
+      ruina = 0
+      }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria$Ct[length(df_trayectoria$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula la mediana de las ganancias finales 
+#de 100 trayectorias, fihando el u= surplus y el c
+generador_mediana<- function(ui,cj)
+  {
+  ganancia_final_replicas <- replicate(100, trayectoria_CLt(u, c,lambda_Nt, t_final))
+  return( median(ganancia_final_replicas))
+  }  
+#Se crea la rejilla donde se hace el analisis de sensibilidad para diferentes valores de u y c
+grid_u <- seq(from = (u-100000*10), to = (u+100000*10), by = 100000)
+grid_c <- seq(from = (decimal_c-0.01*10), to = (decimal_c+0.01*10), by = 0.01)
+
+matriz_mediana <- matrix(rep(0, length(grid_u)*length(grid_c)), nrow= length(grid_u), ncol= length(grid_c))
+
+for (i in 1:length(grid_u)) 
+  {
+    for (j in 1:length(grid_c)) 
+      {
+        matriz_mediana[i,j] <- generador_mediana(grid_u[i], grid_c[j]*grid_u[i])
+      }
+  }  
+matriz_mediana
+
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+w <- grid_u*grid_c
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = grid_u[1], end = grid_u[length(grid_u)], size =100000 , color = 'white'),
+    y = list(show = TRUE, start = w[1], end = w[length(w)], size = 0.01*100000 , color = 'white')),
+  x = ~grid_u,
+  y = ~w,
+  z = ~matriz_mediana)
+
+fig <- fig %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = grid_u[1]-1000, y = w[1]-1000, z = 3000000)),
+    aspectratio = list(x = 2, y = 2, z = 1)))
+
+
+
+
+####################################################################################
+#Para mas cosos
+#Simulación Modelo Clásico de Cramer-Lundberg para tres meses: Antes de la pandemia
+#Con los datos reales de la empresa
+
+library(dplyr) # libreria para poder renombrar las cabeceras de los dataframes
+#Parametros
+set.seed(13) #semilla fija
+u = 1759629 #surplus(capital inicial de salvamento)
+#Es un estimado a partir de la media de las ganancias por semana, 
+#multiplicado por 10/3, 
+#siendo una proporción para evitar la ruina
+# u (sum(medias))*(10/3)
+decimal_c = 0.29
+c =decimal_c*u #prima de pago cada timepo t. c=0.5*u
+lambda_Nt = 0.5
+#lambda_Xi = 3
+t_final = 90
+# S(t) = \sum_{i=1}^{N(t)}X_i
+#donde N(t)~ Poisson (lambda*t)
+# X_i ~ exponencial (lambda_Xi)
+#CL = REPRESENTA EL MODELO DE CRAMER LUNDBERG
+#Simulación de trayectoria de CL_t, cuando t < t_final.
+trayectoria_CLt <- function(u, c, lambda_Nt, t_final)
+{
+  tiempo <- c(0)
+  Cramer_trayectoria <- c(u)
+  while(tiempo[length(tiempo)] < t_final)
+  {
+    #tiempo_llegada <- rexp(1, rate = lambda_Nt)
+    tiempo_llegada <- (1)
+    Y_i <-  (rnorm(1, mean = 139929.468, sd = 24521.524 ) + rnorm(1, mean = 48125.734 , sd=17150.338 ) +  rnorm(1, mean =  44509.755, sd = 14312.338 ) + rnorm(1, mean =   46904.516, sd = 16238.151 ) + rnorm(1, mean = 52786.734  , sd = 18403.17 ) + rnorm(1, mean = 81601.876  , sd = 23756.037) + rnorm(1, mean =  114030.720 , sd = 19161.182 ) ) 
+    tiempo <- c(tiempo, tiempo[length(tiempo)] + tiempo_llegada,tiempo[length(tiempo)] + tiempo_llegada ) 
+    Cramer_trayectoria <- c(Cramer_trayectoria,
+                            Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada, Cramer_trayectoria[length(Cramer_trayectoria)]- c*tiempo_llegada +  Y_i )
+    if(Cramer_trayectoria[length(Cramer_trayectoria)] < 0)
+    {
+      ruina = 1
+    }
+    else
+    {
+      ruina = 0
+    }
+  }
+  df <- data.frame(tiempo, Cramer_trayectoria)
+  df_trayectoria <- data.frame(df%>% rename(Tiempo = tiempo, Ct = Cramer_trayectoria))
+  return(df_trayectoria$Ct[length(df_trayectoria$Ct)])
+  
+}
+
+# La función generador_mediana nos calcula la mediana de las ganancias finales 
+#de 100 trayectorias, fihando el u= surplus y el c
+generador_mediana<- function(ui,cj)
+{
+  ganancia_final_replicas <- replicate(100, trayectoria_CLt(u, c,lambda_Nt, t_final))
+  return( median(ganancia_final_replicas))
+}
+#Se crea la rejilla donde se hace el analisis de sensibilidad para diferentes valores de u y c
+grid_u <- seq(from = (u-100000*20), to = (u+100000*20), by = 100000)
+grid_c <- seq(from = (decimal_c-0.01*5), to = (decimal_c+0.01*5), by = 0.01)
+
+matriz_mediana <- matrix(rep(0, length(grid_u)*length(grid_c)), nrow= length(grid_u), ncol= length(grid_c))
+
+for (i in 1:length(grid_u)) 
+{
+  for (j in 1:length(grid_c)) 
+  {
+    matriz_mediana[i,j] <- generador_mediana(grid_u[i], grid_c[j]*grid_u[i])
+  }
+}  
+matriz_mediana
+
+#Grafica del ánalisis de sensibilidad
+library(plotly)
+library(ggplot2)
+w <- grid_u*grid_c
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    x = list(show = TRUE, start = grid_u[1], end = grid_u[length(grid_u)], size =100000 , color = 'white'),
+    y = list(show = TRUE, start = w[1], end = w[length(w)], size = 0.01*100000 , color = 'white')),
+  x = ~grid_u,
+  y = ~w,
+  z = ~matriz_mediana)
+fig <- fig %>% layout(
+  scene = list(
+    xaxis = list(nticks = 20),
+    zaxis = list(nticks = 4),
+    camera = list(eye = list(x = grid_u[1]-1000, y = w[1]-1000, z = 3000000)),
+    aspectratio = list(x = .9, y = .8, z = 0.2)))
+
+fig
+
+
+fig <- plot_ly(matriz_mediana, x = grid_u[11], y = grid_c[11], z = ~matriz_mediana)
+fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene = list(xaxis = list(title = 'Weight'),
+                                   yaxis = list(title = 'Gross horsepower'),
+                                   zaxis = list(title = '1/4 mile time')))
+
+fig
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

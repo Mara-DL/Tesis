@@ -1,0 +1,121 @@
+# Probabilidad
+
+::: {style="text-align:justify"}
+La probabilidad es el lenguaje necesario para representar eventos aleatorios. Se utiliza para la toma de decisiones basadas en la incertidumbre y para predecir la frecuencia con la que ocurrirán ciertos eventos en condiciones especificas. Permite cuantificar las posibilidades de que ocurra un evento y predecir resultados. La probabilidad se expresa como un número entre $0$ y $1$.
+
+El origen de la teoría de la probabilidad se remonta a los siglos XVI y XVII, cuando surgió como respuesta a problemas prácticos relacionados con juegos de azar.
+
+La teoría de la probabilidad ha evolucionado desde problemas prácticos en juegos de azar hasta convertirse en una disciplina matemática rigurosa con aplicaciones en numerosos campos como la estadística, la física, la economía, y la ingeniería. Los esfuerzos de muchos matemáticos a lo largo de los siglos han contribuido a su desarrollo y formalización.
+
+La probabilidad tiene muchas aplicaciones prácticas en la vida cotidiana. Por ejemplo la probabilidad puede determinar las posibilidades de ganar en juegos de azar como la lotería, el póker, la ruleta y otros juegos de casino, hasta ser usada para las compañías de seguros para calcular las primas de los seguros de vida, salud, automóviles, entre otros. Esto se basa en el análisis de datos históricos y la evaluación de riesgos.
+
+Para brindar mayor conocimiento e indagar una idea mas concreta de lo que es la probabilidad se presentan las siguientes definiciones: [@castaneda2012introduction]
+:::
+
+::: {#def-pclas style="text-align: justify"}
+## Probabilidad clásica
+
+Si un experimento aleatorio puede resultar en $n$ resultados mutuamente excluyentes e igualmente probables y si $s$ de estos resultados tienen un atributo $A$, entonces la probabilidad de $A$ es la fracción $s/n$.
+:::
+
+::: {#def-pfrec style="text-align: justify"}
+## Probabilidad frecuentista
+
+Suponiendo que después de $n$ repeticiones, para valores muy grandes de $n$, un evento $A$ puede ocurrir $s$ veces. Entonces $p=s/n$.
+:::
+
+::: {#def-sigma_algebra}
+## $\sigma$-álgebra
+
+Sea $\Omega \neq \Phi$. Una colección $\mathfrak{F}$ de subconjuntos de $\Omega$ es una $\sigma$-álgebra sobre $\Omega,$ si:
+
+i.  $\Omega \in  \mathfrak{F}$.
+
+ii. Si $A \in \mathfrak{F}$ entonces $A^c \in \mathfrak{F}$.
+
+iii. Si $A_1, A_2, ... \in \mathfrak{F}$ entonces $\bigcup_{i=1}^{\infty} A_i \in \mathfrak{F}$.
+
+     Los elementos de $\mathfrak{F}$ se llaman eventos.
+:::
+
+::: {#def-espacio_medible}
+## Espacio medible
+
+Sean $\Omega \neq \Phi$ y $\mathfrak{F}$ una $\sigma- álgebra$ sobre $\Omega$. La pareja $(\Omega, \mathfrak{F})$ se llama espacio medible.
+:::
+
+::: {#def-mutuamente_excluyentes}
+## Eventos mutuamente excluyentes
+
+Dos eventos $A$ y $B$ se dicen mutuamente excluyentes si $A \cap B = \Phi$
+:::
+
+::: {#def-espacio_probabilidad}
+## Espacio de probabilidad
+
+Sea $(\Omega, \mathfrak{F})$ un espacio medible (@def-espacio_medible). Una función $P$ definida sobre $\mathfrak{F}$ y de valor real que satisface las siguientes condiciones:
+
+i.  $P(A) \geq 0$ para todo $A \in \mathfrak{F}$.
+
+ii. $P(\Omega) = 1$.
+
+iii. Si $A_1, A_2, ...$ son elementos de $\mathfrak{F}$ mutuamente excluyentes, esto es
+
+     $$
+     A_j \ \cap \ A_j = \Phi \ para \  todo \ i \neq j 
+     $$
+
+     $$
+     entonces \ P \left( \bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)
+     $$Se llama medida de probabilidad sobre $(\Omega, \mathfrak{F})$.
+
+     La tripla $(\Omega, \mathfrak{F}, P)$ se llama espacio de probabilidad.
+:::
+
+## Variables aleatorias
+
+::: {style="text-align:justify"}
+En estadística y probabilidad, una variable aleatoria es una función que asigna un valor numérico a cada posible resultado de un experimento aleatorio. Las variables aleatorias son
+:::
+
+::: {#def-variable_aleatoria}
+## Variable aleatoria
+
+Sean $(\Omega,\mathfrak{F}, P)$ un espacio de probabilidad (@def-espacio_probabilidad) y $\tilde{\Omega},\tilde{\mathfrak{F}}$ un espacio medible (@def-espacio_medible). Una $\mathfrak{F}-\mathfrak{F}$- variable aleatoria es una aplicación $X:\Omega\rightarrow \tilde{\Omega}$ tal que, para todo $A \in \mathfrak{F}$ se tiene que $X^{-1}(A) \in  \mathfrak{F}$. Si $(\tilde{\Omega}, \tilde{\mathfrak{F}}) = (\mathbb{R},\mathcal{B}),$ entonces, se dice que $X$ es una variable aleatoria real
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Variable aleatoria***)
+
+Sean
+:::
+
+## Variables aleatorias discretas
+
+::: {#def-variable_alea_dis}
+## Variable aleatoria discreta
+
+Sean $X$ una variable aleatoria real (@def-variable_aleatoria) y $F_X$ su función de distribución. Se dice que $F_X$ presenta un salto en el punto $a \in \mathbb{R}$ si $$ F_{X}(a) - F_{X}(a^{-}) \neq 0$$ La diferencia $F_{X}(a) - F_{X}(a^{-})$ se llama magnitud del salto y por las propiedades desarrolladas anteriormente se tiene que es igual a $P(X=a)$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Variable aleatoria discreta***)
+
+Sean
+:::
+
+## Variables aleatorias continuas
+
+::: {#def-var_alea_cont}
+## Variable aleatoria continua
+
+Sean $X$ una variable aleatoria real (@def-variable_aleatoria) definida sobre el espacio de probabilidad $(\Omega, \mathfrak{F}, P)$ . Se dice que $X$ es absolutamente continua, si y solo si, existe una función real no negativa e integrable $f_X$ tal que, para todo $x \in \mathbb{R}$, se satisface: $$F_X(x) = \int_{-\infty}^x f_X(t)dt.$$ {#eq-var_ale_con}
+
+La función $f_X$ recibe el nombre de función de densidad (fdd) de la variable aleatoria $X$.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Variable aleatoria continua***)
+
+Sean
+:::

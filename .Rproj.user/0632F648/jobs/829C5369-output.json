@@ -1,0 +1,2 @@
+[1,"==> quarto preview Estudio_caso.qmd --to pdf --no-watch-inputs --no-browse\n\n"]
+[1,"ERROR: YAMLException: bad indentation of a mapping entry (C:\\Users\\DELL\\Downloads\\tesis_abril-20240521T152758Z-001\\tesis_abril\\_quarto.yml, 40:3)\n39:     code-fold: true\n40:   pdf:\n     ~~\n41:     lang: es\n"]

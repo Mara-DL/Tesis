@@ -1,0 +1,44 @@
+"0","library(plotly)"
+"2","Cargando paquete requerido: ggplot2
+"
+"2","
+Adjuntando el paquete: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","#día 1 = domingo"
+"0","#día 2 = lunes"
+"0","#día 3 = martes"
+"0","#día 4 = miércoles"
+"0","#día 5 = jueves"
+"0","#día 6 = viernes "
+"0","#día 7 = sábado"
+"0","fig <- plot_ly(y =fil_dat_1_after$Ventas, name = ""Ventas día Domingo"", boxpoints = ""all"",type = ""box"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_2_after$Ventas,  "
+"0","                         name = ""Ventas día Lunes"", boxpoints = ""all"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_3_after$Ventas,  "
+"0","                         name = ""Ventas día Martes"", boxpoints = ""all"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_4_after$Ventas,  "
+"0","                         name = ""Ventas día Miércoles"", boxpoints = ""all"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_5_after$Ventas,  "
+"0","                         name = ""Ventas día Jueves"", boxpoints = ""all"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_6_after$Ventas,  "
+"0","                         name = ""Ventas día Viernes"", boxpoints=""all"")"
+"0","fig <- fig %>% add_trace(y = fil_dat_7_after$Ventas,  "
+"0","                         name = ""Ventas día Sábado"", boxpoints = ""all"")"
+"0",""
+"0","fig"

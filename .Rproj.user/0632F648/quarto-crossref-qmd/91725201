@@ -1,0 +1,88 @@
+{
+    "entries": [
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "prp",
+            "id": "1",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "lem",
+            "id": "4",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "eq",
+            "id": "1.7",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "def",
+            "id": "2",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "eq",
+            "id": "1.8",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "lem",
+            "id": "2",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "eq",
+            "id": "1.3",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "lem",
+            "id": "1",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "eq",
+            "id": "1.5",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "sec",
+            "id": "modelo_C_L",
+            "suffix": "",
+            "title": "Modelo Clásico de Cramér-Lundberg"
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "eq",
+            "id": "1.2",
+            "suffix": "",
+            "title": ""
+        },
+        {
+            "file": "Modelo_de_Cramer_Lundberg.qmd",
+            "type": "def",
+            "id": "1",
+            "suffix": "",
+            "title": ""
+        }
+    ]
+}

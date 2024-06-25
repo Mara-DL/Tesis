@@ -1,0 +1,6 @@
+"0","#________________________Después de la pandemia__________________________________"
+"0",""
+"0",""
+"0","fil_dat_after_new <- data.frame(subset(datos, Año == 2020 & Mes>=8 & Mes<9))"
+"0","fil_after_new <- subset(fil_dat_after_new, select=c(Año, Mes, Dia, Ventas, TotalVentas))"
+"0","fil_after_new"
