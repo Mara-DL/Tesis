@@ -1,0 +1,23 @@
+---
+lang: es
+---
+
+# Objetivos {.unnumbered}
+
+## Objetivo General
+
+::: {style="text-align: justify"}
+Evaluar y predecir la evolución financiera de la empresa de comida rápida mediante la cuantificación del riesgo asociado a las fluctuaciones en las ventas diarias provocadas por la pandemia, utilizando un enfoque matemático basado en el modelo de Cramer-Lundberg para medir la probabilidad de ruina o superávit en el tiempo, teniendo en cuenta los ingresos aleatorios generados por las ventas y los costos operativos fijos.
+:::
+
+## Objetivos Específicos
+
+::: {style="text-align: justify"}
+1.  **Modelar las ventas como un proceso estocástico**: Dado que las ventas de una empresa de comida rápida durante la pandemia son inciertas y variables, se modelarán como una serie de ingresos aleatorios con características probabilísticas.
+
+2.  **Cuantificar la probabilidad de quiebra**: Utilizando el modelo de Cramér-Lundberg, se calculará el riesgo de que las pérdidas acumuladas debido a la disminución de ventas superen el capital disponible de la empresa en un periodo determinado.
+
+3.  **Medir el tiempo hasta el superávit**: Se buscará predecir cuánto tiempo necesitaría la empresa para alcanzar un nivel de superávit, dado un determinado capital inicial, en función de la variabilidad de las ventas y la capacidad de adaptación ante las restricciones impuestas por la pandemia.
+
+4.  **Evaluar estrategias de mitigación del riesgo**: El modelo permitirá identificar los factores que afectan las fluctuaciones en las ventas (por ejemplo, cambios en las normativas de salud, restricciones de movilidad, etc.) y ayudar a diseñar estrategias operativas y financieras que mitiguen el riesgo de insolvencia.
+:::

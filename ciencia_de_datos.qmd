@@ -1,13 +1,183 @@
+---
+lang: es
+---
+
 # Ciencia de Datos
+
+::: {style="text-align:justify"}
+La ciencia de datos es un campo interdisciplinario que se enfoca en extraer conocimientos y aprendizajes a partir de datos. Combina técnicas de estadística, matemáticas, informática, análisis de datos y aprendizaje automático para analizar grandes volúmenes de datos (big data) y extraer información valiosa que puede ser utilizada para tomar decisiones informadas, resolver problemas complejos y descubrir patrones o tendencias ocultas.
+
+La ciencia de datos implica el uso de métodos científicos, algoritmos y sistemas para procesar y analizar datos estructurados y no estructurados. El objetivo es transformar los datos en información útil, que pueda ser utilizada por las empresas, gobiernos y otras organizaciones para mejorar sus operaciones, productos, servicios y estrategias. Los siguientes temas y definiciones se presentan con mayor información en: [@peng2016r], [@wickham2023r]
+:::
+
+## Lenguajes de programación:
+
+::: {style="text-align:justify"}
+Un lenguaje de programación es un sistema de comunicación formal que permite a los programadores escribir instrucciones que una computadora puede entender y ejecutar. Estos lenguajes actúan como un puente entre el ser humano y la máquina, facilitando la creación de software, aplicaciones, sistemas operativos y diversas soluciones tecnológicas.
+:::
+
+::: {style="text-align:justify"}
+A continuación se presenta una explicación concreta de tres lenguajes de programación populares: Python, R y Julia. De los cuales la mayor implementación del uso de ciencia de datos se realizó específicamente con el lenguaje R, para este trabajo.
+:::
+
+::: {style="text-align:justify"}
+### PYTHON
+
+[Python](https://www.python.org/) es un lenguaje de programación de propósito general, ampliamente utilizado en ciencia de datos, inteligencia artificial, desarrollo web y automatización. Fue creado por Guido van Rossum y lanzado en 1991. Es conocido por su sintaxis simple y su enfoque en la legibilidad del código, lo que lo hace ideal tanto para principiantes como para programadores experimentados.
+
+-   Características:
+
+    -   Sintaxis clara y concisa, fácil de aprender.
+
+    -   Amplia biblioteca estándar que incluye herramientas para procesamiento de texto, manipulación de datos y redes.
+
+    -   Fuertemente apoyado por una comunidad extensa y activa.
+
+    -   Numerosas bibliotecas especializadas, como NumPy, Pandas y Matplotlib para ciencia de datos, y TensorFlow y PyTorch para inteligencia artificial.
+
+-   Aplicaciones:
+
+    -   Ciencia de Datos y Machine Learning: Python es la opción más popular en este campo debido a sus poderosas bibliotecas como scikit-learn y Keras.
+
+    -   Desarrollo Web: Frameworks como Django y Flask permiten desarrollar aplicaciones web de manera rápida y eficiente.
+
+    -   Automatización y Scripts: Python es ideal para tareas de automatización gracias a su simplicidad.
+:::
+
+::: {style="text-align:justify"}
+### R {#sec-R style="text-align:justify"}
+
+[**R**](https://www.r-project.org/) es un lenguaje de programación y entorno de software libre especializado en el análisis estadístico y la visualización de datos. Fue desarrollado por Ross Ihaka y Robert Gentleman en 1993 como una implementación del lenguaje S. R es muy popular en estadísticas, bioinformática y ciencia de datos.
+
+-   Características:
+
+    -   Fuerte enfoque en estadísticas y análisis de datos.
+
+    -   Gran cantidad de paquetes especializados en técnicas estadísticas avanzadas.
+
+    -   Extensa comunidad académica y científica, con contribuciones de miles de paquetes en el repositorio CRAN (Comprehensive R Archive Network).
+
+    -   Potentes herramientas de visualización de datos, como ggplot2 y Shiny, que facilitan la creación de gráficos complejos e interactivos.
+
+-   Aplicaciones:
+
+    -   Estadística y Análisis de Datos: R es la herramienta de referencia para análisis estadístico y pruebas de hipótesis, utilizada extensamente en investigación académica y en industrias como la bioestadística y las ciencias sociales.
+
+    -   Visualización de Datos: Con librerías como ggplot2, R sobresale en la creación de gráficos de alta calidad y personalización.
+:::
+
+::: {style="text-align:justify"}
+### JULIA
+
+[Julia](https://julialang.org/) es un lenguaje de programación de alto rendimiento, diseñado para computación numérica y análisis de datos. Lanzado en 2012, fue creado por Jeff Bezanson, Alan Edelman, Stefan Karpinski y Viral B. Shah. Julia ha ganado popularidad en áreas donde el rendimiento es crucial, como el modelado matemático y la simulación científica.
+
+-   Características:
+
+    -   Velocidad comparable a la de lenguajes de bajo nivel como C y Fortran, gracias a su compilador JIT (Just-In-Time).
+
+    -   Soporte nativo para tipos de datos numéricos y álgebra lineal, lo que lo hace ideal para aplicaciones científicas y de ingeniería.
+
+    -   Sintaxis simple y fácil de aprender, similar a la de Python, pero con el rendimiento de lenguajes más técnicos.
+
+    -   Soporte multilinguaje, lo que permite interactuar fácilmente con código en Python, R, C, y otros lenguajes.
+
+-   Aplicaciones:
+
+    -   Computación Científica y Numérica: Julia sobresale en simulaciones de gran escala, álgebra lineal y modelado matemático, utilizado en física, optimización y finanzas cuantitativas.
+
+    -   Inteligencia Artificial: Aunque no tan popular como Python en IA, Julia se está adoptando en entornos que requieren alto rendimiento.
+
+    -   Optimización y Modelado: Julia se usa en optimización numérica y simulación de sistemas dinámicos, siendo una opción preferida en grandes proyectos científicos.
+:::
 
 ## Data Frame {#sec-dataframe}
 
 ::: {style="text-align:justify"}
-Los dataframes son un objeto que se muestran en un formato tabla, los cuales pueden tener diferentes tipos de datos en su interior.
+Los data frames son un objeto que se muestran en un formato tabla, los cuales pueden tener diferentes tipos de datos en su interior.
 
-Una cuestión habitual es preguntarse en qué casos debes usar un data frame o una matriz en R. Los data frames son estructuras de datos muy similares a las matrices, pero en el caso de los data frames puedes tener diferentes tipos de datos dentro de las columnas. En consecuencia, la diferencia es que las matrices almacenan tipos de datos homogéneos mientras que los data frames almacenan tipos de datos heterogéneos.
+Una cuestión habitual es preguntarse en qué casos debes usar un data frame o una matriz en algún lenguaje de programación. Los data frames son estructuras de datos muy similares a las matrices, pero en el caso de los data frames puedes tener diferentes tipos de datos dentro de las columnas. En consecuencia, la diferencia es que las matrices almacenan tipos de datos homogéneos mientras que los data frames almacenan tipos de datos heterogéneos.
 
-Los Dataframes se representan como un tipo especial de lista en la que cada elemento de la lista debe tener el atributo misma longitud. Cada elemento de la lista se puede considerar como una columna y la longitud de cada elemento de la lista es el número de filas. A diferencia de las matrices, los dataframes pueden almacenar diferentes clases de objetos en cada columna. Las matrices deben Hacer que cada elemento sea de la misma clase (por ejemplo, todos los enteros o todos los números).
+Los Data frames se representan como un tipo especial de lista en la que cada elemento de la lista debe tener el atributo misma longitud. Cada elemento de la lista se puede considerar como una columna y la longitud de cada elemento de la lista es el número de filas. A diferencia de las matrices, los data frames pueden almacenar diferentes clases de objetos en cada columna. Las matrices deben hacer que cada elemento sea de la misma clase (por ejemplo, todos los enteros o todos los números).
+:::
 
-[@wickham2023r]
+## Homogenización
+
+::: {style="text-align:justify"}
+La homogenización de datos es el proceso mediante el cual se asegura que los datos procedentes de diversas fuentes o sistemas se presenten en un formato uniforme y coherente, facilitando su análisis, interpretación y uso posterior en la ciencia de datos. Este proceso es fundamental en la integración de grandes volúmenes de datos de múltiples orígenes, especialmente en contextos donde los datos pueden provenir de sistemas heterogéneos con diferentes estructuras, formatos o unidades de medida.
+
+### Pasos en el Proceso de Homogenización
+
+1.  Normalización de Formatos: Los datos pueden estar almacenados en diferentes formatos (CSV, JSON, bases de datos relacionales, etc.). La primera etapa de la homogenización es convertir todos los datos en un formato común adecuado para el análisis.
+
+2.  Estandarización de Unidades: Los datos numéricos pueden tener diferentes unidades de medida (por ejemplo, metros frente a pies, o dólares frente a euros). Es fundamental convertir todas las unidades a un sistema común para evitar discrepancias en los cálculos.
+
+3.  Resolución de Ambigüedades: Algunos términos o categorías pueden variar en denominación entre diferentes fuentes (por ejemplo, "Ciudad de México" frente a "CDMX"). En estos casos, se necesita un proceso de desambiguación para unificar estas etiquetas.
+
+4.  Gestión de Valores Nulos: La presencia de valores faltantes o nulos es un desafío común. El tratamiento de estos datos puede implicar su eliminación, imputación (relleno) o un análisis adicional para determinar su impacto.
+
+5.  Eliminación de Duplicados: En conjuntos de datos grandes y heterogéneos, es posible encontrar registros duplicados. Identificar y eliminar estos duplicados es una parte esencial de la homogenización.
+
+6.  Conversión de Tipos de Datos: Los tipos de datos (numéricos, categóricos, de texto) pueden estar definidos de manera inconsistente entre diferentes fuentes. Unificar los tipos de datos es fundamental para asegurar la coherencia del análisis.
+:::
+
+## Detención de datos faltantes
+
+## Outliers {#sec-outlier}
+
+::: {style="text-align:justify"}
+Los outliers o valores atípicos en ciencia de datos son observaciones que se desvían significativamente de la mayoría de los datos en un conjunto. Estos pueden surgir debido a errores en la recolección de datos, variaciones naturales o incluso eventos inesperados. Identificar, analizar y manejar outliers es crucial, ya que pueden tener un impacto considerable en los resultados de los modelos de análisis de datos, en particular en los métodos de aprendizaje automático y estadísticos.
+
+Un outlier es cualquier observación que parece no seguir el patrón general del resto de los datos. Existen varios tipos de outliers, dependiendo de cómo se desvíen de los datos:
+
+1.  Outliers Univariados: Estos son valores atípicos en una única variable o característica. Su detección se puede realizar utilizando técnicas como los gráficos de caja (box plots), el z-score (puntuación estándar) o el rango intercuartil (IQR).
+
+2.  Outliers Multivariados: Son valores que son inusuales en múltiples dimensiones de los datos. Pueden no parecer atípicos si se consideran las variables individualmente, pero al observar varias características a la vez, se comportan de manera inusual. Técnicas como la distancia de Mahalanobis se utilizan para detectarlos.
+
+3.  Outliers Globales: Son puntos de datos que son atípicos en todo el conjunto de datos.
+
+4.  Outliers Contextuales: También llamados outliers condicionales, son valores que pueden parecer normales en ciertos contextos, pero atípicos en otros. Por ejemplo, una temperatura de 35°C es normal en verano, pero sería un outlier en invierno.
+
+5.  Outliers Temporales: Pueden ocurrir cuando los datos son series temporales y los valores se desvían significativamente de los patrones observados en el tiempo.
+
+### Técnicas para la Detección de Outliers
+
+1.  Métodos basados en estadísticas:
+
+    -   Z-score: Este método mide cuántas desviaciones estándar está un punto de datos de la media del conjunto. Un z-score mayor a $3$ o menor a $-3$ suele considerarse un outlier.
+
+    -   IQR (Interquartile Range): Cualquier punto fuera del rango definido por $[Q1 - 1.5 * IQR, Q3 + 1.5 * IQR]$ puede considerarse un outlier. Este método es especialmente útil para detectar outliers univariados.
+
+2.  Métodos gráficos:
+
+    -   Boxplots: Un gráfico de caja muestra los datos distribuidos entre los cuartiles y los puntos fuera de los bigotes suelen considerarse outliers.
+
+    -   Scatter plots: Estos son útiles para visualizar outliers en conjuntos de datos multivariados.
+
+3.  Métodos basados en la distancia:
+
+    -   Distancia de Mahalanobis: Considera la correlación entre variables y calcula la distancia multivariante de un punto al centroide del conjunto de datos. Los puntos con una distancia mayor a un umbral son outliers.
+
+    -   K-nearest neighbors (KNN): Calcula la distancia a los puntos más cercanos. Los puntos más alejados de sus vecinos pueden ser clasificados como outliers.
+
+4.  Modelos de aprendizaje automático:
+
+    -   Isolation Forest: Un método no supervisado que construye un conjunto de árboles de aislamiento para aislar puntos de datos. Los puntos que se aíslan rápidamente en el árbol se consideran outliers.
+
+    -   One-class SVM: Se entrena para identificar una clase (la clase mayoritaria) y clasificar como outliers los puntos que no encajan en ella.
+
+5.  Métodos basados en densidad:
+
+    -   DBSCAN: Un algoritmo de clustering que clasifica los puntos de baja densidad que no pertenecen a ningún cluster como outliers.
+:::
+
+::: {style="text-align:justify"}
+## Paqueterias de gráficos
+
+### Plotly {#sec-plotly}
+
+[Plotly](https://plotly.com/graphing-libraries/) es un paquete de gráficos interactivos el cual se puede emplear en múltiples lenguajes de programación. La biblioteca de gráficos R de Plotly crea gráficos interactivos con calidad de publicación.
+
+### ggplot2. {#sec-ggplot2}
+
+[ggplot2](https://ggplot2.tidyverse.org/) es un paquete dedicado a la visualización de datos empleado solo para el lenguaje de programación R. Es un sistema para la creación declarativa de gráficos. Puede mejorar en gran medida la calidad y la estética de sus gráficos, y te hacen mucho más eficiente en la creación de ellos. Permite construir casi cualquier tipo de gráfico. Todos los gráficos de ggplot2 comienzan con una llamada, proporcionando datos predeterminados y asignaciones estéticas.
 :::

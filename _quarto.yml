@@ -16,34 +16,43 @@ book:
   reader-mode: true
   language: es
   author: "Mara Dominguez Limas"
-  date: "24/4/2024"
+  date: "06/25/2024"
   output-file: "Tesis_MDL"
-  image: FCFMLOGO.png
+  image: Logo_unach.png
+  sharing: [facebook]
   downloads: [pdf, epub]
   favicon: logofcfm.png
   sidebar:
-    logo: FCFM-UNACH.png
+    logo: Logo_unach.png
     style: floating
     collapse-level: 2
     border: true
     search: true
   open-graph: true
   twitter-card: true
-  repo-url: https://github.com/Mara-DL/Tesis.git
+  repo-url: https://github.com/Mara-DL/Tesis
   repo-actions: [edit, issue, source]
   page-navigation: true
   chapters:
     - index.qmd
+    - intro.qmd
+    - objetivos.qmd
     
     - part: 'Preliminares'
       chapters:
         - probabilidad.qmd
         - estadistica.qmd
+        - procesos.qmd
         - ciencia_de_datos.qmd
         
     - Modelo_de_Cramer_Lundberg.qmd
     - Estudio_caso.qmd
+    - conclusiones.qmd
+    - Sugerencias.qmd
     - references.qmd
+    
+  comments:
+    hypothesis: true  
 
 bibliography: references.bib
 
@@ -51,6 +60,10 @@ format:
  html:
     theme:
       dark: darkly
+      light: cerulean
+    highlight-style: a11y
+    lang: es
+    html-math-method: mathjax
     grid: 
       sidebar-width: 300px
       body-width: 900px
@@ -60,18 +73,22 @@ format:
     code-fold: true
  pdf:
     lang: es
+    cite-method: biblatex
+    bibliographystyle: apa
     include-in-header:
       - packa.tex
     template-partials:
       - before-body.tex
     documentclass: scrreprt
     papersize: us-letter
+    titlegraphic: FCFMLOGO.png
     institution: Universidad Autónoma de Chiapas
     email: x1800999@unach.mx
     keep-tex: true
  epub:
     cover-image: FCFM-UNACH.png
-
+    
     
 editor: visual
+
 

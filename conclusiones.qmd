@@ -1,0 +1,19 @@
+---
+lang: es
+---
+
+# Conclusiones
+
+::: {style="text-align: justify"}
+El presente trabajo de tesis, titulado "Estudio del impacto de la pandemia en un establecimiento de comida rápida: Análisis y estimación de parámetros para el modelo modificado de Cramér-Lundberg", permitió abordar un análisis detallado de los efectos de la pandemia sobre la operación, sostenibilidad y riesgos financieros en este tipo de negocios, utilizando un marco matemático basado en el modelo modificado de Cramér-Lundberg.
+
+En primer lugar, los resultados obtenidos evidencian que la pandemia tuvo un impacto significativo en las dinámicas operativas y financieras del establecimiento. Factores como la reducción en el número de clientes, la implementación de medidas de distanciamiento social y los cambios en los hábitos de consumo fueron determinantes en la disminución de ingresos. Este fenómeno obligó al establecimiento a redefinir estrategias operativas, incluyendo la digitalización de sus servicios, la incorporación de entregas a domicilio y ajustes en su estructura de costos.
+
+A través del modelo de Cramér-Lundberg modificado, se logró estimar y analizar los parámetros clave, como las tasas de llegada de pedidos, los montos promedio de gasto por cliente y las pérdidas por interrupciones de operación. Los resultados sugieren que, si bien el establecimiento experimentó un alto riesgo de insolvencia en los meses más críticos de la pandemia, las estrategias de adaptación implementadas contribuyeron significativamente a reducir este riesgo con el tiempo. En particular, el enfoque en la diversificación de los canales de venta y la optimización de costos demostró ser esencial para la supervivencia del negocio.
+
+Además, este estudio destaca la importancia de incorporar modelos probabilísticos como herramientas para la toma de decisiones estratégicas en contextos de incertidumbre. La flexibilidad del modelo modificado permitió capturar las particularidades del contexto pandémico, ofreciendo una visión integral de los riesgos financieros asociados. Esto pone de manifiesto la relevancia de utilizar herramientas cuantitativas no solo para evaluar riesgos sino también para proyectar escenarios futuros y evaluar el impacto de decisiones estratégicas.
+
+En términos prácticos, las conclusiones del estudio ofrecen recomendaciones aplicables no solo para el establecimiento analizado, sino también para otros negocios similares que enfrenten condiciones de incertidumbre y crisis. La capacidad de adaptarse a cambios en el entorno externo y de incorporar herramientas analíticas para una gestión proactiva de riesgos resulta fundamental en un mercado altamente competitivo.
+
+Finalmente, este trabajo abre la puerta para investigaciones futuras, tales como la aplicación del modelo en otros sectores afectados por la pandemia, el análisis de impactos a largo plazo y la exploración de estrategias de recuperación más eficientes. Se concluye que la combinación de modelos matemáticos con estudios de caso específicos proporciona una base sólida para enfrentar desafíos complejos, contribuyendo tanto al ámbito académico como al sector empresarial.
+:::

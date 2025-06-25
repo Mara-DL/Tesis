@@ -1,3 +1,7 @@
+---
+lang: es
+---
+
 # Probabilidad
 
 ::: {style="text-align:justify"}
@@ -7,9 +11,9 @@ El origen de la teoría de la probabilidad se remonta a los siglos XVI y XVII, c
 
 La teoría de la probabilidad ha evolucionado desde problemas prácticos en juegos de azar hasta convertirse en una disciplina matemática rigurosa con aplicaciones en numerosos campos como la estadística, la física, la economía, y la ingeniería. Los esfuerzos de muchos matemáticos a lo largo de los siglos han contribuido a su desarrollo y formalización.
 
-La probabilidad tiene muchas aplicaciones prácticas en la vida cotidiana. Por ejemplo la probabilidad puede determinar las posibilidades de ganar en juegos de azar como la lotería, el póker, la ruleta y otros juegos de casino, hasta ser usada para las compañías de seguros para calcular las primas de los seguros de vida, salud, automóviles, entre otros. Esto se basa en el análisis de datos históricos y la evaluación de riesgos.
+La probabilidad tiene muchas aplicaciones prácticas en la vida cotidiana. Por ejemplo, la probabilidad puede determinar las posibilidades de ganar en juegos de azar como la lotería, el póker, la ruleta y otros juegos de casino, también puede ser usada para las compañías de seguros para calcular las primas de los seguros de vida, salud, automóviles, entre otros. Esto se basa en el análisis de datos históricos y la evaluación de riesgos.
 
-Para brindar mayor conocimiento e indagar una idea mas concreta de lo que es la probabilidad se presentan las siguientes definiciones: [@castaneda2012introduction]
+Para brindar mayor conocimiento e indagar una idea mas concreta de lo que es la probabilidad se presentan las siguientes definiciones: @castaneda2004probabilidad, @ross2014introduction.
 :::
 
 ::: {#def-pclas style="text-align: justify"}
@@ -27,7 +31,7 @@ Suponiendo que después de $n$ repeticiones, para valores muy grandes de $n$, un
 ::: {#def-sigma_algebra}
 ## $\sigma$-álgebra
 
-Sea $\Omega \neq \Phi$. Una colección $\mathfrak{F}$ de subconjuntos de $\Omega$ es una $\sigma$-álgebra sobre $\Omega,$ si:
+Sea omega un conjunto no vacío. Una colección $\mathfrak{F}$ de subconjuntos de $\Omega$ es una $\sigma$-álgebra sobre $\Omega,$ si:
 
 i.  $\Omega \in  \mathfrak{F}$.
 
@@ -41,13 +45,55 @@ iii. Si $A_1, A_2, ... \in \mathfrak{F}$ entonces $\bigcup_{i=1}^{\infty} A_i \i
 ::: {#def-espacio_medible}
 ## Espacio medible
 
-Sean $\Omega \neq \Phi$ y $\mathfrak{F}$ una $\sigma- álgebra$ sobre $\Omega$. La pareja $(\Omega, \mathfrak{F})$ se llama espacio medible.
+Sean $\Omega \neq \Phi$ y $\mathfrak{F}$ una $\sigma-\text{álgebra}$ sobre $\Omega$. La pareja $(\Omega, \mathfrak{F})$ se llama espacio medible.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Espacio medible***)
+
+Sean $\Omega = \{a, b, c, d \}$ y $\mathfrak{F} = \{ \emptyset, \{a\}, \{ b, c, d\}, \{a, b, c, d\}\}$. Demostrar que $(\Omega, \mathfrak{F})$ es un espacio medible.
+
+Solución: Para demostrar que $(\Omega,\mathfrak{F})$ es un espacio medible, se debe verificar que $\mathfrak{F}$ es una $\sigma$-álgebra sobre $\Omega$. Una colección $\mathfrak{F}$ de subconjuntos de $\Omega$ es una $\sigma$-álgebra si cumple las propiedades de la definición (@def-sigma_algebra).
+
+Se verifica estas propiedades para $\mathfrak{F}$:
+
+1.  $\Omega \in \mathfrak{F}$:
+
+    $\Omega = \{ a,b,c,d\}$. Por la definición de $\mathfrak{F}$, $\{a,b,c,d\} \in \mathfrak{F}$.
+
+2.  Cerradura bajo complementos:
+
+    -   El complemento de $\emptyset$ es $\Omega = \{a,b,c,d\}$, que esta en $\mathfrak{F}$.
+
+    -   El complemento de $\{a\}$ es $\{b,c,d\}$, que está en $\mathfrak{F}$
+
+    -   El complemento de $\{b,c,d\}$ es $\{a\}$ que esta en $\mathfrak{F}$.
+
+    -   El complemento de $\{a,b,c,d\}$ es $\emptyset$, que está en $\mathfrak{F}$.
+
+3.  Cerradura bajo uniones numerables:
+
+    Considerando cualquier colección numerable de conjuntos en $\mathfrak{F}$. Todas las posibles uniones de estos conjuntos son $\emptyset, \{a\}, \{b,c, d\},$ y $\{a,b,c, d\}$, todas las cuales están en $\mathfrak{F}$.
+
+    Dado que $\mathfrak{F}$ cumple con todas las propiedades necesarias para ser una $\sigma$-álgebra, se concluye que $(\Omega, \mathfrak{F})$ es un espacio medible.
 :::
 
 ::: {#def-mutuamente_excluyentes}
 ## Eventos mutuamente excluyentes
 
-Dos eventos $A$ y $B$ se dicen mutuamente excluyentes si $A \cap B = \Phi$
+Dos eventos $A$ y $B$ se dicen mutuamente excluyentes si $A \cap B = \emptyset$.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Eventos mutuamente excluyentes***)
+
+Sea $A= \{a,b,c,d\}$ y $B = \{e.,f,g,h\}$
+
+Se sabe que: $A \cap B$ es un evento que ocurre si y solo si A y B ocurren.
+
+Por lo que $A \cap B = \{a,b,c,d\} \cap \{e,f,g,h\} = \emptyset$. Por definición de $A$ y $B$.
+
+Por lo tanto $A$ y $B$ son dos eventos mutuamente excluyentes.
 :::
 
 ::: {#def-espacio_probabilidad}
@@ -62,49 +108,330 @@ ii. $P(\Omega) = 1$.
 iii. Si $A_1, A_2, ...$ son elementos de $\mathfrak{F}$ mutuamente excluyentes, esto es
 
      $$
-     A_j \ \cap \ A_j = \Phi \ para \  todo \ i \neq j 
-     $$
+     A_i \ \cap \ A_j = \emptyset \  \forall i \neq j, 
+     $$ entonces
 
-     $$
-     entonces \ P \left( \bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)
+     $$\ P \left( \bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i).
      $$Se llama medida de probabilidad sobre $(\Omega, \mathfrak{F})$.
 
-     La tripla $(\Omega, \mathfrak{F}, P)$ se llama espacio de probabilidad.
+     La tripleta $(\Omega, \mathfrak{F}, P)$ se llama espacio de probabilidad.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Espacio de probabilidad***)
+
+Sean $\Omega = \{a, b, c\}, \mathfrak{F}=\{\emptyset, \Omega, \{a\}, \{b,c\} \}$ y P la aplicación definida sobre $\mathfrak{F}$ como sigue: $$P(A) = \left\{ \begin{array}{lcc} 1, & si & a\in A, \\ \\ 0, & si & a \notin A, \end{array} \right.$$
+
+Para demostrar que $(\Omega, \mathfrak{F}, P)$ es un espacio de probabilidad, se debe comprobar que cumple las tres propiedades mencionadas en @def-espacio_probabilidad.
+
+Solución:
+
+1.  Observe que $P$ está definido como:
+
+$$
+P(A) = \left\{ \begin{array}{lcc} 1, & si & a\in A, \\ \\ 0, & si & a \notin A, \end{array} \right.
+$$
+
+Dado que los únicos valores posibles de $P(A)$ son $0$ y $1$ siempre se tiene $P(A) \geq 0$.
+
+2.  Se debe comprobar que $P(\Omega) = 1$. En este caso, $\Omega = \{a, b, c\}$ , y $a \in \Omega$, así que según la definición:
+
+    $$
+    P(\Omega) = 1.
+    $$
+
+3.  Considerando eventos disjuntos $A_1, A_2, \ldots \in \mathfrak{F}$. Dado que $\mathfrak{F} = \{\emptyset, \Omega, \{a\}, \{b,c\}\}$ las posibles colecciones de eventos disjuntos son limitadas. Se verifica la aditividad en todos los casos posibles:
+
+    -   $A_1 = \emptyset$ y $A_2 = \Omega$:
+
+        $$P(A_1 \cup A_2) = P(\emptyset \cup \Omega) = P(\Omega)= 1$$
+
+        $$P(A_1) + P(A_2) = P(\emptyset) + P(\Omega) = 0 + 1 = 1.$$
+
+    -   $A_1 = \{a\}$ y $A_2 = \{b,c\}$ :
+
+        $$
+        A_1 \cup A_2 = \{a\} \cup \{b,c\} = \{a,b,c\} = \Omega,
+        $$ así que $P(A_1 \cup A_2) = P(\Omega) = 1$
+
+        y
+
+        $$P(A_1) + P(A_2) = P(\{a\}) + P(\{b,c\}) = 1+ 0 = 1.$$
+
+    -   $A_1 = \{a\}$ y $A_2 = \emptyset$ :
+
+        $$
+        P(A_1 \cup A_2) = P(\{a\} \cup \emptyset) = P(\{a\}) = 1,
+        $$ y$$P(A_1) + P(A_2) = P(\{a\}) + P(\emptyset)= 1 + 0 = 0.$$
+
+    -   $A_1 ={\emptyset} \ \text{y}\  A_2 = \{b, c\}:$
+
+        $$P(A_1 \cup A_2) = P(\emptyset \cup \{b, c\}) = P(\{b, c\}) = 0$$
+
+        y$$P(A_1) + P(A_2) = P(\emptyset) + P(\{b,c\})= 0 + 0 = 0.$$
+
+        Dado que la aditividad se cumple en todos los casos posibles de eventos disjuntos de $\mathfrak{F}$, la tercer propiedad se cumple.
+
+Por lo tanto, $(\Omega, \mathfrak{F}, P)$ es un espacio de probabilidad.
 :::
 
 ## Variables aleatorias
 
 ::: {style="text-align:justify"}
-En estadística y probabilidad, una variable aleatoria es una función que asigna un valor numérico a cada posible resultado de un experimento aleatorio. Las variables aleatorias son
+En estadística y probabilidad, una variable aleatoria es una función que asigna un valor numérico a cada posible resultado de un experimento aleatorio.
+
+Las variables aleatorias son fundamentales en la teoría de probabilidad y estadística. A continuación, se ofrece una explicación general de lo que son y cómo se clasifican.
 :::
 
 ::: {#def-variable_aleatoria}
 ## Variable aleatoria
 
-Sean $(\Omega,\mathfrak{F}, P)$ un espacio de probabilidad (@def-espacio_probabilidad) y $\tilde{\Omega},\tilde{\mathfrak{F}}$ un espacio medible (@def-espacio_medible). Una $\mathfrak{F}-\mathfrak{F}$- variable aleatoria es una aplicación $X:\Omega\rightarrow \tilde{\Omega}$ tal que, para todo $A \in \mathfrak{F}$ se tiene que $X^{-1}(A) \in  \mathfrak{F}$. Si $(\tilde{\Omega}, \tilde{\mathfrak{F}}) = (\mathbb{R},\mathcal{B}),$ entonces, se dice que $X$ es una variable aleatoria real
+Sean $(\Omega,\mathfrak{F}, P)$ un espacio de probabilidad (@def-espacio_probabilidad) y $(\tilde{\Omega},\tilde{\mathfrak{F}})$ un espacio medible (@def-espacio_medible). Una $\mathfrak{F}- {\tilde{\mathfrak{F}}}$- variable aleatoria es una aplicación $X:\Omega\rightarrow \tilde{\Omega}$ tal que, para todo $A \in \tilde{\mathfrak{F}}$ se tiene que $X^{-1}(A) \in  \mathfrak{F}$. Si $(\tilde{\Omega}, \tilde{\mathfrak{F}}) = (\mathbb{R},\mathcal{B}),$ entonces, se dice que $X$ es una variable aleatoria real.
 :::
 
 ::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
 ### Ejemplo (***Variable aleatoria***)
 
-Sean
+Sean $\Omega = \{a,b,c\}, \ \mathfrak{F} = \{ \emptyset, \{a\}, \{b, c\}, \Omega \},\ P$ una medida de probabilidad arbitraria sobre $\mathfrak{F}$. Supongase que $(\tilde{\Omega}, \tilde{\mathfrak{F}})$ es un espacio medible con $\tilde{\Omega} = \{1,2\}$ y $\tilde{\mathfrak{F}} = p(\tilde{\Omega})$. La aplicación $X: \Omega \longrightarrow \tilde{\Omega}$ dada por: $$X(\omega) = \left\{ \begin{array}{lcc} 1, & si \ \ \omega = a, \\ \\ 2, & si  \ \ \omega = b \ o \ w= c. \end{array} \right.$$
+
+es una $\mathfrak{F}-\mathfrak{\tilde{F}}$- variable aleatoria, pues: $$X^{-1}(\emptyset) = \emptyset, \ X^{-1}(\{1\}) = \{a\}, X^{-1}(\{2\}) = \{b,c\}\ \ \text{y} \ \ \ X^{-1}(\tilde{\Omega}) = \Omega.$$
+:::
+
+::: {#def-fun_distr}
+## Función de distribución
+
+Sea $X$ una variable aleatoria real. La función $F_X$ definida sobre $\mathbb{R}$ por medio de: $$F_X(x) := P_X((-\infty,x]) = P(X \leq x),$$
+
+se llama función de distribución ( o distribución acumulativa) de la variable aleatoria $X$.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***función de distribución***)
+
+Supóngase que se lanza una moneda corriente cuatro veces consecutivas y sea $X$ la variable aleatoria definida por:
+
+$$
+X : = \text{``número de caras obtenidas"}
+$$ Para este caso se tiene que la distribución de $X$ es igual a:
+
+Solución:
+
+Para resolver este problema, primero se determinan todas las posibles realizaciones de la variable aleatoria $X$ y sus respectivas probabilidades. Lanzar una moneda corriente cuatro veces genera $2^4 = 16$ posibles resultados. La variable aleatoria $X$ cuenta el número de caras $(C)$ obtenidas en los lanzamientos.
+
+Obteniendo los posibles resultados y los valores de $X$ correspondientes:
+
+-   $0$ caras: $TTTT$
+
+-   $1$ cara: $CTTT, TCTT, TTCT, TTTC$
+
+-   $2$ caras: $CCTT, CTCT, CTTC, TCCT, TCTC, TTCC$
+
+-   $3$ caras: $CCCT, CTCC, TCCC, CCTC$
+
+-   $4$ caras: $CCCC$
+
+Donde $C$ es cara y $T$ es cruz.
+
+Calculando la probabilidad de cada caso posible valor de $X$ se tiene:
+
+-   $P(X = 0)$ : Sólo una combinación tiene 0 caras $(TTTT)$.
+
+    $P(X = 0) = \frac{1}{16}$
+
+-   $P(X = 1)$: Hay 4 combinaciones que tienen $1$ cara $(CTTT, TCTT, TTCT, TTTC)$.
+
+    $P(X = 1) = \frac{4}{16}$
+
+-   $P(X = 2)$ Hay $6$ combinaciones que tienen 2 caras $(CCTT, CTCT, CTTC, TCCT, TCTC, TTCC).$
+
+    $P(X = 2) = \frac{6}{16}$
+
+-   $P(X = 3)$: Hay $4$ combinaciones que tienen $3$ caras $(CCCT, CTCC, TCCC, CCTC)$.
+
+    $P(X = 3) =\frac{4}{16}$
+
+-   $P(X =4)$: Solo hay una combinación que tiene $4$ caras $(CCCC)$.
+
+    $$
+    P(X = 4) = \frac{1}{16}
+    $$
+
+La función de distribución $F_X(x)$ de una variable aleatoria $X$ es la probabilidad acumulada hasta un cierto valor $x$, es decir, $F_X(x) = P(X \leq x).$
+
+Se puede calcular $F_X(x)$ para todos los valores posibles de $X$:
+
+-   Para $x<0$ :
+
+    $$F_X(x) = 0.$$
+
+-   Para $0\leq x < 1$:
+
+    $$F_X(x) = \frac{1}{16}.$$
+
+-   Para $1\leq x<2$:
+
+    $$
+    F_X(x) = \frac{5}{16}.
+    $$
+
+-   Para $2\leq x<3$ :
+
+    $$
+    F_X(x) = \frac{11}{16}.
+    $$
+
+-   Para $3\leq x<4$:
+
+    $$
+    F_X(x) = \frac{15}{16}.
+    $$
+
+-   Para $x\geq 4$
+
+    $$
+    F_X(x) = 1.
+    $$
+
+    Por lo tanto, la función de distribución $F_X(x)$ es :
+
+    $$
+    F_X(x)= \left\{ \begin{array}{lcc} 0 & si \ x< 0, \\  \frac{1}{16} & si \ 0\leq x<1, \\ \frac{5}{16} & si \ 1\leq x <2,\\ \frac{11}{16} & si \ 2\leq x<3, \\ \frac{15}{16} & si \ 3\leq x <4, \\ 1 & si \ x\geq 4. \end{array} \right.
+    $$
 :::
 
 ## Variables aleatorias discretas
 
-::: {#def-variable_alea_dis}
+::: {style="text-align:justify"}
+Las variables aleatorias discretas son aquellas que toman valores específicos y finitos o infinitos numerables dentro de un conjunto. Estos valores suelen ser números enteros y están asociados a experimentos aleatorios en los que los resultados se pueden contar, como el número de caras al lanzar una moneda tres veces o la cantidad de autos que pasan por un semáforo en una hora.
+
+Son útiles para modelar situaciones donde los resultados son cuantificables y contables, como el número de defectos en un lote de productos o el número de personas en una cola y son fundamentales en la estadística inferencial, ya que permiten la estimación de parámetros y la realización de pruebas de hipótesis en contextos discretos.
+:::
+
+::: {#def-var_ale_dis}
 ## Variable aleatoria discreta
 
-Sean $X$ una variable aleatoria real (@def-variable_aleatoria) y $F_X$ su función de distribución. Se dice que $F_X$ presenta un salto en el punto $a \in \mathbb{R}$ si $$ F_{X}(a) - F_{X}(a^{-}) \neq 0$$ La diferencia $F_{X}(a) - F_{X}(a^{-})$ se llama magnitud del salto y por las propiedades desarrolladas anteriormente se tiene que es igual a $P(X=a)$
+Sean $X$ una variable aleatoria real (@def-variable_aleatoria) y $F_X$ su función de distribución (@def-fun_distr). Se dice que $F_X$ presenta un salto en el punto $a \in \mathbb{R}$ si $$ F_{X}(a) - F_{X}(a^{-}) \neq 0.$$ La diferencia $F_{X}(a) - F_{X}(a^{-})$ se llama magnitud del salto y por las propiedades desarrolladas anteriormente se tiene que es igual a $P(X=a).$
 :::
 
 ::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
 ### Ejemplo (***Variable aleatoria discreta***)
 
-Sean
+Supóngase que se lanza una moneda corriente cuatro veces consecutivas y sea $X$ la variable aleatoria definida por:
+
+$$
+X : = \text{número de caras obtenidas"}
+$$ Para este caso se tiene que la distribución de $X$ es igual a:
+
+$$
+F_X(x)= \left\{ \begin{array}{lcc} 0 & si \ x< 0, \\  \frac{1}{16} & si \ 0\leq x<1, \\ \frac{5}{16} & si \ 1\leq x <2,\\ \frac{11}{16} & si \ 2\leq x<3, \\ \frac{15}{16} & si \ 3\leq x <4, \\ 1 & si \ x\geq 4. \end{array} \right.
+$$Se observa que la variable aleatoria $X$ presenta saltos en los puntos $x=i$ con $i = 0,\dots , 4$. Las magnitudes de dichos saltos son: $\frac{1}{16}, \frac{1}{4}, \frac{3}{8}, \frac{1}{4}$ y $\frac{1}{16}$ respectivamente.
+:::
+
+::: {#def-var_ale_bino}
+## Variable aleatoria Binomial
+
+Si se supone que se van a realizar $n$ ensayos independientes, cada uno de los cuales da como resultado un "éxito" con probabilidad $p$ y un "fracaso" con probabilidad $1 − p$. Si $X$ representa el número de sucesos que éxitos que se produce en los $n$ ensayos, entonces de dice que $X$ es una variable aleatoria binomial con parámetros $(n,p)$.
+
+La función de masa de probabilidad de una variable aleatoria binomial que tiene parámetros $(n,p)$ es dada por:
+
+$$
+p(i) = \binom{n}{i}pî(1-p)^{n-i}, \qquad i=0, 1, ..., n
+$$ donde $$\binom{n}{i} = \frac{n!}{(n-i)! \ i!}.$$ Es igual al número de grupos diferentes de $i$ objetos que se pueden elegir de un conjunto de $n$ objetos. La validez de la ecuación puede verificarse observando primero que la probabilidad de que cualquier secuencia particular de los n resultados contenga $i$ éxitos y $n − i$ fracasos es, por la supuesta independencia de los ensayos, $p^i(1-p)^{n-i}.$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Variable aleatoria Binomial***)
+
+Se carga una moneda de tal manera que $P(C) =\frac{3}{7}$ y $P(S)= \frac{4}{7}$. Supóngase que se lanza la moneda tres veces consecutivas y sea $X$ la variable aleatoria que indica el número de caras obtenidas. Hallar la función de distribución de la variable aleatoria $X$.
+
+**Solución:**
+
+Como se puede identificar, los posibles valores que puede tomar $X$ es $0, 1,2$ o $3$.
+
+La probabilidad de obtener $k$ caras en $3$ lanzamientos sigue una distribución binomial con parámetros $n=3$ y $p = \frac{3}{7}$. La función de masa de probabilidad para una variable binomial $X$ es: $$P(X = k) = \binom{n}{k}p^k(1-p)^{n-k}$$
+
+donde $n=3$ y $p=\frac{3}{7}$.
+
+se calcula las probabilidades para $k = 0, 1, 2, 3:$
+
+1.  $P(X =0):$
+
+    $P(X=0) = \binom{3}{0}\left(\frac{3}{7}\right)^0\left(\frac{4}{7}\right)^3 = 1\cdot1\left(\frac{4}{7}\right)^3 = \frac{64}{343}.$
+
+2.  $P(X = 1):$
+
+    $P(X=1)=\binom{3}{1}\left(\frac{3}{7}\right)^1\left(\frac{4}{7}\right)^2 = 3\cdot\frac{3}{7}\cdot\left(\frac{4}{7}\right)^2=3\cdot\frac{3}{7}\cdot\frac{16}{49} = \frac{144}{343}.$
+
+3.  $P(X=2):$
+
+    $P(X=2)=\binom{3}{2}\left(\frac{3}{7}\right)^2\left(\frac{4}{7}\right)^1 = 3\cdot\frac{3}{7}^2\cdot\left(\frac{4}{7}\right)=3\cdot\frac{9}{49}\cdot\frac{4}{7} = \frac{108}{343}.$
+
+4.  $P(X=3):$
+
+    $P(X=2)=\binom{3}{3}\left(\frac{3}{7}\right)^3\left(\frac{4}{7}\right)^1 = 3\cdot\frac{3}{7}^2\cdot\left(\frac{4}{7}^0\right)=1\cdot\frac{27}{343}\cdot1 = \frac{27}{343}.$
+
+Por lo que se resume la masa de probabilidad como: $$P(X=0)=\frac{64}{343},$$ $$P(X=1)=\frac{144}{343},$$ $$P(X=2)=\frac{108}{343},$$ $$P(X=3)=\frac{27}{343}.$$
+:::
+
+::: {#def-var_ale_bino_neg}
+## Binomial Negativa
+
+Supongamos, para un valor fijo de $p, \ 0 < p < 1$, que la variable aleatoria compuesta $N$ tiene una función de masa de probabilidad.
+
+$$
+P(N =n) = \binom{n + r -1}{r-1}p^r(1-p)^n, \ \ n=0, 1, ...
+$$
+
+Tal variable aleatoria se puede considerar como el número de errores que ocurren antes de que se haya acumulado un total de $r$ éxitos cuando cada intento es independientemente un éxito con probabilidad $p$. (Habrá $n$ tales fracasos si el $r-ésimo$ se produce en la prueba $n + r$. En consecuencia, $N + r$ es una variable aleatoria binomial negativa con parámetros $r$ y $p$.) .
+:::
+
+::: {#def-var_ale_poisson}
+## Variable aleatoria Poisson
+
+Una variable aleatoria $X$, que toma infinitos valores $0, 1, 2, ....$, se dice que es una variable aleatoria de Poisson con parámetro $\lambda$, si para algunos $\lambda >0$, $$p(i) = P[X = i] = e^{-\lambda}\frac{\lambda^{i}}{i!} \qquad i = 0, 1, 2, ...$$
+
+La ecuación anterior define una función de masa de probabilidad ya que, $$\sum_{i=0}^{\infty} p(i) = e^{-\lambda} \sum_{i=0}^{\infty} \frac{\lambda^{i}}{i!} = e^{-\lambda} e^{\lambda} = 1.$$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Variable aleatoria de Poisson***)
+
+El número de accidentes que ocurren en una carretera cada día es una variable aleatoria de Poisson con parámetro $\lambda = 5$. Se quiere saber la probabilidad de que no haya accidentes en el día, por lo que usando la ecuación de la (@def-var_ale_poisson) se tiene:
+
+$$
+P[X = 0] = e^{-5} = 0.0673
+$$
+:::
+
+::: {#def-fun_den_dis}
+## Función de densidad discreta
+
+Sean $X$ una variable aleatoria real discreta con valores $x_1, x_2, \dotsb$. La función $f_X$ definida sobre $\mathbb{R}$, mediante: $$f_X(x) = \left\{ \begin{array}{lcc} P(X = x_i), & si & x = x_1, x_2,  \dotsb \\ \\ 0, & en \ otro \ caso, \end{array} \right. $$
+
+se llama función de densidad de la variable aleatoria $X$.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Función de densidad discreta***)
+
+Sean $X$ una variable aleatoria cuya función de distribución esta dada por:
+
+$$
+F_X(x)= \left\{ \begin{array}{lcc} 0 & si \ x< 0, \\  \frac{1}{16} & si \ 0\leq x<1, \\ \frac{5}{16} & si \ 1\leq x <2,\\ \frac{11}{16} & si \ 2\leq x<3, \\ \frac{15}{16} & si \ 3\leq x <4, \\ 1 & si \ x\geq 4. \end{array} \right.
+$$
+
+En este caso se tiene que la función de densidad, de la variable aleatoria $X$, esta dada por:
+
+$$
+f_X(x)= \left\{ \begin{array}{lcc} \frac{1}{16} & si \ x = 0,\\ \frac{4}{16} & si \ x = 1, \\ \frac{6}{16} & si \  x = 2, \\ \frac{4}{16} & si \ x=3, \\ \frac{1}{16} & si \ x = 4, \\ 0 & \text{en otro caso.}\end{array} \right.
+$$
 :::
 
 ## Variables aleatorias continuas
+
+::: {#text-align:justify}
+Estas variables pueden tomar cualquier valor dentro de un intervalo continuo. Por ejemplo, la altura de una persona o la cantidad de tiempo que alguien espera en una fila.
+:::
 
 ::: {#def-var_alea_cont}
 ## Variable aleatoria continua
@@ -117,5 +444,316 @@ La función $f_X$ recibe el nombre de función de densidad (fdd) de la variable 
 ::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
 ### Ejemplo (***Variable aleatoria continua***)
 
-Sean
+Sea $X$ una variable aleatoria con función de distribución acumulativa $F_X(x)$ dada por:
+
+$$F_X(x) = \begin{cases} 0 & \text{si } x < 0, \\ 1 - e^{-x} & \text{si } x \geq 0. \end{cases}$$​
+
+Verificar si $X$ es absolutamente continua.
+
+**Solución:**
+
+Para verificar si la variable aleatoria $X$ es absolutamente continua se mostrará si su función de distribución $F_X(x)$ puede expresarse como:
+
+$$
+F_X(x) = \int_{-\infty}^x f_X(t)dt.
+$$
+
+-   Dada la función de distribución acumulativa $F_X(x)$, la función de densidad $f_X(x)$ se obtiene derivando $F_X(x)$ con respecto a $x$:
+
+    $$
+    f_X(x) = \frac{d}{dx}F_X(x).
+    $$
+
+    Derivando $F_X(x)$ por partes:
+
+    -   Para $x<0$:
+
+        $$F_X(x) = 0 \Rightarrow \frac{d}{dx}F_X(x)= 0 $$
+
+    -   Para $x\geq 0$ :
+
+        $$
+        F_X(x) = 1 - e^{-x} \Rightarrow \frac{d}{dx}F_X(x) = e^{-x}
+        $$
+
+    Entonces la función de densidad es :
+
+    $$f_X(x) = \begin{cases} 0 & \text{si } x < 0, \\ e^{-x} & \text{si } x \geq 0. \end{cases}$$
+
+Para que $f_X(x)$ sea una función de densidad válida, debe ser no negativa e integrable sobre todo el espacio real. Por lo que se procede a calcular la integral:
+
+$$
+\int_{-\infty}^{\infty}f_X(x)dx = \int_{-\infty}^{0} 0 \ dx \ + \int_{0}^{\infty} e^{-x} \ dx.
+$$
+
+$$
+= 0 + [-e^{-x}]_{0}^{\infty} = 0 -(-1) = 1.
+$$
+
+Entonces la función $f_X(x)$ es no negativa e integrable. Por lo tanto $X$ es una variable aleatoria absolutamente continua.
+:::
+
+::: {#def-var_ale_exp}
+## Variable aleatoria exponencial
+
+Una variable aleatoria continua cuya función de densidad de probabilidad esta dada, para algunos $\lambda > 0$, por $$f(x) = \left\{ \begin{array}{lcc}\lambda e^{-\lambda x} & si \ x\geq0, \\ \\ 0 & si \ x<0, \end{array} \right.$$
+
+Donde $\lambda >0$, se dice que es una variable aleatoria exponencial con parámetro $\lambda$.
+:::
+
+::: {#def-var_ale_norm}
+## Variable aleatoria normal
+
+Se dice que $X$ es una variable aleatoria normal (o simplemente que $X$ se distribuye normalmente) con parámetros $\mu$ y $\sigma^2$ si la densidad de $X$ viene dada por: $$f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-(x - \mu)^2/2\sigma^2}, \qquad -\infty < x < \infty.$$
+
+![Gráfica de una variable aleatoria normal](normal.png){width="10.6cm"}
+:::
+
+::: {#def-var_ale_weibull}
+## Variable aleatoria Weibull
+
+La variable aleatoria de Weibull es una variable continua utilizada principalmente en estudios de confiabilidad y análisis de supervivencia para modelar tiempos hasta un evento, como el tiempo de falla de un sistema o la vida útil de un producto. La distribución de Weibull es particularmente flexible y se puede ajustar a diferentes formas de datos mediante sus dos parámetros: el parámetro de forma $(k)$ y el parámetro de escala $(\lambda)$.
+
+La función de densidad de probabilidad (PDF) para una variable aleatoria $X$ que sigue una distribución Weibull está definida como:
+
+$$f(x; k, \lambda) = \begin{cases} \frac{k}{\lambda} \left( \frac{x}{\lambda} \right)^{k-1} e^{-(x/\lambda)^k} & x \geq 0, \\ 0 & x < 0, \end{cases}$$
+
+donde:
+
+-   $k>0$ : parámetro de forma que determina la forma de la distribución.
+
+    -   Si $k<1$, la función de probabilidad decrece con $x$.
+
+    -   Si $k= 1$, la distribución se reduce a una exponencial.
+
+    -   Si $k > 1$, la función aumenta inicialmente, alcanza un máximo y luego decrece.
+
+-   $\lambda > 0$: parámetro de escala que estira o comprime la distribución.
+:::
+
+## Valor esperado y varianza de una variable aleatoria.
+
+::: {#def-valor_esperado}
+## Valor esperado
+
+Sean $X$ una variable aleatoria real (@def-variable_aleatoria) definida sobre el espacio de probabilidad $(\Omega, \mathfrak{F}, P)$ .
+
+1.  Si $X$ es una variable aleatoria discreta, con valores $x_1, x_2, \dots,$ se dice que $X$ posee un valor esperado si:\
+    $$\sum_{k=1}^{\infty} |x_k| P(X = x_k) < \infty.$$
+
+En tal caso, se define el valor esperado $E[X]$ (esperanza matemática media) de $X$ como: $$E[X] = \sum_{k=1}^{\infty} x_k P(X = x_k).$$
+
+2.  Si $X$ es una variable aleatoria continua con función de densidad $f_x$, se dice que $X$ posee un valor esperado si $$\int_{-\infty}^{\infty} |x| f_X(x)dx < \infty.$$
+
+    En tal caso, se define el valor esperado $E[X]$ (esperanza matemática media) de $X$ como: $$E[X] = \int_{-\infty}^{\infty} xf_X(x) dx.$$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Valor Esperado***)
+
+Se lanza una moneda justa. Sea $X$ la variable aleatoria que denota el resultado obtenido, $1$ si se obtiene cara y $0$ si se obtiene cruz.
+
+Para una moneda justa se tiene que $P(cara)= \frac{1}{2}$ y $P(cruz)=\frac{1}{2}$.
+
+El valor esperado $E[X]$ es:
+
+$$
+E(X) = \sum(x_i \cdot P(x_i)) = 1\cdot \frac{1}{2} + 0 \cdot \frac{1}{2} = \frac{1}{2}
+$$
+:::
+
+::: {#def-varianza}
+## Varianza
+
+Sea $X$ una variable aleatoria con media $\mu$, entonces la varianza de $X$, esta denotada por $Var(X)$, se define como: $$Var(X) = E[(X - \mu)^2].$$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Varianza***)
+
+Supongase que se tiene una variable aleatoria $X$ que toma los siguientes valores con las respectivas probabilidades:
+
+| $X$    | $1$   | $2$   | $3$   | $4$   |
+|--------|-------|-------|-------|-------|
+| $P(X)$ | $0.1$ | $0.3$ | $0.4$ | $0.2$ |
+
+Entonces $\mu$ de $X$ es:
+
+$$
+\mu = \sum_i x_iP(X = x_i) = 1(1.01) + 2(0.3) + 3(0.4)+ 4(0.2) = 2.7
+$$ Por lo que la varianza nos da:
+
+$$
+Var(X) = E[(X - \mu)^2] = \sum_{i}(x_i - \mu)^2 P(X= x_i)
+$$
+
+$$
+Var(X) = (1- 2.7)^2(0.1) + (2- 2.7)^2(0.3) + (3- 2.7)^2(0.4) + (4- 2.7)^2(0.2) = 0.81
+$$
+
+Por lo tanto la varianza de $X$ es $Var(X) = 0.81$.
+:::
+
+::: {#def-fun_gen_mom}
+## Función generadora de momentos
+
+Sean $X$ una variable aleatoria tal que $E[e^{tx}]$ es finito para todo $t \in (-\alpha, \alpha)$, con $\alpha$ real positivo. Se define la función generadora de momentos de $X$, denotada por $m_X(\cdot)$ como: $$m_X(t) = E[e^{tX}]; \ \ con \  t \in (-\alpha, \alpha).$$ Esto es: $$f_X(x) = \left\{ \begin{array}{lcc} \sum_{k} e^{tx_{k}}P(X = x_k), & \text{si $X$ es una v.a discreta con valores $x = x_1, x_2\dotsb$} \\ \\ \int_{-\infty}^{\infty} e^{tx}f(x)dx, & \text{si $X$ es una v.a continua con función de densidad $f$.} \end{array} \right.$$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Función generadora de momentos***)
+
+Se considera una variable aleatoria $X$ que sigue una distribución exponencial con parámetros $\lambda$ y con función de densidad de probabilidad : $f_X(x) = \lambda e^{-\lambda x}, \ x \geq 0$.
+
+La función generadora de momentos de $X$ es:
+
+$$
+m_X(t) = E[e^{tX}] = \int_0^{\infty} e^{tx}\lambda e^{-\lambda x} dx = \lambda \int_0^{\infty} e^{x(t-\lambda)} dx.
+$$La integral converge solo si $t < \lambda$, y resolviendo queda como
+
+$m_X(t) = \lambda \left[\frac{e^{x(t - \lambda)}}{t - \lambda}\right]_{0}^{\infty} = \frac{\lambda}{\lambda - t}, \quad \text{para } t < \lambda.$
+:::
+
+## Probabilidad condicional e independencia {#sec-probabilidad-condicional-e-independencia}
+
+::: {style="text-align:justify"}
+La probabilidad condicional es un concepto fundamental en la teoría de probabilidad. Se refiere a la probabilidad de que ocurra un evento $A$, dado que ya ha ocurrido otro evento $B$.
+:::
+
+::: {#def-prob_cond}
+## Probabilidad condicional
+
+Sea $(\Omega, \mathfrak{F}, P)$ un espacio de probabilidad. Si $A, B, \in \mathfrak{F}$ con $P(A) > 0$, entonces se define la probabilidad del evento $B$ bajo la condición $A$ como sigue: $$P(B | A) := \frac{P(A \cap B)}{P(A)}.$$
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Probabilidad Condicional***)
+
+Se lanzan dos dados. La probabilidad de que la suma de los dos dados sea $8$, dado que el primer dado ha mostrado un número mayor que $3$ es la siguiente.
+
+**Solución:**
+
+1.  Evento A: La suma de los dados es $8$.
+
+2.  Evento B: El primer dado muestra un número mayor que $3$.
+
+Primero se busca la $P(B)$, es decir el primer dado puede mostrar $4, 5,$ o $6$, lo que son 3 opciones de $6$, por lo tanto:
+
+$$
+P(B) = \frac{3}{6} = \frac{1}{2}.
+$$
+
+Ahora para $P(A \cap B)$, tenemos que es la probabilidad de que la suma sea $8$ y el primer dado mayor que $3$. Las combinaciones que cumplen con esto son: $(4,4), (5,3),(6,2)$, por lo que hay 3 casos favorables de un total de 36 posibles., siendo así:
+
+$$
+P(A\cap B) = \frac{3}{36} = \frac{1}{12}.
+$$ Teniendo finalmente la probabilidad condicional:
+
+$$
+P(A|B) = \frac{\frac{1}{12}}{\frac{1}{2}} = \frac{2}{12} =\frac{1}{6}.
+$$
+:::
+
+::: {#thm-prob_total}
+## Teorema de probabilidad total
+
+Sea $A_1, A_2, ...$ una partición finita o numerable de $\Omega$, es decir, $A_i \cap A_j = \emptyset$ *para todo* $i\neq j$ *y* $\bigcup_{i=1}^{\infty} A_i = \Omega$ tal que $P(A_i)>0$ *para todo* $i$*. Entonces para cualquier* $B \in \mathfrak{F}$ *se satisface:*
+
+$$
+P(B) = \sum_n P(B|A_n)P(A_n).
+$$
+:::
+
+::: {style="text-align:justify"}
+La demostración del @thm-prob_total puede ser consultado en [@castaneda2012introduction].
+:::
+
+::: {style="text-align:justify"}
+En algunos casos la ocurrencia de un evento no afecta la probabilidad de ocurrencia de otro evento. En ese caso se dice que el primer evento es independiente del otro.
+:::
+
+::: {#def-even_ind}
+## Eventos independientes
+
+Dos eventos son independientes $A$ y $B$ son independientes, si y solo si, $$P(A \cap B) = P(A)P(B).$$En caso contrario se dice que los eventos son dependientes.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Ejemplo de eventos independientes***)
+
+Supongamos que lanzas dos monedas. Los eventos siguientes son independientes:
+
+-   **Evento A**: $\text{``La primera moneda muestra cara."}$
+
+-   **Evento B**: $\text{``La segunda moneda muestra cara."}$
+
+La probabilidad de que el evento $A$ ocurra es $P(A) = \frac{1}{2}$​ y la probabilidad de que el evento B ocurra también es $P(B) = \frac{1}{2}$​. La probabilidad conjunta de que ambos eventos ocurran es $P(A \cap B) = \frac{1}{2} \times \frac{1}{2} = \frac{1}{4}$ Como $P(A \cap B) = P(A) \cdot P(B)$, estos eventos son independientes.
+:::
+
+## Independencia de variables aleatorias
+
+::: {#def-ind_var_ale}
+## Independencia de variables aleatorias
+
+Las variables aleatorias $X$ e $Y$ son independientes si para dos conjuntos cualesquiera de números reales $A$ y $B$, $$P[X \in A, Y \in B] = P(\{\omega \in \Omega: X(\omega) \in A)P(\{\omega \in \Omega: X(\omega) \in B).$$
+
+En otras palabras, $X$ e $Y$ son independientes si, para todos $A$ y $B$, los eventos $E_A = [X \in A]$ y $F_B = [Y \in B]$ son independientes.
+:::
+
+## Probabilidad condicional de una variable aleatoria
+
+::: {style="text-align:justify"}
+La probabilidad condicional de una variable aleatoria es la probabilidad de que ocurra un evento, dado que otro evento ya ha ocurrido. En resumen, la probabilidad condicional es crucial para entender cómo la ocurrencia de un evento afecta la probabilidad de otro, lo que tiene amplias aplicaciones en análisis de datos, estadística, y muchas otras disciplinas.
+:::
+
+### Valor esperado condicionado dada una variable aleatoria
+
+::: {#def-val_es_cond_v_a}
+## Valor esperado condicional de v. a. discretas
+
+El valor esperado condicional de $X$ dado $Y = y$ se define así: $$E[X | Y = y] =: \sum_x xf_{X|Y}(x | y),$$ para todos los $y$ para los cuales $P(Y = y) > 0$.
+:::
+
+<div>
+
+### Varianza condicionada dada una variable aleatoria
+
+</div>
+
+::: {#def-vari_cond_var_ale}
+## Varianza condicionada dada una variable aleatoria
+
+Si $X$ y $Y$ son dos variables aleatorias, la varianza condicionada de $X$ dado $Y=y$ se denota como $Var(X | Y=Y)$ y se define como: $$Var( X | Y = y) = E[(X - E[X|Y=y])^2 | Y = y].$$
+
+Donde $E[X |Y =y]$ es la esperanza condicional de $X$ dado $Y = y$.
+:::
+
+::: {#def-convolucion}
+## Convolución
+
+Para dos medidas $\sigma$ -finitas cualesquiera $\mu$ y $\lambda$ en $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, la medida $(\mu*\lambda)(A)$ definida como:
+
+$$
+(\mu*\lambda)(A) \equiv \int \int I_A(x+y)\mu(dx)\lambda(dy),
+$$
+
+se denomina convolución de $\mu$ y $\lambda$.
+:::
+
+::: {style="text-align:justify"}
+## Ley fuerte de los grandes números
+
+La ley fuerte de los grandes números es probablemente el resultado más conocido de la teoría de la probabilidad. Establece que el promedio de una secuencia de variables aleatorias independientes que tengan una distribución común, con probabilidad $1$, convergerán a la media de esa distribución.
+:::
+
+::: {#thm-ley_f_gran_num}
+## Ley fuerte de los grandes números
+
+Sea $X_1, X_2, ...$ una secuencia de variables aleatorias independientes e idénticamente distribuidas, cada una de las cuales tiene media finita $\mu = E[X_i]$. Entonces con probabilidad $1$ se tiene que:
+
+$$ \frac{X_1 + X_2 + \dots + X_n}{n} \rightarrow \mu \qquad \text{cuando $n \rightarrow \infty^{\uparrow}$} $$
+:::
+
+::: {style="text-align:justify"}
+La demostración del @thm-ley_f_gran_num puede ser consultado en [@ross2015first].
 :::

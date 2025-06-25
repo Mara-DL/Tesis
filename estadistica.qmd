@@ -1,1 +1,400 @@
+---
+lang: es
+---
+
 # Estadística
+
+::: {style="text-align: justify"}
+La estadística es una disciplina matemática que se encarga de recopilar, analizar e interpretar datos para extraer conclusiones útiles y tomar decisiones informadas. Su origen se remonta a la antigüedad, donde civilizaciones como la egipcia y la babilónica ya utilizaban registros numéricos para fines administrativos y de organización. Sin embargo, el desarrollo formal de la estadística como ciencia comenzó en el siglo XVII con la obra de matemáticos como John Graunt, quien analizó los registros de mortalidad en Londres, y Pierre-Simon Laplace, que desarrolló técnicas probabilísticas.
+
+La estadística se divide en dos grandes ramas: la estadística descriptiva y la inferencial. La estadística descriptiva se centra en resumir y describir las características de un conjunto de datos a través de medidas como la media, la mediana, la moda, y la desviación estándar, al igual que mediante representaciones gráficas como histogramas y diagramas de dispersión. Por otro lado, la estadística inferencial utiliza técnicas de muestreo y probabilidad para hacer generalizaciones y predicciones sobre una población a partir de una muestra de datos.
+
+En la vida diaria, la estadística tiene numerosas aplicaciones. Por ejemplo, en la medicina, se utiliza para evaluar la eficacia de nuevos tratamientos mediante ensayos clínicos y para estudiar la incidencia de enfermedades. En el ámbito económico, ayuda a analizar tendencias del mercado, prever el comportamiento de los consumidores y tomar decisiones financieras. En la educación, se emplea para evaluar el rendimiento académico y diseñar políticas educativas. Además, la estadística es fundamental en la investigación científica para validar hipótesis y teorías a través del análisis de datos experimentales.
+
+Para brindar más información ([@walpole2012probabilidad], [@jones1994book],[@massey1951kolmogorov], [@wackerly2009estadística], [@mood1986introduction]) presentan las siguientes definiciones.
+:::
+
+::: {#def-estadis}
+## Estadístico
+
+Un estadístico es una función de variables aleatorias observables que no contienen parámetros desconocidos.
+:::
+
+::: {#def-muestra_aleatoria}
+## Muestra aleatoria
+
+Sean $x_1, x_2, ..., x_n$ variables aleatorias cuya distribución conjunta es
+
+$$
+g(x_1, x_2, ..., x_n) = f(x_1) f(x_2)\dotsb f(x_n)
+$$
+
+donde la función de densidad de cada $x_i$ es $f(x)$. En tal supuesto se dice que $x_1, x_2, ..., x_n$ es una muestra aleatoria de tamaño $n$ de la población con densidad $f(x)$.
+:::
+
+## Medidas de localización
+
+::: {style="text-align: justify"}
+Las medidas de localización son estadísticas que resumen o describen la tendencia central de un conjunto de datos. Las más comunes incluyen la media y mediana. Estas medidas ayudan a identificar el valor central o típico de los datos, proporcionando una referencia útil para entender su distribución y comportamiento. Las medidas de localización son fundamentales en estadística porque proporcionan un resumen rápido de la distribución de los datos. Ayudan a comparar datos, tomar decisiones y entender la distribución.
+:::
+
+::: {#def-media}
+## Media muestral
+
+El primer momento de la muestra es la *media muestral*, definida como
+
+$$\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i.$$
+:::
+
+::: {style="text-align: justify"}
+La mediana de la muestra es una medida de tendencia central que divide los datos en dos partes iguales, la mitad por debajo de la mediana y la otra mitad por encima. Si el número de observaciones es uniforme, la mediana está a medio camino entre los dos valores centrales
+:::
+
+::: {#def-mediana}
+## Mediana
+
+Dado que las observaciones en una muestra son $x_1, x_2, \cdots x_n$ acomodadas en orden de magnitud creciente, la mediana de la muestra es
+
+$$
+\bar{X} = \left\{ \begin{array}{lcc} x_{\frac{n+1}{2}}, & \text{si $n$ es impar}, \\ \\ \frac{1}{2}(x_{\frac{n}{2}} + x_{\frac{n}{2}+1}), & \text{si $n$ es par}. \end{array} \right.
+$$
+:::
+
+## Elementos de teoría de muestreo
+
+::: {style="text-align: justify"}
+La teoría de muestreo es una rama de la estadística que se ocupa del diseño y análisis de muestras. La teoría de muestreo es crucial porque permite inferir características de una población a partir de una muestra representativa. Esto es esencial en estudios donde es impracticable o imposible examinar a toda la población debido a limitaciones de tiempo, costos o logística. Un muestreo adecuado asegura que las inferencias hechas sobre la población sean precisas y confiables, minimizando el error de muestreo y permitiendo un análisis eficiente.
+:::
+
+::::::::::: {style="text-align:justify"}
+### Población
+
+::: {#def-poblacion}
+Es el conjunto completo de elementos o individuos que se desean estudiar. Puede ser finita o infinita.
+:::
+
+-   Ejemplo: Todos los estudiantes de una universidad.
+
+### Muestra
+
+::: {#def-muestra}
+Subconjunto de la población seleccionado para el estudio. Una muestra debe ser representativa para que las inferencias realizadas a partir de ella sean válidas para la población total.
+
+-   Ejemplo: Un grupo de 200 estudiantes seleccionados aleatoriamente de la universidad.
+:::
+
+### Unidad de Muestreo
+
+::: {#def-unidad_muestreo}
+Cada uno de los elementos individuales que componen la muestra. Es la unidad básica sobre la cual se toman las mediciones.
+:::
+
+-   Ejemplo: Un estudiante específico en el grupo de 200 estudiantes.
+
+### Marco Muestral
+
+::: {#def-muestral}
+Lista completa de todas las unidades de muestreo en la población de donde se seleccionará la muestra. Debe ser exhaustivo y actualizado para minimizar sesgos.
+:::
+
+-   Ejemplo: Lista de todos los estudiantes matriculados en la universidad.
+
+### Parámetro
+
+::: {#def-parámetro}
+Característica numérica de la población que se desea estimar, como la media, proporción o varianza.
+:::
+
+-   Ejemplo: La media de la calificación final de todos los estudiantes de la universidad.
+
+### Estadístico
+
+::: {#def-estadistico}
+Valor calculado a partir de los datos de la muestra, utilizado para estimar el parámetro poblacional.
+:::
+
+-   Ejemplo: La media de la calificación final de los 200 estudiantes seleccionados.
+
+### Error de Muestreo
+
+::: {#def-error_muestreo}
+Diferencia entre el valor del parámetro poblacional y el estadístico de la muestra. Es un error inherente que surge porque se está trabajando con una muestra en lugar de toda la población.
+:::
+
+-   Ejemplo: Diferencia entre la media de la calificación final de todos los estudiantes y la media obtenida de los 200 estudiantes seleccionados.
+
+### Técnicas de Muestreo
+
+::: {#def-tecnicas_muestreo}
+Métodos utilizados para seleccionar una muestra de la población. Incluyen muestreo aleatorio simple, muestreo estratificado, muestreo por conglomerados, entre otros.
+:::
+
+-   Ejemplo: En el muestreo aleatorio simple, cada estudiante tiene la misma probabilidad de ser seleccionado.
+:::::::::::
+
+### Importancia de la Teoría de Muestreo
+
+::: {style="text-align: justify"}
+La teoría de muestreo es crucial porque permite hacer inferencias sobre una población sin necesidad de examinar a cada miembro. Esto es esencial en la investigación en ciencias sociales, biología, marketing, y muchos otros campos donde examinar toda la población sería costoso o impracticable.
+:::
+
+## Gráficos estadísticos
+
+### Histograma {#sec-histogramas}
+
+::: {style="text-align: justify"}
+Un histograma es un tipo de gráfico utilizado en estadística para representar la distribución de una variable cuantitativa continua. Se construye dividiendo el rango de datos en intervalos (también conocidos como "bins" o clases), y luego contando el número de observaciones que caen dentro de cada intervalo.
+
+Cada intervalo se representa como una barra rectangular, donde la altura de la barra es proporcional a la frecuencia (número de observaciones) o a la densidad (frecuencia relativa) de los datos en ese intervalo. A diferencia de un gráfico de barras, las barras en un histograma están unidas entre sí, lo que refleja la continuidad de los datos.
+:::
+
+::: {style="text-align:justify"}
+### Componentes de un Histograma
+
+1.  Intervalos o Bins: Divisiones del rango de datos en segmentos de igual ancho. El número y el ancho de los intervalos pueden afectar la apariencia del histograma.
+
+2.  Frecuencia: Número de observaciones que caen dentro de cada intervalo. Se puede representar como frecuencia absoluta (conteo) o como frecuencia relativa (porcentaje).
+
+3.  Barras: Rectángulos cuya altura corresponde a la frecuencia de las observaciones en cada intervalo.
+:::
+
+### Box Plot {#sec-boxplot}
+
+::: {style="text-align: justify"}
+Un boxplot (o diagrama de caja y bigotes) es un gráfico estadístico que resume la distribución de un conjunto de datos numéricos a través de cinco estadísticos clave: el mínimo, el primer cuartil $(Q1)$, la mediana $(Q2)$, el tercer cuartil $(Q3)$, y el máximo. Este tipo de gráfico es especialmente útil para identificar la dispersión, la asimetría, y los valores atípicos (outliers) en un conjunto de datos.
+:::
+
+::: {style="text-align:justify"}
+### Componentes de un Boxplot
+
+1.  Caja (Box):
+
+    -   Primer cuartil $(Q1)$: Marca el límite inferior de la caja, representando el $25\%$ de los datos por debajo de este valor.
+
+    -   Mediana $(Q2)$: Línea dentro de la caja que representa el valor medio ($50\%$ de los datos están por debajo y $50\%$ por encima).
+
+    -   Tercer cuartil $(Q3)$: Marca el límite superior de la caja, representando el $75\%$ de los datos por debajo de este valor.
+
+    -   Rango intercuartílico (IQR): Es la longitud de la caja, calculada como $Q3$ - $Q1$. Mide la dispersión central del conjunto de datos.
+
+2.  Bigotes (Whiskers):
+
+    -   Se extienden desde los extremos de la caja hasta el valor mínimo y máximo dentro de $1.5$ veces el rango intercuartílico (IQR) desde el primer y tercer cuartil, respectivamente.
+
+    -   Los valores que caen fuera de estos límites se consideran valores atípicos.
+
+3.  Valores Atípicos (Outliers):
+
+    -   Son los puntos de datos que se encuentran fuera del rango cubierto por los bigotes. Se representan como puntos individuales o pequeños círculos fuera de la caja y los bigotes.
+
+### Propósito del Boxplot
+
+El boxplot se utiliza principalmente para:
+
+-   Visualizar la distribución: Permite ver de manera rápida la distribución de los datos, su simetría o asimetría, y la presencia de valores atípicos.
+
+-   Comparar distribuciones: Es útil para comparar la distribución de datos entre diferentes grupos o categorías.
+
+-   Identificar valores atípicos: Facilita la detección de outliers que pueden influir significativamente en el análisis.
+:::
+
+![](box2.png){fig-align="center"}
+
+## Pruebas de hipótesis.
+
+::: {style="text-align: justify"}
+Las pruebas de hipótesis son un conjunto de procedimientos estadísticos utilizados para tomar decisiones sobre una población basándose en la información obtenida de una muestra. El propósito principal de estas pruebas es determinar si existe suficiente evidencia en los datos muéstrales para rechazar una hipótesis nula $(H_0)$ en favor de una hipótesis alternativa $(H_1)$.
+:::
+
+::: {#def-hip_est}
+Una hipótesis estadística es una aseveración o conjetura respecto a una o más poblaciones.
+:::
+
+::: {style="text-align:justify"}
+### Conceptos Clave en Pruebas de Hipótesis
+
+1.  Hipótesis Nula $H_o$:
+
+    -   Es una afirmación que se plantea inicialmente y que se somete a prueba. Generalmente, representa una situación de "no efecto" o "no diferencia".
+
+    -   Ejemplo: "La media de la población es igual a $50$".
+
+2.  Hipótesis Alternativa $H_a$ o $H_1$ :
+
+    -   Es la afirmación que se acepta si la evidencia contra $H_0$ es suficiente. Representa una situación de "efecto" o "diferencia".
+
+    -   Ejemplo: "La media de la población es diferente de $50$".
+
+3.  Estadístico de Prueba:
+
+    -   Es un valor calculado a partir de los datos muéstrales que se utiliza para decidir si se rechaza o no la hipótesis nula. Este valor se compara con una distribución de referencia (normal, $t$ de Student, chi-cuadrado, etc.) para determinar la significancia.
+
+4.  Nivel de Significancia ($\alpha$):
+
+    -   Es la probabilidad de rechazar la hipótesis nula cuando en realidad es verdadera (error tipo I). Comúnmente se elige un valor de $\alpha= 0.05$, aunque puede variar dependiendo del contexto del estudio.
+
+    -   Ejemplo: Un nivel de significancia de $0.05$ significa que hay un $5\%$ de probabilidad de cometer un error tipo I.
+
+5.  Valor-p (p-value):
+
+    -   Es la probabilidad de obtener un resultado tan extremo como el observado en los datos muéstrales, asumiendo que la hipótesis nula es verdadera. Si el valor-p es menor que $\alpha$, se rechaza $H_0$.
+
+    -   Ejemplo: Un valor-p de $0.03$ indica que hay un $3 \%$ de probabilidad de obtener los datos observados si la hipótesis nula es verdadera.
+
+6.  Decisión:
+
+    -   Rechazar $H_0$: Si el valor-p es menor que $\alpha$ se concluye que hay suficiente evidencia para rechazar la hipótesis nula a favor de la alternativa.
+
+    -   No Rechazar $H_0$: Si el valor-p es mayor que $\alpha$, no se rechaza la hipótesis nula, lo que no implica que sea verdadera, sino que no hay suficiente evidencia en contra.
+:::
+
+## Test de normalidad. {#sec-normalidad}
+
+::: {style="text-align: justify"}
+Un test de normalidad es una prueba estadística que se utiliza para determinar si un conjunto de datos sigue una distribución normal. La normalidad es un supuesto clave en muchas pruebas estadísticas, como la prueba $t$ de Student y el análisis de varianza (ANOVA), porque muchas inferencias estadísticas asumen que los datos son aproximadamente normales. Si los datos no siguen una distribución normal, algunos métodos estadísticos pueden no ser válidos o pueden ofrecer resultados engañosos.
+
+### Propósito
+
+El propósito principal de un test de normalidad es evaluar si la muestra de datos tiene una distribución que sea aproximadamente simétrica y con una forma de campana, como lo haría una distribución normal. Existen varios test de normalidad, y cada uno tiene su propio enfoque para medir esta adecuación.
+
+### Principales tipos de tests de normalidad
+
+1.  Prueba de Kolmogorov-Smirnov (K-S): Este test compara la distribución empírica de los datos con una distribución normal teórica, midiendo la distancia máxima entre ambas distribuciones.
+
+2.  Prueba de Shapiro-Wilk: Considerada una de las pruebas más poderosas, especialmente en pequeñas muestras, evalúa la normalidad calculando una estadística basada en las correlaciones entre los datos y sus posiciones esperadas bajo una distribución normal.
+
+3.  Prueba de Anderson-Darling: Similar a la K-S, pero con más peso en las colas de la distribución, lo que la hace más sensible a los valores atípicos.
+
+4.  Prueba de Jarque-Bera: Evalúa la normalidad basándose en la asimetría (skewness) y la curtosis de los datos. Es útil cuando los datos tienen distribuciones que se desvían significativamente de la normal.
+:::
+
+## Jarque Bera {#sec-J_B}
+
+::: {style="text-align:justify"}
+### Test de Jarque-Bera: Definición y Uso
+
+El Test de Jarque-Bera (JB) es una prueba estadística utilizada para evaluar si una serie de datos sigue una distribución normal. Específicamente, se basa en las diferencias de la curtosis y la asimetría (skewness) de la muestra con respecto a las de una distribución normal.
+
+### Conceptos Clave
+
+1.  Asimetría (Skewness):
+
+    -   Mide la simetría de la distribución de los datos. Una distribución normal tiene una asimetría de 0.
+
+    -   La asimetría positiva indica que la cola derecha es más larga, mientras que la asimetría negativa indica que la cola izquierda es más larga.
+
+2.  Curtosis:
+
+    -   Mide la "concentración" de los datos en torno a la media. Una distribución normal tiene una curtosis de 3.
+
+    -   La curtosis mayor que 3 (leptocúrtica) indica una distribución con colas más largas, mientras que una curtosis menor que 3 (platicúrtica) indica una distribución con colas más cortas.
+
+3.  Estadístico de Jarque-Bera:
+
+    -   Se calcula a partir de la asimetría (S) y la curtosis (K) de la muestra mediante la fórmula:
+
+        $$JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right).$$
+
+    Donde $n$ es el tamaño de la muestra, $S$ es la asimetría y $K$ es la curtosis.
+
+4.  Hipótesis:
+
+    -   Hipótesis nula (H₀): Los datos siguen una distribución normal.
+
+    -   Hipótesis alternativa (H₁): Los datos no siguen una distribución normal.
+
+5.  Valor Crítico y Decisión:
+
+    -   El estadístico JB se compara con un valor crítico de la distribución chi-cuadrado con dos grados de libertad. Si el valor del estadístico es mayor que el valor crítico o si el valor-p asociado es menor que el nivel de significancia ($\alpha$), se rechaza la hipótesis nula, indicando que los datos no siguen una distribución normal.
+
+## Kolmogorov Smirnov {#sec-K_S}
+
+El Test de Kolmogorov-Smirnov (K-S) es una prueba no paramétrica utilizada para determinar si una muestra de datos sigue una distribución teórica específica (por ejemplo, normal, exponencial, etc.) o para comparar dos muestras para verificar si provienen de la misma distribución. Es especialmente útil porque no requiere que la distribución subyacente de los datos sea normal, lo que lo hace aplicable en una amplia variedad de situaciones.
+
+### Conceptos Clave
+
+1.  Función de Distribución Empírica (FDE):
+
+    -   Es una función que estima la distribución acumulativa de la muestra de datos. Se calcula como la proporción de puntos en la muestra que son menores o iguales a un valor dado.
+
+2.  Función de Distribución Teórica:
+
+    -   Es la función de distribución acumulativa de la distribución que se está comparando con los datos (por ejemplo, la distribución normal, exponencial, etc.).
+
+3.  Estadístico de Kolmogorov-Smirnov:
+
+    -   Es la máxima diferencia absoluta entre la función de distribución empírica de los datos y la función de distribución teórica:
+
+    $$D = \sup_x |F_n(x) - F(x)|.$$
+
+    Donde $F_n(x)$ es la función de distribución empírica de la muestra y $F(x)$ es la función de distribución teórica.
+
+4.  Hipótesis:
+
+    -   Hipótesis nula $(H_0)$: La muestra sigue la distribución teórica especificada.
+
+    -   Hipótesis alternativa $(H_1)$: La muestra no sigue la distribución teórica especificada.
+
+5.  Valor Crítico y Decisión:
+
+    -   El estadístico D se compara con un valor crítico basado en la distribución K-S. Si el estadístico D es mayor que el valor crítico, o si el valor-p es menor que el nivel de significancia ($\alpha$), se rechaza la hipótesis nula.
+
+### Aplicaciones del Test de Kolmogorov-Smirnov
+
+El Test de Kolmogorov-Smirnov se utiliza en muchas áreas, incluyendo la econometría, biología, y análisis de datos. Es comúnmente empleado para validar modelos estadísticos, verificar la normalidad de los datos, o comparar distribuciones de diferentes muestras.
+
+### Variantes del Test
+
+1.  Test de Kolmogorov-Smirnov Bivariado: Compara dos muestras y evalúa si provienen de la misma distribución.
+
+2.  Test de Lilliefors: Una adaptación del test K-S para cuando se estima la media y la varianza de la distribución normal a partir de la muestra.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Test KS***)
+
+Un **Q-Q plot** combinado con la **prueba de Kolmogorov-Smirnov** (K-S) se utiliza para verificar si un conjunto de datos sigue una distribución teórica específica (por ejemplo, una normal).
+
+1.  **Prueba de Kolmogorov-Smirnov (K-S)**:
+
+-   **Objetivo:** Comparar la función de distribución acumulativa (FDA) empírica de los datos con la FDA de una distribución teórica.
+-   **Hipótesis:**
+    -   $(H_0)$: Los datos siguen la distribución teórica.
+    -   $(H_a)$: Los datos no siguen la distribución teórica.
+-   **Estadístico K-S ((D))**: Es la mayor diferencia absoluta entre la FDA empírica y la teórica.
+
+2.  **Q-Q Plot**: El Q-Q plot es una representación gráfica que complementa la prueba K-S al comparar cuantiles de los datos con los cuantiles de una distribución teórica. Si los datos siguen la distribución teórica, los puntos deberían alinearse sobre la línea $(y = x)$.
+
+3.  Ejemplo de que ilustra cómo los datos se comparan con una distribución normal:
+
+    ![](images/clipboard-3064661078.png){fig-align="center" width="334"}
+
+### Descripción del gráfico:
+
+1.  **Cuantiles teóricos vs. muestrales:** Los puntos azules representan los datos muestrales en comparación con una distribución normal teórica.
+2.  **Línea de referencia** $(y=x)$**:** Indica cómo deberían alinearse los puntos si los datos siguen la distribución teórica.
+3.  **Estadístico K-S:** La distancia vertical máxima ((D)) entre un punto de los datos y la línea de referencia se marca con una flecha roja.
+:::
+
+## Monte Carlo {#sec-Mon_Car}
+
+::: {style="text-align:justify"}
+El Método de Monte Carlo es un conjunto de técnicas estadísticas que utilizan simulaciones aleatorias para resolver problemas matemáticos y físicos que son difíciles o imposibles de resolver de manera exacta mediante métodos determinísticos. Este enfoque se basa en generar múltiples muestras aleatorias para estimar una solución aproximada. Es ampliamente utilizado en áreas como la física, las finanzas, la ingeniería, la biología y otros campos donde la complejidad del problema o la incertidumbre inherente hacen que otros métodos no sean prácticos.
+
+Cuando se trabaja con variables aleatorias, comúnmente se quiere estimar el valor esperado de cualquier cantidad.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Monte Carlo***)
+
+Este es un ejemplo de cómo generar una representación gráfica del método de Monte Carlo, donde los puntos azules caen dentro del círculo y los puntos rojos fuera de él.
+
+![](images/clipboard-3088952609.png){fig-align="center" width="309"}
+
+### Interpretación del gráfico:
+
+-   **Puntos dentro del círculo**: Representan los puntos aleatorios que están dentro de la región que se utiliza para estimar $(\pi)$.
+-   **Puntos fuera del círculo**: Representan los puntos que no cumplen la condición de $(x^2 + y^2 \leq 1)$.
+
+Este gráfico proporciona una visualización del proceso de simulación utilizado en el método de Monte carlo para la estimación de $\pi$.
+:::

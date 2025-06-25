@@ -1,0 +1,113 @@
+---
+lang: es
+---
+
+# Procesos estocásticos
+
+::: {style="text-align:justify"}
+Los procesos estocásticos son un concepto fundamental en la teoría de probabilidad y se refieren a fenómenos que evolucionan en el tiempo de manera aleatoria. Un proceso estocástico puede ser descrito como una colección de variables aleatorias indexadas por el tiempo o por otro parámetro, donde el futuro del proceso está condicionado por el presente, pero no necesariamente determinado. Este concepto es ampliamente utilizado en diversas disciplinas, como la física, la biología, la economía, la ingeniería, y las finanzas, para modelar sistemas que cambian con el tiempo de manera incierta.
+
+Los procesos estocásticos son esenciales para modelar sistemas donde el componente aleatorio es inherente y no puede ser ignorado. Por ejemplo, en las finanzas, los modelos de valoración de opciones y análisis de riesgos se basan en procesos estocásticos. En la ingeniería, se utilizan para modelar ruido en señales o sistemas de control. En biología, permiten estudiar fenómenos como la dinámica poblacional o la difusión de enfermedades.
+
+Los siguientes fuentes proporcionan las siguientes definiciones ([@castaneda2012introduction],[@dobrow2016introduction],[@rincon2012introduccion],[@ross1995stochastic])
+:::
+
+::: {#def-proc_esto}
+## Procesos estocásticos
+
+Un proceso estocástico real es una colección de variables aleatorias $\{X_t;\  t\in T\}$ definida en un espacio de probabilidad común $(\Omega, \mathfrak{F}, P)$ con valores en $\mathbb{R}$. $T$ se le llama al conjunto índice del proceso o espacio paramétrico, que generalmente es un subconjunto de $\mathbb R$. El conjunto de valores que la variable aleatoria $X_t$ puede tomar se denomina espacio de estado del proceso y es denotado por $S$.
+:::
+
+::: {.callout-caution collapse="true" style="text-align: justify" icon="false"}
+### Ejemplo (***Procesos Estocásticos***)
+
+Sea $Y(t) = 5t$, donde $t$ representa el tiempo en horas. Sea $Z(t) = Y(t) + \epsilon$, donde $\epsilon \sim N(0, 1)$ es una variable aleatoria normal con media $0$ y varianza $1$.
+
+¿Cuál de los procesos, $Y(t)$ o $Z(t)$, es un proceso estocástico?
+
+**Solución:**
+
+1.  Definición del proceso $Y(t)$:
+
+    -   $Y(t) = 5t$ es una función determinista, ya que su valor está completamente determinado para cada $t$. No involucra incertidumbre ni variables aleatorias.
+
+2.  Definición del proceso $Z(t)$ :
+
+    -   $Z(t) = Y(t) + \epsilon = 5t + \epsilon$, donde $\epsilon$ es una variable aleatoria normal.
+
+    -   Para cada $t$, $Z(t)$ es una variable aleatoria, ya que depende de $\epsilon$.
+
+    Por lo tanto:
+
+    -   $Y(t)$ no es un proceso estocástico, ya que no involucra aleatoriedad.
+
+    -   $Z(t)$ sí es un proceso estocástico, ya que es una colección de variables aleatorias indexadas por el tiempo $t$.
+:::
+
+## Proceso de Conteo
+
+::: {style="text-align:justify"}
+El proceso de conteo es una herramienta utilizada en diversas disciplinas para cuantificar elementos, eventos o fenómenos en un contexto específico. Este proceso es clave en la recolección de datos cuantitativos, ya que permite identificar la frecuencia de ocurrencia de un fenómeno o elemento determinado.
+
+El conteo proporciona datos precisos que son esenciales para tomar decisiones informadas en campos como la ciencia, la administración y la economía. Al cuantificar variables, permite establecer patrones, tendencias y relaciones entre diferentes factores, lo que facilita la creación de modelos predictivos y análisis más robustos.
+:::
+
+::: {#def-proc_cont}
+## Proceso de conteo
+
+Un proceso de conteo $(N_t)_{t\geq0}$ es una colección de variables aleatorias no negativas, con valores enteros. $(N_t)_{t\geq0}$ es un proceso de conteo si se cumplen las siguientes condiciones:
+
+a.  ) $N(0) \geq 0$.
+
+b.  ) $N(t)$ es un valor entero.
+
+c.  ) $N(t)$ es no decreciente, por tanto, $s < t, N(s) \leq  N(t)$.
+
+El proceso estocástico $\{N_t; t\geq0\}$ es llamado proceso de conteo si $N_t$ representa el número de eventos que ha ocurrido hasta el tiempo $t$.
+:::
+
+::: {#def-proc_poi_hom}
+## Proceso de Poisson (Homogéneo)
+
+Un proceso de Poisson homogéneo con parámetro $\lambda > 0$, es aquel que cumple las siguientes propiedades:
+
+a.  Se inicia en cero: $N(0) = 0$.
+
+b.  Los incrementos son independientes y estacionarios.
+
+c.  Para todo $t > 0, N(t)$ es una variable aleatoria Poisson con parámetro $\lambda t:$ $$P(N(t) = k) = e^{−λt} \frac{(λt)^k}{k!},\ \ \ k = 0, 1, 2, . . . $$
+:::
+
+::: {#def-proc_poi_comp}
+## Proceso de Poisson compuesto
+
+Sea $\{N(t), t\geq0\}$ un proceso de Poisson y sea $Y_1, Y_2,...$ una sucesión de variables aleatorias independientes, idénticamente distribuidas e independientes (i. i. d.) del proceso Poisson. Sea $Y_0 = 0$. El proceso de Poisson compuesto se define de la siguiente forma.
+
+$$
+X_t = \sum_{n=0}^{N_t} Y_n.
+$$
+:::
+
+## Proceso de Poisson(No Homogéneo)
+
+::: {#def-pro_poi_n_hom}
+Un proceso de Poisson no homogéneo es un proceso a tiempo continuo $\{X_t : t\geq0\}$ , con espacio de estados $\{0, 1,...\}$, con parámetro la función positiva y localmente integrable $\lambda(t)$, y que cumple las siguientes propiedades:
+
+a\) $X_0 = 0$.
+
+b\) Los incrementos son independientes.
+
+c\) Para cualquier $t\geq 0$, y cuando $h \rightarrow 0$
+
+i.  $P(X_{t+h} -X_t \geq 1) =  \lambda(t)h + o(h)$.
+
+ii. $P(X_{t+h} - X_t \geq 2) = o(h)$.
+:::
+
+::: {#def_proc_reno}
+## Proceso de renovación
+
+$(N(t))_{t\geq 0}$ es un proceso de conteo de renovación si $$N(t) = sup\{n \geq 1 : T_n \leq t\}, t \geq 0$$
+
+y $$T_n = Y_1 + · · · + Y_n, n \geq 1,$$ donde $Y_1, Y_2, . . .$ son variables aleatorias no negativas e i. i. d. con una función de distribución $F_Y$ apropiada tal que $F_Y(0) = 0$ y $EY_1 = \frac{1}{\lambda}< \infty$ .
+:::

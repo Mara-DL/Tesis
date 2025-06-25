@@ -1,0 +1,81 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{Resumen}{6}{chapter*.4}%
+\contentsline {chapter}{Introducción}{7}{chapter*.5}%
+\contentsline {chapter}{Objetivos}{8}{chapter*.6}%
+\contentsline {section}{Objetivo General}{8}{section*.7}%
+\contentsline {section}{Objetivos Específicos}{8}{section*.8}%
+\contentsline {part}{\numberline {I}Preliminares}{9}{part.1}%
+\contentsline {chapter}{\numberline {1}Probabilidad}{10}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Variables aleatorias}{13}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Variables aleatorias discretas}{16}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Variables aleatorias continuas}{20}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Valor esperado y varianza de una variable aleatoria.}{22}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Probabilidad condicional e independencia}{24}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Independencia de variables aleatorias}{25}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Probabilidad condicional de una variable aleatoria}{26}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Valor esperado condicionado dada una variable aleatoria}{26}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Varianza condicionada dada una variable aleatoria}{26}{section.1.9}%
+\contentsline {section}{\numberline {1.10}Ley fuerte de los grandes números}{27}{section.1.10}%
+\contentsline {chapter}{\numberline {2}Estadística}{28}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Medidas de localización}{29}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Elementos de teoría de muestreo}{29}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}1. \textbf {Población}}{30}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}2. \textbf {Muestra}}{30}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}3. \textbf {Unidad de Muestreo}}{30}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}4. \textbf {Marco Muestral}}{30}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}5. \textbf {Parámetro}}{30}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}6. \textbf {Estadístico}}{31}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}7. \textbf {Error de Muestreo}}{31}{subsection.2.2.7}%
+\contentsline {subsection}{\numberline {2.2.8}8. \textbf {Técnicas de Muestreo}}{31}{subsection.2.2.8}%
+\contentsline {subsection}{\numberline {2.2.9}Importancia de la Teoría de Muestreo}{31}{subsection.2.2.9}%
+\contentsline {section}{\numberline {2.3}Gráficos estadísticos}{31}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Histograma}{31}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Componentes de un Histograma}{32}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Box Plot}{32}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Componentes de un Boxplot}{32}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Propósito del Boxplot}{33}{subsection.2.3.5}%
+\contentsline {section}{\numberline {2.4}Pruebas de hipótesis.}{33}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Conceptos Clave en Pruebas de Hipótesis}{34}{subsection.2.4.1}%
+\contentsline {section}{\numberline {2.5}Jarque Bera}{35}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Test de Jarque-Bera: Definición y Uso}{35}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Conceptos Clave}{35}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Kolmogorov Smirnov}{36}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Procesos estocásticos}{37}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Proceso de Conteo}{37}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Proceso de Poisson(Homogéneo)}{38}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Proceso de renovación}{38}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Ciencia de Datos}{39}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Data Frame}{39}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Homogenización}{40}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Detención de datos faltantes}{40}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Outliers}{40}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Modelo Clásico de Cramér-Lundberg}{41}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introducción}{41}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Descripción del modelo de Cramér Lundberg}{42}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Estudio de caso: Análisis de ventas de una empresa de comida rápida}{45}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Descripción del problema}{45}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Definición de estructuras de Ciencia de Datos}{47}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Importación de los datos originales a R}{47}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Homogenización del total de ventas por día}{48}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}DataFrame Resultante: Antes de la pandemia}{49}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}DataFrame Resultante: Después de la pandemia}{50}{subsection.6.2.4}%
+\contentsline {subsection}{\numberline {6.2.5}Análisis gráfico de las ventas por día:}{52}{subsection.6.2.5}%
+\contentsline {subsubsection}{\numberline {6.2.5.1}Histogramas de los datos de ventas por día antes de la pandemia}{52}{subsubsection.6.2.5.1}%
+\contentsline {subsubsection}{\numberline {6.2.5.2}Boxplot de datos de ventas por días antes de la pandemia}{53}{subsubsection.6.2.5.2}%
+\contentsline {subsubsection}{\numberline {6.2.5.3}Histogramas de los datos de ventas por día después de la pandemia}{55}{subsubsection.6.2.5.3}%
+\contentsline {subsubsection}{\numberline {6.2.5.4}Boxplot de datos de ventas por días limpios después de la pandemia}{56}{subsubsection.6.2.5.4}%
+\contentsline {section}{\numberline {6.3}Identificación de distribuciones de probabilidad de las ventas por día}{58}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Prueba de la distribución Weibull:}{62}{subsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.1.1}Representación gráfica al aplicar el test de Kolmogorov de Smirnov}{63}{subsubsection.6.3.1.1}%
+\contentsline {section}{\numberline {6.4}Modelo Modificado de Cramér-Lundberg para identificar la probabilidad de las ganancias insuficientes en una empresa de comida rápida}{69}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Caso pre-pandemia}{70}{subsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.1.1}Modelo de Cramér-Lundberg simulado en R con datos reales de las ventas por día de la empresa.}{70}{subsubsection.6.4.1.1}%
+\contentsline {subsubsection}{\numberline {6.4.1.2}Simulación de la probabilidad de ruina}{72}{subsubsection.6.4.1.2}%
+\contentsline {subsubsection}{\numberline {6.4.1.3}Análisis de sensibilidad}{76}{subsubsection.6.4.1.3}%
+\contentsline {subsection}{\numberline {6.4.2}Caso pos-pandemia}{80}{subsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.2.1}Modelo de Cramér-Lundberg simulado en R con datos reales de las ventas por día de la empresa}{80}{subsubsection.6.4.2.1}%
+\contentsline {subsubsection}{\numberline {6.4.2.2}Simulación de la probabilidad de ruina}{86}{subsubsection.6.4.2.2}%
+\contentsline {subsubsection}{\numberline {6.4.2.3}Análisis de sensibilidad}{95}{subsubsection.6.4.2.3}%
+\contentsline {section}{\numberline {6.5}Análisis de resultados y recomendaciones.}{103}{section.6.5}%
+\contentsline {chapter}{Referencias}{105}{chapter*.29}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

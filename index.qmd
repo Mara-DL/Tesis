@@ -1,1 +1,17 @@
-# Introducción
+---
+author:
+  - name: Mara Dominguez Limas
+    email: x180099@unach.mx
+    corresponding: true
+  - name: Yofre Hernán García Gómez
+    degrees: PhD
+    email: yofre.garcia@unach.mx
+    roles: supervisor
+    corresponding: true
+---
+
+# Resumen {.unnumbered}
+
+::: {style="text-align: justify"}
+La pandemia de COVID-19 ha generado un impacto significativo en diversas industrias y los establecimientos de comida rápida no son una excepción. Este caso estudio de este segmento de la economía, se centra en analizar y cuantificar, mediante una modificación del modelo de Cramér-Lundberg, la evolución de sus ganancias y pérdidas, aunque este modelo tradicionalmente se ha utilizado en la teoría del riesgo actuarial, para evaluar fluctuaciones financieras y las probabilidades de ruina. La cuantificación se obtuvo mediante simulación de las distribuciones de probabilidad de las ganancias por semana que se estiman mediante técnicas de inferencia estadística, para el análisis probabilístico de la insolvencia comercial.
+:::

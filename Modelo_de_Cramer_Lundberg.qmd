@@ -4,14 +4,20 @@ lang: es
 
 # Modelo Clásico de Cramér-Lundberg {#sec-modelo_C_L}
 
+::: {style="text-align:justify"}
+El modelo de Cramér-Lundberg es un modelo fundamental en el ámbito de la teoría del riesgo, utilizado principalmente para estudiar la solvencia y la quiebra en compañías de seguros.
+
+Este modelo sigue siendo relevante en la actualidad, especialmente en el contexto de la gestión del riesgo y la estabilidad financiera en el sector asegurador, y continúa siendo un pilar en la formación de actuarios y profesionales en finanzas y seguros.
+:::
+
 ## Introducción
 
 ::: {style="text-align:justify"}
-El **modelo clásico de Cramér-Lundberg**, también conocido como **modelo de riesgo clásico o modelo de ruina teórica**, fue descrito por **Filip Lundberg** en **1903** y enriquecido con los aportes de **Harald Cramér** en **1930**. Este modelo describe el **superávit de una aseguradora** que recibe ingresos por primas y, a su vez, paga los montos de las reclamaciones o siniestros que ocurren.
+El **modelo clásico de Cramér-Lundberg**, también conocido como **modelo de riesgo clásico o modelo de ruina teórica**, fue descrito por **Filip Lundberg** en **1903** y enriquecido con los aportes de **Harald Cramér** en **1930**.
 
-![](Filip_Lundberg.jpg){width="213"}
+![Harald Cramér - Filip Lundberg](Diseño%20sin%20título.png){fig-align="left" width="300"}
 
-![](harald-cramr.jpg){width="215"}
+Este modelo describe el **superávit de una aseguradora** que recibe ingresos por primas y, a su vez, paga los montos de las reclamaciones o siniestros que ocurren.
 
 En términos más técnicos, el **modelo de Cramér-Lundberg** se utiliza para estudiar la **probabilidad de ruina** de una compañía de seguros. Aquí están algunos conceptos clave:
 
@@ -21,29 +27,29 @@ En términos más técnicos, el **modelo de Cramér-Lundberg** se utiliza para e
 
 3.  **Fórmulas Exactas y Aproximadas**: Se han desarrollado **métodos** para obtener **fórmulas exactas y aproximadas** para la probabilidad de ruina en este modelo. Estas fórmulas permiten estimar la posibilidad de que la compañía quiebre debido a pérdidas inesperadas.
 
-4.  **Simulaciones y Estimaciones**: Además de las fórmulas, se realizan **simulaciones** de las trayectorias del proceso de riesgo para diferentes niveles de capital inicial. Esto proporciona una perspectiva más completa de las características operativas de la aseguradora .
+4.  **Simulaciones y Estimaciones**: Además de las fórmulas, se realizan **simulaciones** de las trayectorias del proceso de riesgo para diferentes niveles de capital inicial. Esto proporciona una perspectiva más completa de las características operativas de la aseguradora.
 
 En resumen, el **modelo de Cramér-Lundberg** es una herramienta valiosa para evaluar el riesgo financiero en el ámbito de las compañías de seguros y comprender las posibilidades de ruina en función de las fluctuaciones en el capital disponible.
+
+Las siguientes fuentes presentan información detallada sobre el modelo Cramér - Lundberg: ([@asmussen2010ruin], [@dickson1998ruin])
 :::
 
-## Descripción del modelo
+## Descripción del modelo de Cramér Lundberg
 
 ::: {style="text-align:justify"}
-El modelo de Cramér Lundberg se define enseguida como un cierto tipo de proceso estocástico a tiempo discreto.
+El modelo de Cramér Lundberg se define enseguida como un cierto tipo de proceso estocástico(@def-proc_esto) a tiempo discreto.
 :::
 
 ::: {style="text-align:justify"}
-Se modela el numero de reclamaciones como un proceso de Poisson $(N(t))$ con parámetro $\lambda t$ donde $t\geq 0$, las pérdidas individuales $X_i$ son variables aleatorias independientes e idénticamente distribuidas (iii)
-:::
+Se modela el número de reclamaciones como un proceso de Poisson $(N(t))$ con parámetro $\lambda t$ donde $t\geq 0$, las pérdidas individuales $X_i$ son variables aleatorias independientes e idénticamente distribuidas (i. i. d.)
 
-::: {#def-1}
-1.  El proceso estocástico a tiempo discreto del monto de reclamaciones se define como $\{(X_k): {k \in \mathbb{N} }\}$, donde las $X_k$ para $k = 1, 2, ...,$ son variables aleatorias (@def-variable_aleatoria) no negativas, independientes e idénticamente distribuidas y tienen función de distribución común $F$, media finita denotada por $E[X_k] = \mu$ y varianza $Var(X_k) = \sigma^2 \leq \infty$.
+1.  El proceso estocástico a tiempo discreto del monto de reclamaciones se define como $\{(X_k):{k \in \mathbb{N} }\}$, donde las $X_k$ para $k = 1, 2, ...,$ son variables aleatorias (@def-variable_aleatoria) no negativas, independientes e idénticamente distribuidas y tienen función de distribución común $F$, media finita denotada por $E[X_k] = \mu$ y varianza $Var(X_k) = \sigma^2 \leq \infty$.
 
-2.  Los tiempos de reclamación ocurren en instantes aleatorios de tiempo denotados por $T_i$ tales que $$ 0 < T_1 < T_2 < \dotsb$$
+2.  Los tiempos de reclamación ocurren en instantes aleatorios de tiempo, denotados por $T_i$, tales que $$ 0 < T_1 < T_2 < \dotsb$$
 
 3.  El proceso de ocurrencia de las reclamaciones es el número de reclamaciones contingentes en el intervalo $[0,t]$, y se define como sigue:
 
-$$N(t) = \sup \{n \geq 1: T_n \leq t  \leq 0\}$$ y por convención se usará $\sup \ \emptyset = 0$.
+$$N(t) = \sup \{n \geq 1: T_n \leq t  \leq 0\}.$$ Por convención se usará $\sup \ \emptyset = 0$.
 
 4.  Los tiempos entre llegadas son los tiempos que transcurren entre dos reclamaciones sucesivas, los cuales se denotan por $$Y_i = T_i \ \ \ Y_k= T_k - T_{k-1}, \ \ \ k = 2,3, \dotsb,$$donde las variables aleatorias $Y_k$ son i.i.d. con distribución exponencial y media finita $E[Y_1] =\frac{1}{\lambda}$.
 
@@ -52,15 +58,34 @@ $$N(t) = \sup \{n \geq 1: T_n \leq t  \leq 0\}$$ y por convención se usará $\s
 
 ::: {#def-2}
 El proceso de agregado de siniestros $(S(t))_{t \geq 0}$ de un portafolio se define como: $$S(t):= \left\{ \begin{array}{lcc} \sum_{i=1}^{N(t)} X_i, & si & N(t) > 0, \\ \\ 
-0, & si & N(t) = 0. \end{array} \right. $$ {#eq-1.2} El proceso $(S(t))_{t\geq0}$ es un proceso de suma parcial aleatoria, que se obtiene al sustituir el índice determinado $n$ en la suma $S_n = X_1 + \dotsb + X_n$ por la variable aleatoria $N(t):$ $$S(t) = X_1 + \dotsb+ X_{N(t)} = S_{N(t)}, \ \ t\geq0,$$que se le conoce como proceso compuesto. Nótese que cuando $Var(X_k) = \sigma^2 < \infty$, el proceso del agregado de siniestros $(S(t))t\ge0$ comparte varias propiedades con el proceso de una suma parcial, como las propiedades asintóticas del teorema del límite central y la ley fuerte de los grandes números.
+0, & si & N(t) = 0. \end{array} \right. $$ {#eq-1.2} El proceso $(S(t))_{t\geq0}$ es un proceso de suma parcial aleatoria, que se obtiene al sustituir el índice determinado $n$ en la suma $S_n = X_1 + \dotsb + X_n$ por la variable aleatoria $N(t):$ $$S(t) = X_1 + \dotsb+ X_{N(t)} = S_{N(t)}, \ \ t\geq0,$$que se le conoce como proceso compuesto. Nótese que cuando $Var(X_k) = \sigma^2 < \infty$, el proceso del agregado de siniestros $(S(t))t\ge0$ comparte varias propiedades asintóticas, teorema del límite central y la ley fuerte de los grandes números.
 :::
 
 ::: {#lem-1}
-El agregado de siniestros $(S(t))$ con $t \geq 0$ tiene función de distribución $$G_s(x) = P[S(t) \leq x] = \sum_{n=0}^{\infty} e^{-\lambda t}\frac{(\lambda t)^n}{n!}F**(x) \ \ \ t\leq 0, x \leq 0,$$ {#eq-1.3} donde $F^{n*}(x)= P[\sum_{i=q}^{n} X_i \leq x]$ es la n-ésima convolución de F.
+El agregado de siniestros $(S(t))$ con $t \geq 0$ tiene función de distribución $$G_s(x) = P[S(t) \leq x] = \sum_{n=0}^{\infty} e^{-\lambda t}\frac{(\lambda t)^n}{n!}F^{n*}(x) \ \ \ t\leq 0, x \leq 0,$$ {#eq-1.3} donde $F^{n*}(x)= P[\sum_{i=q}^{n} X_i \leq x]$ es la n-ésima convolución de $F$.
 :::
 
 ::: proof
-By induction.
+Sea $G_s(x) =P[S(t) \leq x]$, por como esta definido $S(t)$ se tiene:
+
+$$G_S(x) = P[S(t) \leq x] =P\left[\sum_{i=1}^{N(t)} X_i \leq x\right].$$
+
+Aplicando el teorema de la probabilidad total se da:
+
+$$G_s(x) =  P[S(t) \leq x] = \sum_{n=0}^{\infty} P\left[\sum_{i=1}^{N(t)} X_i \leq x | N(t) =n \right] P[N(t) = n],
+$$
+
+dado que $S(t)|N(t) = n$ es la suma de las $n$ variables aleatorias i. i. d. con distribución $F$, por lo que la función de distribución acumulativa de $S(t)|N(t)=n$ es la $n$-ésima convolución de $F,$ denotada por $F^{n*}(n)$.
+
+Es decir $P\left[\sum_{i=1}^{N(t)} X_i \leq x |N(t) = n \right] = F^{n*}(x)$ por lo tanto $G_s(x) = \sum_{n=0}^{\infty} F^{n*} P[N(t) =n].$
+
+Puesto que $P[N(t) =n]$ sigue una distribución de Poisson con parámetro $\lambda t$, es decir $P[N(t) =n] = \frac{(\lambda t)^n e^{-\lambda t}}{n!},$
+
+entonces
+
+$$
+G_s(x) = \sum_{n=0}^{\infty} F^{n*} \frac{(\lambda t)^n e^{-\lambda t}}{n!}.
+$$
 :::
 
 ::: {#lem-2}
@@ -68,35 +93,156 @@ Para cada $r \geq 0$, el proceso del agregado de siniestros $(S(t))_{t \geq 0}$ 
 :::
 
 ::: proof
-By induction.
+Sea $N(t)$ el proceso de Poisson con tasa $\lambda$ que cuenta el número de siniestros hasta el tiempo $t$. Sea $X_i$ el tamaño del $i$-ésimo siniestro, donde los $X_i$'s son variables aleatorias i. i. d. con función generadora de momentos $M_{X_i}(r) = E[e^{rX_i}]$ .
+
+Condicionando sobre el número de siniestros $N(t)$ hasta el tiempo $t$ se tiene:
+
+$$S(t)|N(t) = n = \sum_{i=1}^{n} X_i. $$
+
+Por lo tanto, la función generadora de momentos de $S(t)$ condicionada en $N(t) = n$ es:
+
+$$E[e^{rS(t)}| N(t)=n] = E\left[e^{r\sum_{i=1}^n X_i}\right].$$
+
+Dado que los $X_i$ son independientes, se puede escribir esto como:
+
+$$E\left[e^{r\sum_{i=1}^n X_i}\right]= \prod_{i=1}^n E[e^{rX_i}] = (M_{X_i}(r))^n, $$
+
+donde $M_{X_i}(r) = E[e^{rX_i}]$ es la función generadora de momentos de una variable aleatoria $X_i$.
+
+Usando la ley de probabilidad total, se puede escribir la función generadora de momentos de $S(t)$ como :
+
+$$M_{S(t)}(r) = E[e^{rS(t)}] = \sum_{n=0}^{\infty} E[e^{rS(t)}|N(t) = n]P[N(t) =n]. $$ sustituyendo la expresión para $E[e^{rS(t)}|N(t)=n]$, se tiene:
+
+$$M_{S_(t)}(r) = \sum_{n=0}^{\infty}(M_{X_i}(r))^nP[N(t)=n]. $$
+
+Además sabiendo que $N(t)$ sigue una distribución de Poisson con parámetro $\lambda t$, es decir,
+
+$$P[N(t) = n] = \frac{(\lambda t)^n e^{-\lambda t}}{n!} , $$
+
+sustituyendo en la expresión anterior se da:
+
+$$M_{S(t)}(r) = \sum_{n=0}^{\infty} \frac{(\lambda tM_{X_i}(r))^n}{n!} = e^{-\lambda t}e^{\lambda tM_{X_i}(r)}. $$
+
+Por lo tanto
+
+$$
+M_{S(t)}(r) = e^{\lambda t(M_{X_i}(r) -1)}.
+$$
+
+Recordando que la función generadora de momentos de $N(t)$ de un proceso de Poisson con tasa $\lambda$, es
+
+$$ M_{N(t)}(r) = E[e^{rN(t)}] = e^{\lambda t(e^r - 1)}, $$
+
+si se sustituye $r$ por $ln M_{X_i}(r)$, obtenemos
+
+$$M_{N(t)}(\ln M_{X_i}(r)) = e^{\lambda t (M_{X_i}(r) - 1)}.$$
+
+Por lo tanto
+
+$M_{S(t)}(r) = M_{N(t)}(\ln M_{X_i}(r));$
+
+lo que demuestra el lema.
 :::
 
-::: {style="text-align:justify"}
-El proceso de riesgo $((U(t))_{t \geq 0}$ se define como sigue: $$U(t) = u + ct - S(t) \ \ \ t\geq 0, $$ {#eq-1.7} en donde $u \geq 0$ denota el capital inicial, ct el ingreso vía prima durante el periodo $[0,t]$ a una tasa constante $c > 0$ y $S(t)$ es el agregado de siniestros en el momento t.
+::: {#def-3 style="text-align:justify"}
+El proceso de riesgo $(U(t))_{t \geq 0}$ se define como sigue: $$U(t) := u + ct - S(t) \ \ \ t\geq 0, $$ {#eq-1.7} en donde $u \geq 0$ denota el capital inicial, $ct$ el ingreso vía prima durante el periodo $[0,t]$ a una tasa constante $c > 0$ y $S(t)$ es el agregado de siniestros en el momento $t$.
 :::
 
-::: {#prp-1}
-Para cada $r\geq0$, el proceso de riesgo $(U(t))_{t\geq0}$ tiene función generadora de momentos $$M_{U(t)}(r) =e^{r(u + ct)} M_{S(t)}(-r).$$ {#eq-1.8}
-:::
-
-::: {.content-visible when-format="html"}
 ::: {#lem-3}
-sea $(U(t))_{t\geq0}$ un proceso de riesgo, entonces para el modelo de renovación se tiene que: $$E[U(t)] = u + ct - \mu E[N(t)],$$ {#eq-1.10} y para el modelo clásico de Crámer-Lundberg es: $$E[U(t)] = u + ct - \lambda \mu t.$$ {#eq-1.11}
-:::
-:::
-
-::: {.content-visible when-format="pdf"}
-Sea $(U(t))_{t\geq0}$ un proceso de riesgo, entonces para el modelo de renovación se tiene que: $$E[U(t)] = u + ct - \mu E[N(t)],$$ y para el modelo clásico de Crámer-Lundberg es: $$E[U(t)] = u + ct - \lambda \mu t.$$
+Sea $(U(t))_{t\geq0}$ un proceso de riesgo, entonces para el modelo de renovación se tiene que: $$E[U(t)] = u + ct - \mu E[N(t)],$$ {#eq-1.10} y para el modelo clásico de Crámer-Lundberg es: $$E[U(t)] = u + ct - \lambda \mu t.$$ {#eq-1.11}
 :::
 
 ::: proof
-By induction.
-:::
+Sea $U(t)$ el proceso de riesgo para $t>0$. El proceso de riesgo se define como:
 
-::: {#lem-4}
-Sea $(U(t))_{t\geq0}$un proceso de riesgo, entonces para el modelo de renovación se tiene que : $$ Var(U(t)) = \mu^2 Var(N(t)) + \sigma^2 E[N(t)],$$ y para el modelo clásico Cramér-Lundberg es: $$Var(U(t)) = \lambda t(\sigma^2 + \mu^2).$$
-:::
+$$
+U(t) = u + ct -S(t),
+$$
 
-::: proof
-By induction.
+donde:
+
+-   $u$ es la reserva inicial de capital,
+
+-   $c$ es la tasa de ingresos premium por unidad de tiempo,
+
+-   $S(t)$ es el agregado de siniestros hasta el tiempo $t$, es decir, la suma de los tamaños de siniestros ocurridos hasta ese tiempo.
+
+Existen dos modelos para describir $S(t)$:
+
+1.  Modelo de renovación: Los tiempos entre siniestros tienen una distribución general.
+
+2.  Modelo clásico de Crámer-Lundberg: Los siniestros ocurren según un proceso de Poisson con tasa $\lambda$.
+
+Se quiere demostrar las siguientes dos expresiones para $E[U(t)]$, la esperanza del capital en el tiempo $t$, para ambos modelos:
+
+1.  Para el modelo de renovación:
+
+    $$
+    E[U(t)] = u + ct - \mu E[N(t)],
+    $$
+
+    donde $\mu = E[X_i]$ es la esperanza del tamaño de los siniestros $X_i$​, y $N(t)$ es el número de siniestros hasta el tiempo $t$.
+
+2.  Para el modelo clásico de Crámer-Lundberg
+
+    $$
+    E[U(t)] = u + ct - \lambda \mu t,
+    $$
+
+    donde $\lambda$ es la tasa del proceso de Poisson para los siniestros y $\mu = E[X_i]$.
+
+El proceso de riesgo $U(t)$ se puede escribir como:
+
+$$U(t) = u + ct - S(t),$$
+
+donde $S(t) = \sum_{i=1}^{N(t)} X_i$​ es el agregado de siniestros hasta el tiempo $t$, y $N(t)$ es el número de siniestros hasta el tiempo $t$, mientras que los $X_i$​'s son los tamaños de siniestros i. i. d. con $E[X_i] = \mu$.
+
+Así se quiere encontrar:
+
+$$
+E[U(t)] = E[u + ct - S(t)].
+$$
+
+si se sabe que $u$ y $c$ son constantes, se tiene:
+
+$$
+E[U(t)] = u + ct - E[S(t)].
+$$
+
+Reduciéndose a calcular $E[S(t)]$.
+
+En el modelo de renovación, el número de siniestros $N(t)$ hasta el tiempo $t$ es un proceso de renovación general. El agregado de siniestros $S(t)$ es la suma de $N(t)$ siniestros, es decir,
+
+$$
+S(t) = \sum_{i=1}^{N(t)} X_i.
+$$
+
+Dado que los $X_i$​'s son i. i. d. con $E[X_i] = \mu$, la esperanza de $S(t)$ es:
+
+$$
+E[S(t)] = E \left[\sum_{i=1}^{N(t)} X_i \right] = E[N(t)]E[X_i] = \mu E[N(t)].
+$$
+
+Por lo tanto, la esperanza del capital en el tiempo $t$ es:
+
+$$
+E[U(t)] = u + ct - \mu E[N(t)].
+$$
+
+En el modelo clásico de Crámer-Lundberg, los siniestros ocurren de acuerdo con un proceso de Poisson con tasa $\lambda$, es decir, $N(t) \sim Poisson(\lambda t)$ . La esperanza del número de siniestros es:
+
+$$
+E[N(t)] = \lambda t.
+$$
+
+entonces, la esperanza del agregado de siniestros $S(t)$ es:
+
+$$E[S(t)] = \mu E[N(t)] = \mu \lambda t.
+$$
+
+Por lo tanto sustituyendo esto en la expresión para $E[U(T)]$, se tiene:
+
+$$
+E[U(t)] = u +ct - \mu \lambda t.
+$$
 :::

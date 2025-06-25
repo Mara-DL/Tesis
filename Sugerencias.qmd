@@ -1,0 +1,25 @@
+::: {#text-align:justify}
+# Sugerencias y/o recomendaciones y/o propuestas.
+
+El modelo de Cramér-Lundberg es un modelo clásico en teoría del riesgo utilizado para modelar la evolución temporal de las reservas de una compañía de seguros.
+
+Aunque el modelo de Cramér-Lundberg no es en sí un problema de optimización, se pueden desarrollar problemas de optimización lineal relacionados con ciertos aspectos del modelo implementando cadenas de suministros, en el cual se requiere optimizar los costos, garantizar la calidad del producto y satisfacer la demanda a tiempo, presentado así en algunos proyectos y tomando de referencias (@martinez2021evaluacion, @sanchez2021retos)
+
+Estos pueden incluir:
+
+1.  Optimización de ganancias : Un objetivo podría ser maximizar las ganancias de la empresa mientras se minimiza la probabilidad de ruina o se mantiene una probabilidad aceptable de no ruina. En la optimización de las ganancias ciertas restricciones pueden ser formuladas como un problema de programación lineal si las relaciones son lineales (como el cálculo de ingresos esperados versus reclamaciones).
+
+2.  Algunos de los parámetros del modelo, como la cantidad de recursos asignados a publicidad, costos variables por servicio (como personal o insumos), o estrategias para mitigar las pérdidas, pueden ser convertidos en variables de decisión en un problema de optimización.
+
+    Si los parámetros se pueden expresar como relaciones lineales, se puede definir una función objetivo que maximice las ganancias o minimice las pérdidas del establecimiento durante la pandemia.
+
+Pudiendo así implementarlas en distintos problemas o estrategias que se presenten como:
+
+-   Reducir el horario de atención.
+
+-   Invertir en publicidad digital.
+
+-   Ampliar el menú con opciones para llevar.
+
+En conclusión, generalmente aunque el modelo de Cramér-Lundberg está basado en un enfoque estocástico, ciertos aspectos del problema pueden ser reformulados como un problema de optimización lineal, especialmente si el enfoque se centra en la gestión de recursos y la maximización de las ganancias bajo restricciones.
+:::

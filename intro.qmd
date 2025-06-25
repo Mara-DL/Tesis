@@ -1,0 +1,15 @@
+# Introducción {.unnumbered}
+
+::: {style="text-align:justify"}
+La pandemia generó un entorno incierto para las empresas de comida rápida, con fluctuaciones en la demanda, cambios en los patrones de consumo y restricciones operativas. El modelo de Cramér-Lundberg es útil en este contexto para analizar el riesgo financiero y las probabilidades de supervivencia a largo plazo.
+
+La pandemia del COVID-19, declarada por la Organización Mundial de la Salud (OMS) en marzo de 2020, ha tenido un impacto sin precedentes a nivel global. El virus SARS-CoV-2, causante de la enfermedad, se propagó rápidamente, generando una crisis sanitaria, social y económica. Las medidas implementadas por los gobiernos para frenar su propagación incluyeron confinamientos, distanciamiento social y restricciones a la movilidad. Estas medidas, necesarias desde un punto de vista sanitario, afectaron profundamente a las actividades económicas. Sectores como el de la restauración y las empresas de comida rápida fueron particularmente impactados, viéndose obligados a adaptar sus modelos de negocio hacia un enfoque de entrega a domicilio, servicios de recogida, o plataformas digitales.
+
+En este contexto, los cambios en los patrones de consumo fueron drásticos. Mientras algunos clientes redujeron su gasto debido a la incertidumbre económica, otros cambiaron sus hábitos hacia el consumo de comida rápida, al ser una opción accesible y conveniente en tiempos de confinamiento. Para analizar estos cambios, se requiere de modelos cuantitativos que permitan evaluar el riesgo financiero y los patrones de demanda, y es aquí donde el modelo de Cramér-Lundberg puede desempeñar un papel importante.
+
+Aplicar el modelo de Cramer-Lundberg al análisis de ventas de una empresa de comida rápida durante la pandemia de COVID-19 implica varios ajustes, ya que este modelo tradicionalmente se ha utilizado en la industria de seguros. No obstante, su estructura básica puede adaptarse para evaluar el comportamiento financiero de la empresa frente a un escenario de incertidumbre económica, como lo fue la pandemia.
+
+Durante la pandemia, uno de los mayores riesgos para las empresas de comida rápida fue el de enfrentar períodos prolongados de bajas ventas o pérdidas debido a restricciones.
+
+Por ende este proyecto de tesis se enfoca en implementar el modelo de Cramér-Lundberg y permitir simular estos escenarios para evaluar qué tan probable es que la empresa agote sus reservas de capital con los datos proporcionados por la empresa antes y después del periodo de la pandemia.
+:::
